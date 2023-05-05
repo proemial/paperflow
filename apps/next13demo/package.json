@@ -2,7 +2,7 @@
   "name": "next13demo",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3020",
+    "dev": "next dev --port 3090",
     "dev-turbo": "next dev --turbo --port 3020",
     "build": "next build",
     "start": "next start",

@@ -68,6 +68,12 @@ export const demos: Item[] = [
         description:
           'Pass context between Client Components that cross Server/Client Component boundary',
       },
+      {
+        name: 'Mutations',
+        slug: 'mutations',
+        description:
+          'Use server actions inside client components',
+      },
     ],
   },
   {
