@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo --port 3020",
+    "dev": "next dev --port 3020",
+    "dev-turbo": "next dev --turbo --port 3020",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -15,26 +16,26 @@
   },
   "dependencies": {
     "clsx": "1.2.1",
-    "next": "latest",
-    "react": "latest",
-    "react-dom": "latest",
+    "next": "13.4.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "styled-components": "6.0.0-beta.2",
     "styled-jsx": "5.1.0",
     "use-count-up": "3.0.1",
     "ui": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "18.0.6",
+    "@types/node": "20.0.0",
+    "@types/react": "18.2.5",
+    "@types/react-dom": "18.2.3",
     "autoprefixer": "^10.4.7",
     "eslint": "8.19.0",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "13.4.0",
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.12",
-    "tailwindcss": "latest",
-    "typescript": "latest",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4",
     "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*"
   }
