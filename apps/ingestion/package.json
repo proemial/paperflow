@@ -23,6 +23,7 @@
     "ui": "workspace:*",
     "autoprefixer": "10.4.14",
     "dayjs": "^1.11.7",
+    "dayjs-plugin-utc": "^0.1.2",
     "fast-xml-parser": "^4.2.2",
     "postcss": "8.4.23",
     "rss-parser": "^3.12.0",
