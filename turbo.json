@@ -1,9 +1,21 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local"],
+  "globalDependencies": [
+    "**/.env.*local"
+  ],
   "pipeline": {
     "build": {
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**"
+      ],
+      "env": [
+        "OPENAI_API_KEY",
+        "REDIS_PROMPTS_URL",
+        "REDIS_PROMPTS_TOKEN",
+        "REDIS_MODEL_OUTPUT_URL",
+        "REDIS_MODEL_OUTPUT_TOKEN"
+      ]
     },
     "lint": {},
     "dev": {
