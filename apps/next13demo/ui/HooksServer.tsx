@@ -1,5 +1,9 @@
 import React from 'react';
-import { cookies, headers, previewData } from 'next/headers';
+import {
+  cookies,
+  headers,
+  // previewData 
+} from 'next/headers';
 
 const HooksServer = () => {
   return (
@@ -9,7 +13,7 @@ const HooksServer = () => {
           {
             cookies: cookies(),
             useHeaders: headers(),
-            usePreviewData: previewData(),
+            // usePreviewData: previewData(),
           },
           null,
           2,

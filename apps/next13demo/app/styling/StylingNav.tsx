@@ -17,10 +17,6 @@ const items = [
     slug: 'css-modules',
   },
   {
-    name: 'Styled Components',
-    slug: 'styled-components',
-  },
-  {
     name: 'Styled JSX',
     slug: 'styled-jsx',
   },
