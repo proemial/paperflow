@@ -28,6 +28,9 @@ export const DocsDao = {
       }, { upsert: true });
 
       return (await mongo.findOne<RevisionedPaper>({ id })) as RevisionedPaper;
+    } catch (error) {
+      console.error(error);
+      throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.upsert`);
     }
@@ -57,6 +60,9 @@ export const DocsDao = {
 
         return result;
       }));
+    } catch (error) {
+      console.error(error);
+      throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.upsertMany`);
     }

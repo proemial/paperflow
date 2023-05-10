@@ -42,8 +42,6 @@ async function fetchByIds(ids: string) {
 }
 
 const buildOutput = (hits: ArxivPaper[], misses: ArxivPaper[]) => {
-  console.log('output', hits.length, misses.length);
-
   return {
     hits: hits.sort(comparator),
     misses,
@@ -89,7 +87,7 @@ export async function parseArxiv(data: string) {
           raw: entry,
         } as ArxivPaper;
       } catch (e) {
-        console.log('entry', entry.category);
+        console.error('entry', entry.category, e);
         throw e;
       }
     });

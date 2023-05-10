@@ -1,16 +1,18 @@
 import { db } from "@/data/adapters/mongo/mongo-client";
 import { DateMetrics } from "@/utils/date";
 
+type IngestionIds = {
+  hits: string[],
+  misses: string[],
+};
+
 export type IngestionEntry = {
   date: string,
-  ids: {
-    hits: string[],
-    misses: string[],
-  },
+  ids: IngestionIds,
 };
 
 export const IngestionDao = {
-  upsert: async (date: string) => {
+  getOrCreate: async (date: string) => {
     const mongo = await db('ingestion');
     const begin = DateMetrics.now();
 
@@ -28,8 +30,11 @@ export const IngestionDao = {
       }
 
       return ingestionEntry;
+    } catch (error) {
+      console.error(error);
+      throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.upsert`);
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getOrCreate`);
     }
   },
 
@@ -39,6 +44,9 @@ export const IngestionDao = {
 
     try {
       await mongo.updateOne({ date }, { $set: ingestionEntry });
+    } catch (error) {
+      console.error(error);
+      throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.update`);
     }

@@ -34,6 +34,9 @@ export const db = async (collection: string) => {
 
   try {
     return (await clientPromise).db("paperflow").collection(collection);
+  } catch (e) {
+    console.error(e);
+    throw e;
   } finally {
     console.log(`[${DateMetrics.elapsed(begin)}] Mongo connected to ${collection}`);
   }

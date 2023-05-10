@@ -2,34 +2,41 @@ import { fetchUpdatedItems } from "@/data/adapters/arxiv/arxiv-api";
 import { fetchUpdatedIds } from "@/data/adapters/arxiv/arxiv-oao";
 import { DocsDao } from "@/data/db/paper-dao";
 import { IngestionDao } from "@/data/db/ingestion-dao";
-import { DateFactory } from "@/utils/date";
+import { DateFactory, DateMetrics } from "@/utils/date";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 
 export const revalidate = 1;
 
-// /api/scheduler/tick
-// /api/worker/summarise/:id
 export async function GET() {
-  const date = dayjs().format("YYYY-MM-DD");
+  const begin = DateMetrics.now();
 
-  const ids = await fetchUpdatedIds(date);
+  try {
+    const date = dayjs().format("YYYY-MM-DD");
 
-  let ingestionState = await IngestionDao.upsert(date);
+    const ids = await fetchUpdatedIds(date);
 
-  const newIds = ids.filter(id => !ingestionState.ids.hits.includes(id) && !ingestionState.ids.misses.includes(id));
-  console.log('new ids', newIds.length);
+    let ingestionState = await IngestionDao.getOrCreate(date);
 
-  const limit = DateFactory.yesterday();
-  const output = await fetchUpdatedItems(newIds, limit, 1);
+    const newIds = ids.filter(id => !ingestionState.ids.hits.includes(id) && !ingestionState.ids.misses.includes(id));
 
-  DocsDao.upsertMany(output.hits);
+    const limit = DateFactory.yesterday();
+    const output = await fetchUpdatedItems(newIds, limit);
 
-  ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
-  ingestionState.ids.misses.push(...output.misses.map(item => item.parsed.id));
-  await IngestionDao.update(date, ingestionState);
+    if (output.misses.length > 0 || output.hits.length > 0) {
+      if (output.hits.length > 0) {
+        DocsDao.upsertMany(output.hits);
+      }
 
-  // TODO: push to qStash
+      ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
+      ingestionState.ids.misses.push(...output.misses.map(item => item.parsed.id));
+      await IngestionDao.update(date, ingestionState);
+    }
 
-  return NextResponse.json(output);
+    // TODO: push to qStash
+
+    return NextResponse.json({ updated: output.hits.length, ignored: output.misses.length });
+  } finally {
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick`);
+  }
 }

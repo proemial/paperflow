@@ -7,27 +7,29 @@ export async function fetchUpdatedIds(date: string) {
   const result = await fetchData(idsByDate(date));
   const data = await result.text();
 
-  const parsed = parseOai(data);
-  console.log('ids', parsed.length);
-
-  return parsed;
+  return parseOai(data);
 }
 
 function parseOai(text: string) {
-  const parser = new XMLParser({
-    ignoreAttributes: true,
-    removeNSPrefix: true
-  });
+  try {
+    const parser = new XMLParser({
+      ignoreAttributes: true,
+      removeNSPrefix: true
+    });
 
-  let parsed = parser
-    .parse(text)['OAI-PMH']['ListIdentifiers']['header'];
+    let parsed = parser
+      .parse(text)['OAI-PMH']['ListIdentifiers']['header'];
 
-  if (!Array.isArray(parsed)) {
-    parsed = [parsed];
+    if (!Array.isArray(parsed)) {
+      parsed = [parsed];
+    }
+
+    return (parsed as Array<{ identifier: string, datestamp: string, setSpec: string | Array<string> }>)
+      .map(item => item.identifier.substring(item.identifier.lastIndexOf(':') + 1)) // extract id's
+      .sort()
+      .reverse();
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-
-  return (parsed as Array<{ identifier: string, datestamp: string, setSpec: string | Array<string> }>)
-    .map(item => item.identifier.substring(item.identifier.lastIndexOf(':') + 1)) // extract id's
-    .sort()
-    .reverse();
 }
