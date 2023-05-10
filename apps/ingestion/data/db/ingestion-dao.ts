@@ -1,4 +1,5 @@
 import { db } from "@/data/adapters/mongo/mongo-client";
+import { DateMetrics } from "@/utils/date";
 
 export type IngestionEntry = {
   date: string,
@@ -11,25 +12,35 @@ export type IngestionEntry = {
 export const IngestionDao = {
   upsert: async (date: string) => {
     const mongo = await db('ingestion');
+    const begin = DateMetrics.now();
 
-    let ingestionEntry = await mongo.findOne<IngestionEntry>({ date });
-    if (!ingestionEntry) {
-      ingestionEntry = {
-        date,
-        ids: {
-          hits: [],
-          misses: [],
-        },
+    try {
+      let ingestionEntry = await mongo.findOne<IngestionEntry>({ date });
+      if (!ingestionEntry) {
+        ingestionEntry = {
+          date,
+          ids: {
+            hits: [],
+            misses: [],
+          },
+        }
+        await mongo.insertOne(ingestionEntry);
       }
-      await mongo.insertOne(ingestionEntry);
-    }
 
-    return ingestionEntry;
+      return ingestionEntry;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.upsert`);
+    }
   },
 
   update: async (date: string, ingestionEntry: IngestionEntry) => {
     const mongo = await db('ingestion');
+    const begin = DateMetrics.now();
 
-    await mongo.updateOne({ date }, { $set: ingestionEntry });
+    try {
+      await mongo.updateOne({ date }, { $set: ingestionEntry });
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.update`);
+    }
   },
 };

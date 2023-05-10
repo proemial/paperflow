@@ -23,9 +23,7 @@ export async function GET() {
   const limit = DateFactory.yesterday();
   const output = await fetchUpdatedItems(newIds, limit, 1);
 
-  output.hits.forEach(async item => {
-    await DocsDao.upsert(item);
-  });
+  DocsDao.upsertMany(output.hits);
 
   ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
   ingestionState.ids.misses.push(...output.misses.map(item => item.parsed.id));
