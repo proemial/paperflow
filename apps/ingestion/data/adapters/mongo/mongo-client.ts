@@ -1,7 +1,7 @@
 import { DateMetrics } from '@/utils/date';
 import { MongoClient } from 'mongodb';
 
-const uri = process.env.MONGO_CONNECTSTRING;
+const uri = process.env.MONGO_CONNECT_STRING;
 const options = {};
 
 
