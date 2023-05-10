@@ -25,7 +25,7 @@ export async function GET() {
 
     if (output.misses.length > 0 || output.hits.length > 0) {
       if (output.hits.length > 0) {
-        DocsDao.upsertMany(output.hits);
+        await DocsDao.upsertMany(output.hits);
       }
 
       ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
