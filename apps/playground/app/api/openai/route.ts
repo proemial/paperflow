@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   return NextResponse.json(completion);
 }
 
-async function davinciPrompt({ text, maxTokens, temperature, model }: Prompt) {
+async function davinciPrompt({ text, maxTokens, temperature, model, prompt }: Prompt) {
   const key = `OpenAI[${model}/${temperature}/${maxTokens}]`;
   const begin = now();
 
@@ -44,7 +44,7 @@ async function davinciPrompt({ text, maxTokens, temperature, model }: Prompt) {
       model,
       temperature,
       max_tokens: maxTokens,
-      prompt: createPrompt(text),
+      prompt: createPrompt(prompt, text),
     });
 
     return { ...completion.data, text: completion.data.choices[0].text } as WithTextAndUsage;
@@ -56,7 +56,7 @@ async function davinciPrompt({ text, maxTokens, temperature, model }: Prompt) {
   }
 }
 
-async function gptPrompt({ text, model, role }: Prompt) {
+async function gptPrompt({ text, model, role, prompt }: Prompt) {
   const key = `OpenAI[${model}/${role}]`;
   const begin = now();
 
@@ -70,7 +70,7 @@ async function gptPrompt({ text, model, role }: Prompt) {
         },
         {
           role: ChatCompletionRequestMessageRoleEnum.User,
-          content: createPrompt(text),
+          content: createPrompt(prompt, text),
         }
       ],
     });
@@ -84,6 +84,6 @@ async function gptPrompt({ text, model, role }: Prompt) {
   }
 }
 
-function createPrompt(abstract: string) {
-  return `Write an extremely short summary of the following text in the style of an engaging tweet "${abstract}"`;
+function createPrompt(prompt: string, abstract: string) {
+  return `${prompt} "${abstract}"`;
 }
