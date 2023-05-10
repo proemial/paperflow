@@ -1,11 +1,15 @@
-import { ArxivItem } from "./api/arxiv/scrape/.model";
-import ListItem from "./.components/.list-item";
+import { RawArxivPaper } from '@/data/adapters/arxiv/arxiv.models';
+import ListItem from "@/components/list-item";
 import Link from "next/link";
+import dayjs from 'dayjs';
+import { fetchData } from '@/data/adapters/fetch';
 
 export default async function Page() {
-  const json: Array<ArxivItem> = await (await fetch('http://localhost:3020/api/arxiv/scrape')).json();
+  const json: Array<RawArxivPaper> = await (await fetchData(`http://localhost:3020/api/arxiv/scrape/`)).json();
+  console.log('json', json);
 
-  const grouped = {} as Record<string, Array<ArxivItem>>;
+
+  const grouped = {} as Record<string, Array<RawArxivPaper>>;
   json.forEach((item) => {
     const category = item.primary_category.term;
     grouped.hasOwnProperty(category)
@@ -40,7 +44,7 @@ export default async function Page() {
   );
 }
 
-function ArxivLink({ item }: { item: ArxivItem }) {
+function ArxivLink({ item }: { item: RawArxivPaper }) {
   const id = item.id.substring(item.id.lastIndexOf('/') + 1);
   return (
     <Link href={item.id}>{id}</Link>
