@@ -9,7 +9,7 @@ export const revalidate = 1;
 
 export async function POST(request: Request) {
   const { date, ids } = await request.json() as { date: string, ids: string[] };
-  log('date', date, ids);
+  log('[scrape>>', date, ids);
 
   const limit = DateFactory.yesterday();
   const output = await fetchUpdatedItems(ids, limit);
@@ -26,10 +26,12 @@ export async function POST(request: Request) {
     await IngestionDao.update(date, ingestionState);
   }
 
-  return NextResponse.json({
+  const response = {
     papers: {
       updated: output.hits.length,
       ignored: output.misses.length
     }
-  });
+  }
+  log('<<scrape]', response);
+  return NextResponse.json(response);
 }

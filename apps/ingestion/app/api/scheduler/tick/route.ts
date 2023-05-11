@@ -13,6 +13,7 @@ export async function GET() {
 
   try {
     const date = dayjs().format("YYYY-MM-DD");
+    log('[tick>>', { date });
     let ingestionState = await IngestionDao.getOrCreate(date);
 
     // 1. Check for updates
@@ -23,7 +24,7 @@ export async function GET() {
         url: "https://ingestion.paperflow.ai/api/worker/scrape",
         body: { date, ids },
       });
-      console.log('qstash response', res);
+      log('[qstash]', res);
 
       ingestionState.ids.newIds.push(...ids);
       await IngestionDao.update(date, ingestionState);
@@ -33,7 +34,9 @@ export async function GET() {
 
     // 3. push to qStash (limit by category)
 
-    return NextResponse.json({ date, ids: ids.length });
+    const response = { date, ids: ids.length };
+    log('<<tick]', response);
+    return NextResponse.json(response);
   } finally {
     console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick`);
   }

@@ -10,8 +10,8 @@ export const revalidate = 1;
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   const begin = DateMetrics.now();
-
   const { id } = params;
+  log('[summarise>>', id);
 
   try {
     // Fetch paper 
@@ -49,7 +49,9 @@ export async function GET(request: Request, { params }: { params: { id: string }
       log('summary cached', cacheResult);
     }
 
-    return NextResponse.json({ summary: summary.text });
+    const response = { summary: summary.text };
+    log('<<summarise]', response);
+    return NextResponse.json(response);
   } finally {
     console.log(`[${DateMetrics.elapsed(begin)}] /api/workers/summarise/${id}`);
   }
