@@ -4,7 +4,8 @@ import { DateMetrics } from "@/utils/date";
 import { log } from "console";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
-import { qstash } from "@/data/adapters/qstash/qstash-client";
+import { Workers, qstash } from "@/data/adapters/qstash/qstash-client";
+import { PapersDao } from "@/data/db/paper-dao";
 
 export const revalidate = 1;
 
@@ -18,23 +19,30 @@ export async function GET() {
 
     // 1. Check for updates
     const ids = await fetchLatestPapers(date, ingestionState);
+
+    // 2. Schedule scraping
     if (ids.length > 0) {
-      // TODO: qStash POST https://ingestion.paperflow.ai/worker/scrape {date, ids}
-      const res = await qstash.publishJSON({
-        url: "https://ingestion.paperflow.ai/api/worker/scrape",
-        body: { date, ids },
-      });
-      log('[qstash]', res);
+      await qstash.publish(Workers.scraper, { date, ids });
 
       ingestionState.ids.newIds.push(...ids);
       await IngestionDao.update(date, ingestionState);
     }
 
-    // 2. Get papers to summarise (status intial, category from config)
+    // 3. Get papers to summarise (status intial, category from config)
+    const papers = await PapersDao.getIdsByStatusFiltered('initial');
+    log('papers', papers.length);
 
-    // 3. push to qStash (limit by category)
+    // 4. Schedule summarisation
+    if (papers.length > 0) {
+      papers.forEach(async paper => {
+        await qstash.publish(Workers.summarizer, { id: paper.id });
+      });
 
-    const response = { date, ids: ids.length };
+      // ingestionState.ids.newIds.push(...ids);
+      // await IngestionDao.update(date, ingestionState);
+    }
+
+    const response = { date, ids: ids.length, papers: papers.length };
     log('<<tick]', response);
     return NextResponse.json(response);
   } finally {

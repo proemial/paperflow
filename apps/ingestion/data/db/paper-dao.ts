@@ -3,6 +3,8 @@ import { DateMetrics } from "@/utils/date";
 import { log } from "console";
 import { AnyBulkWriteOperation } from "mongodb";
 import { ArxivPaper } from "../adapters/arxiv/arxiv.models";
+import { ConfigDao } from "./config-dao";
+import { get } from "http";
 
 export type PaperStatus = "initial" | "summarised";
 
@@ -11,6 +13,10 @@ export type RevisionedPaper = {
   status: PaperStatus,
   lastUpdated: Date,
   revisions: ArxivPaper[],
+};
+
+export type WithId = {
+  id: string,
 };
 
 export const PapersDao = {
@@ -69,27 +75,6 @@ export const PapersDao = {
     }
   },
 
-  getByIdAndStatus: async (id: string, status: string) => {
-    const mongo = await db('papers');
-    const begin = DateMetrics.now();
-
-    try {
-      const paper = await mongo.findOne<RevisionedPaper>({ id, status }, {
-        projection: {
-          revisions: { $slice: -1 },         // last element
-          // "revisions.parsed.abstract": 1  // only abstract
-        }
-      });
-
-      return paper && paper?.revisions[0];
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
-    }
-  },
-
   updateSummary: async (id: string, revId: string, summary: string) => {
     const mongo = await db('papers');
     const begin = DateMetrics.now();
@@ -111,5 +96,58 @@ export const PapersDao = {
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.updateSummary`);
     }
-  }
+  },
+
+  getByIdAndStatus: async (id: string, status: string) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    try {
+      const paper = await mongo.findOne<RevisionedPaper>({ id, status }, {
+        projection: {
+          revisions: { $slice: -1 },         // last element
+          // "revisions.parsed.abstract": 1  // only abstract
+        }
+      });
+
+      return paper && paper?.revisions[0];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+    }
+  },
+
+  getIdsByStatusFiltered: async (status: string) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    const filterConfig = await ConfigDao.getFilter();
+    const filter = { 'revisions.parsed.category': { $regex: filterConfig?.regex } };
+
+    try {
+      const paperIds = mongo.find<WithId>({ status, ...filter }, {
+        projection: { id: 1 }
+      });
+
+      return await paperIds.toArray();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+    }
+  },
 };
+
+async function getCategoryFilter(filter?: boolean) {
+  if (!filter)
+    return {};
+
+  const filterConfig = await ConfigDao.getFilter();
+  if (!filterConfig)
+    return {};
+
+  return { $regex: filterConfig.regex };
+}

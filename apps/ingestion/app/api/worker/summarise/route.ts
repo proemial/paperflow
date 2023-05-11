@@ -8,9 +8,9 @@ import { NextResponse } from "next/server";
 
 export const revalidate = 1;
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request) {
   const begin = DateMetrics.now();
-  const { id } = params;
+  const { id } = await request.json() as { id: string };
   log('[summarise>>', id);
 
   try {
