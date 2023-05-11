@@ -4,7 +4,7 @@ import { log } from "console";
 import { AnyBulkWriteOperation } from "mongodb";
 import { ArxivPaper } from "../adapters/arxiv/arxiv.models";
 
-export type PaperStatus = "new" | "summarised";
+export type PaperStatus = "initial" | "summarised";
 
 export type RevisionedPaper = {
   id: string,
@@ -21,7 +21,7 @@ export const PapersDao = {
     try {
       const lastUpdated = new Date();
       const id = paper.parsed.id;
-      const status = 'new';
+      const status = 'initial';
 
       await mongo.updateOne({ id }, {
         $set: { id, status, lastUpdated },
@@ -45,7 +45,7 @@ export const PapersDao = {
       await mongo.bulkWrite(papers.map(paper => {
         const lastUpdated = new Date();
         const id = paper.parsed.id;
-        const status = 'new';
+        const status = 'initial';
 
         const result: AnyBulkWriteOperation = {
           updateOne: {

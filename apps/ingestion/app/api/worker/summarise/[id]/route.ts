@@ -1,6 +1,6 @@
 import { gptPrompt } from "@/data/adapters/openai/openai";
 import { PapersDao } from "@/data/db/paper-dao";
-import { PromptDao, asOpenAIPrompt } from "@/data/db/prompt-dao";
+import { ConfigDao, asOpenAIPrompt } from "@/data/db/config-dao";
 import { SummariesDao } from "@/data/db/summaries-dao";
 import { DateMetrics } from "@/utils/date";
 import { log } from "console";
@@ -15,14 +15,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
   try {
     // Fetch paper 
-    const paper = await PapersDao.getByIdAndStatus(id, 'new');
+    const paper = await PapersDao.getByIdAndStatus(id, 'initial');
     if (!paper) {
       return NextResponse.json({ error: 'paper not found' }, { status: 404 });
     }
     log('paper', paper.parsed.hash);
 
     // Fetch prompt
-    const prompt = await PromptDao.getDefault();
+    const prompt = await ConfigDao.getPrompt();
     if (!prompt) {
       return NextResponse.json({ error: 'prompt not found' }, { status: 404 });
     }
