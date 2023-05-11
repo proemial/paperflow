@@ -5,6 +5,8 @@ import { DateFactory } from "@/utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";
 
+export const revalidate = 1;
+
 export async function POST(request: Request) {
   const { date, ids } = await request.json() as { date: string, ids: string[] };
   log('date', date, ids);

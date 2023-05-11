@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import { qstash } from "@/data/adapters/qstash/qstash-client";
 
-
 export const revalidate = 1;
 
 export async function GET() {
