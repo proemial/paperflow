@@ -10,6 +10,7 @@ export default async function Page() {
     <div className="space-y-6">
       <div className="space-y-2 text-white">
         <div className="space-y-3">
+          {/* @ts-expect-error Server Component */}
           <IngestionSummary ingestionState={ingestionState} />
         </div>
       </div>
