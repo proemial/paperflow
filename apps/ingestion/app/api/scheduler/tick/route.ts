@@ -20,7 +20,7 @@ export async function GET() {
     if (ids.length > 0) {
       // TODO: qStash POST https://ingestion.paperflow.ai/worker/scrape {date, ids}
       const res = await qstash.publishJSON({
-        url: "https://ingestion.paperflow.ai/worker/scrape",
+        url: "https://ingestion.paperflow.ai/api/worker/scrape",
         body: { date, ids },
       });
       console.log('qstash response', res);
