@@ -93,6 +93,6 @@ export type ArxivPaper = {
 }
 
 export const extractId = (url: string) => removeVersion(
-  url.split('/').pop() as string
+  url.split('abs/').pop() as string
 );
 export const removeVersion = (id: string) => id.substring(0, id.lastIndexOf('v') || id.length - 1);

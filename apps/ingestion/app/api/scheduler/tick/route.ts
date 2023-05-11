@@ -5,6 +5,7 @@ import { IngestionDao } from "@/data/db/ingestion-dao";
 import { DateFactory, DateMetrics } from "@/utils/date";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
+import { log } from "console";
 
 export const revalidate = 1;
 
@@ -35,6 +36,10 @@ async function fetchLatestPapers(date: string) {
   let ingestionState = await IngestionDao.getOrCreate(date);
 
   const newIds = ids.filter(id => !ingestionState.ids.hits.includes(id) && !ingestionState.ids.misses.includes(id));
+
+  if (newIds.length === 0) {
+    return { hits: [], misses: [] };
+  }
 
   const limit = DateFactory.yesterday();
   const output = await fetchUpdatedItems(newIds, limit);
