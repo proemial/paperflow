@@ -1,6 +1,6 @@
+import { logError, logMetric, now } from "@/utils/metrics";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
-import { logError, logMetric, now } from "@/utils/metrics";
 
 const url = process.env.REDIS_PROMPTS_URL as string;
 const token = process.env.REDIS_PROMPTS_TOKEN as string;
@@ -13,11 +13,11 @@ export async function GET(request: Request, { params }: { params: { hash: string
 
   try {
     const cached = await redis.get(params.hash);
-    if(cached)
+    if (cached)
       console.log(`CACHE HIT: ${key}`);
 
     return NextResponse.json(cached);
-  } catch(e) {
+  } catch (e) {
     logError(key, begin, e);
     throw e;
   } finally {
@@ -34,7 +34,7 @@ export async function PUT(request: Request, { params }: { params: { hash: string
     const output = await redis.set(params.hash, data);
 
     return NextResponse.json(output);
-  } catch(e) {
+  } catch (e) {
     logError(key, begin, e);
     throw e;
   } finally {
