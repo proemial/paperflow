@@ -1,11 +1,11 @@
-import { fetchUpdatedItems } from "@/data/adapters/arxiv/arxiv-api";
 import { fetchUpdatedIds } from "@/data/adapters/arxiv/arxiv-oao";
-import { PapersDao } from "@/data/db/paper-dao";
-import { IngestionDao } from "@/data/db/ingestion-dao";
-import { DateFactory, DateMetrics } from "@/utils/date";
+import { IngestionDao, IngestionState } from "@/data/db/ingestion-dao";
+import { DateMetrics } from "@/utils/date";
+import { log } from "console";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
-import { log } from "console";
+import { qstash } from "@/data/adapters/qstash/qstash-client";
+
 
 export const revalidate = 1;
 
@@ -14,45 +14,34 @@ export async function GET() {
 
   try {
     const date = dayjs().format("YYYY-MM-DD");
+    let ingestionState = await IngestionDao.getOrCreate(date);
 
-    const output = await fetchLatestPapers(date);
+    // 1. Check for updates
+    const ids = await fetchLatestPapers(date, ingestionState);
+    if (ids.length > 0) {
+      // TODO: qStash POST https://ingestion.paperflow.ai/worker/scrape {date, ids}
+      const res = await qstash.publishJSON({
+        url: "https://ingestion.paperflow.ai/worker/scrape",
+        body: { date, ids },
+      });
+      console.log('qstash response', res);
 
-    // TODO: push to qStash (limit by category)
+      ingestionState.ids.newIds.push(...ids);
+      await IngestionDao.update(date, ingestionState);
+    }
 
-    return NextResponse.json({
-      papers: {
-        updated: output.hits.length,
-        ignored: output.misses.length
-      }
-    });
+    // 2. Get papers to summarise (status intial, category from config)
+
+    // 3. push to qStash (limit by category)
+
+    return NextResponse.json({ date, ids: ids.length });
   } finally {
     console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick`);
   }
 }
 
-async function fetchLatestPapers(date: string) {
+async function fetchLatestPapers(date: string, ingestionState: IngestionState) {
   const ids = await fetchUpdatedIds(date);
 
-  let ingestionState = await IngestionDao.getOrCreate(date);
-
-  const newIds = ids.filter(id => !ingestionState.ids.hits.includes(id) && !ingestionState.ids.misses.includes(id));
-
-  if (newIds.length === 0) {
-    return { hits: [], misses: [] };
-  }
-
-  const limit = DateFactory.yesterday();
-  const output = await fetchUpdatedItems(newIds, limit);
-
-  if (output.misses.length > 0 || output.hits.length > 0) {
-    if (output.hits.length > 0) {
-      await PapersDao.upsertMany(output.hits);
-    }
-
-    ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
-    ingestionState.ids.misses.push(...output.misses.map(item => item.parsed.id));
-    await IngestionDao.update(date, ingestionState);
-  }
-
-  return output;
+  return ids.filter(id => !ingestionState.ids.newIds.includes(id));
 }

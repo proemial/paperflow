@@ -2,11 +2,12 @@ import { db } from "@/data/adapters/mongo/mongo-client";
 import { DateMetrics } from "@/utils/date";
 
 type IngestionIds = {
+  newIds: string[],
   hits: string[],
   misses: string[],
 };
 
-export type IngestionEntry = {
+export type IngestionState = {
   date: string,
   ids: IngestionIds,
 };
@@ -17,11 +18,12 @@ export const IngestionDao = {
     const begin = DateMetrics.now();
 
     try {
-      let ingestionEntry = await mongo.findOne<IngestionEntry>({ date });
+      let ingestionEntry = await mongo.findOne<IngestionState>({ date });
       if (!ingestionEntry) {
         ingestionEntry = {
           date,
           ids: {
+            newIds: [],
             hits: [],
             misses: [],
           },
@@ -38,7 +40,7 @@ export const IngestionDao = {
     }
   },
 
-  update: async (date: string, ingestionEntry: IngestionEntry) => {
+  update: async (date: string, ingestionEntry: IngestionState) => {
     const mongo = await db('ingestion');
     const begin = DateMetrics.now();
 

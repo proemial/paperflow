@@ -1,5 +1,6 @@
 import { DateMetrics } from '@/utils/date';
 import { MongoClient } from 'mongodb';
+import { Env } from '../env';
 
 const uri = process.env.MONGO_CONNECT_STRING;
 const options = {};
@@ -12,7 +13,7 @@ if (!uri) {
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (process.env.NODE_ENV === "development") {
+if (Env.isDev) {
   // Handle hot reload
 
   let globalWithMongoClientPromise = global as typeof globalThis & {

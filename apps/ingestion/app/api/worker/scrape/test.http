@@ -1,0 +1,7 @@
+POST http://localhost:3020/api/worker/scrape HTTP/1.1
+content-type: application/json
+
+{
+    "date": "2023-05-11",
+    "ids": ["gr-qc/0603005"]
+}
