@@ -1,6 +1,6 @@
 import { fetchUpdatedItems } from "@/data/adapters/arxiv/arxiv-api";
 import { fetchUpdatedIds } from "@/data/adapters/arxiv/arxiv-oao";
-import { DocsDao } from "@/data/db/paper-dao";
+import { PapersDao } from "@/data/db/paper-dao";
 import { IngestionDao } from "@/data/db/ingestion-dao";
 import { DateFactory, DateMetrics } from "@/utils/date";
 import dayjs from "dayjs";
@@ -41,7 +41,7 @@ async function fetchLatestPapers(date: string) {
 
   if (output.misses.length > 0 || output.hits.length > 0) {
     if (output.hits.length > 0) {
-      await DocsDao.upsertMany(output.hits);
+      await PapersDao.upsertMany(output.hits);
     }
 
     ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));

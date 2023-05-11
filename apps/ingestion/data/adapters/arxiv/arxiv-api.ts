@@ -4,6 +4,7 @@ import { splitIntoBuckets } from "../../../utils/array";
 import { DateMetrics } from "../../../utils/date";
 import { fetchData, } from "../fetch";
 import { ArxivPaper, RawArxivPaper, extractId } from "./arxiv.models";
+import { Md5 } from "ts-md5";
 
 const papersByIds = (ids: string) => `https://export.arxiv.org/api/query?id_list=${ids}&max_results=50`;
 
@@ -83,6 +84,7 @@ export async function parseArxiv(data: string) {
             },
             title: entry.title,
             abstract: entry.summary,
+            hash: Md5.hashStr(entry.summary),
           },
           raw: entry,
         } as ArxivPaper;

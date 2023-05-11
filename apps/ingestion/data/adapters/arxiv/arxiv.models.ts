@@ -1,4 +1,3 @@
-import { url } from "inspector";
 
 export const arxivCategories = [
   { key: "cs", title: "Computer Science", category: "Computer Science" },
@@ -88,6 +87,7 @@ export type ArxivPaper = {
     },
     title: string,
     abstract: string,
+    hash: string,
   },
   raw: RawArxivPaper,
 }
