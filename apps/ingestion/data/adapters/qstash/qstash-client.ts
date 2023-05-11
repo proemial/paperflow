@@ -26,7 +26,7 @@ type PublishResponse<PublishRequest> = PublishRequest extends { cron: string }
 
 export enum Workers {
   scraper = "https://ingestion.paperflow.ai/api/worker/scrape",
-  summarizer = "https://ingestion.paperflow.ai/api/worker/summarize",
+  summariser = "https://ingestion.paperflow.ai/api/worker/summarise",
 }
 
 export const qstash = {

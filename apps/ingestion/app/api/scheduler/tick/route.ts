@@ -35,7 +35,7 @@ export async function GET() {
     // 4. Schedule summarisation
     if (papers.length > 0) {
       papers.forEach(async paper => {
-        await qstash.publish(Workers.summarizer, { id: paper.id });
+        await qstash.publish(Workers.summariser, { id: paper.id });
       });
 
       // ingestionState.ids.newIds.push(...ids);
