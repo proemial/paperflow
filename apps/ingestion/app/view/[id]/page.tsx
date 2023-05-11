@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 {paper.revisions[0].parsed.authors.join(', ')}
               </div>
               {paper.revisions[0].summary &&
-                <div className="my-4 p-2 italic rounded-xl border border-zinc-800 text-green-500">"{removeQuotes(paper.revisions[0].summary)}"</div>
+                <div className="my-4 p-2 italic rounded-xl border border-zinc-800 text-green-500">&quot;{removeQuotes(paper.revisions[0].summary)}&quot;</div>
               }
               <div className="my-2 text-2xs font-extralight">
                 {paper.revisions[0].parsed.abstract}

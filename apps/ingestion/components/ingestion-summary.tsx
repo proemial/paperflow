@@ -40,11 +40,11 @@ export default async function IngestionSummary({ ingestionState }: { ingestionSt
               <div className="text-sm font-bold">{key}</div>
               <div className="flex items-center justify-between">
                 <div className="text-sm">
-                  {groupedPapers[key].map(paper => {
+                  {groupedPapers[key].map((paper, i) => {
                     const color = paper.status === 'summarised' ? 'text-green-500' : 'text-zinc-700';
 
                     return (
-                      <span className="text-zinc-700">[
+                      <span className="text-zinc-700" key={i}>[
                         <Link className={color} href={`/view/${paper.id}`}>{paper.id}</Link>
                         ] </span>
                     )
