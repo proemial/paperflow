@@ -90,6 +90,7 @@ export type ArxivPaper = {
     hash: string,
   },
   raw: RawArxivPaper,
+  summary?: string,
 }
 
 export const extractId = (url: string) => removeVersion(

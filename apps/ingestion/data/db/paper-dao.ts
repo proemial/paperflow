@@ -1,10 +1,8 @@
 import { db } from "@/data/adapters/mongo/mongo-client";
 import { DateMetrics } from "@/utils/date";
-import { log } from "console";
 import { AnyBulkWriteOperation } from "mongodb";
 import { ArxivPaper } from "../adapters/arxiv/arxiv.models";
 import { ConfigDao } from "./config-dao";
-import { get } from "http";
 
 export type PaperStatus = "initial" | "summarised";
 
@@ -95,6 +93,58 @@ export const PapersDao = {
       throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.updateSummary`);
+    }
+  },
+
+  getByIds: async (ids: string[]) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    try {
+      const papers = mongo.find<RevisionedPaper>({ id: { $in: ids } }, {
+        projection: {
+          id: 1, status: 1, lastUpdated: 1,
+          revisions: { $slice: -1 },
+        }
+      });
+
+      return (await papers.toArray()).map(paper => ({
+        id: paper.id,
+        status: paper.status,
+        lastUpdated: paper.lastUpdated,
+        revisions: paper.revisions
+      }));
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getByIds`);
+    }
+  },
+
+  getById: async (id: string) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    try {
+      const paper = await mongo.findOne<RevisionedPaper>({ id }, {
+        projection: {
+          id: 1, status: 1, lastUpdated: 1,
+          revisions: { $slice: -1 },
+        }
+      });
+
+      return paper && {
+        id: paper.id,
+        status: paper.status,
+        lastUpdated: paper.lastUpdated,
+        revisions: paper.revisions
+      };
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
     }
   },
 

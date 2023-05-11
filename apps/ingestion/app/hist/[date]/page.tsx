@@ -1,10 +1,8 @@
 import IngestionSummary from '@/components/ingestion-summary';
 import { IngestionDao } from '@/data/db/ingestion-dao';
-import dayjs from 'dayjs';
 
-export default async function Page() {
-  const date = dayjs().format("YYYY-MM-DD");
-  const ingestionState = await IngestionDao.get(date);
+export default async function Page({ params }: { params: { date: string } }) {
+  const ingestionState = await IngestionDao.get(params.date);
 
   return (
     <div className="space-y-6">

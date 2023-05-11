@@ -13,6 +13,22 @@ export type IngestionState = {
 };
 
 export const IngestionDao = {
+  get: async (date: string) => {
+    const mongo = await db('ingestion');
+    const begin = DateMetrics.now();
+
+    try {
+      const ingestionEntry = await mongo.findOne<IngestionState>({ date });
+
+      return ingestionEntry || undefined;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.get`);
+    }
+  },
+
   getOrCreate: async (date: string) => {
     const mongo = await db('ingestion');
     const begin = DateMetrics.now();
