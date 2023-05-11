@@ -45,7 +45,7 @@ export default async function IngestionSummary({ ingestionState }: { ingestionSt
 
                     return (
                       <span className="text-zinc-700" key={i}>[
-                        <Link className={color} href={`/view/${paper.id}`}>{paper.id}</Link>
+                        <Link className={`${color} hover:underline`} href={`/view/${paper.id}`}>{paper.id}</Link>
                         ] </span>
                     )
                   })}

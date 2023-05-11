@@ -1,5 +1,6 @@
 import { PapersDao } from '@/data/db/paper-dao';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const paper = await PapersDao.getById(params.id);
@@ -13,7 +14,7 @@ export default async function Page({ params }: { params: { id: string } }) {
           {paper &&
             <div>
               <div className="text-right text-2xs">{dayjs(paper.revisions[0].parsed.updated).format("YYYY-MM-DD HH:mm:ss")}</div>
-              <div className="text-2xl font-bold">{paper.revisions[0].parsed.title}</div>
+              <Link href={paper.revisions[0].raw.id} target="_blank" className="text-2xl font-bold hover:underline">{paper.revisions[0].parsed.title}</Link>
               <div className="text-xs font-extralight">
                 {paper.revisions[0].parsed.authors.join(', ')}
               </div>
