@@ -2,6 +2,8 @@ import IngestionSummary from '@/components/ingestion-summary';
 import { IngestionDao } from '@/data/db/ingestion-dao';
 import dayjs from 'dayjs';
 
+export const revalidate = 60;
+
 export default async function Page() {
   const date = dayjs().format("YYYY-MM-DD");
   const ingestionState = await IngestionDao.get(date);
