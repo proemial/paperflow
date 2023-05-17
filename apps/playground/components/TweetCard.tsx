@@ -15,6 +15,7 @@ import { AccordionContent, AccordionHeader } from "@/components/prompt/JoyAccord
 import Divider from "@mui/joy/Divider";
 import { InfoOutlined } from "@mui/icons-material";
 import Box from "@mui/joy/Box";
+import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
 export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem }) {
   const { title, authors, contentSnippet, link } = item;
@@ -27,20 +28,20 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
     setResult(undefined);
 
     (async () => {
-      const promptData: Payload = { ...promptInput, category: promptInput.category.key, hash: hash, text: contentSnippet };
+      const promptData: Payload = { ...promptInput, category: promptInput.category.key, hash: hash, contentSnippet, title };
       console.log('item/route promptData', promptData);
 
       const pHash = Md5.hashStr(JSON.stringify(promptData));
       console.log('item/route hash', pHash);
 
       const redisOutput = await getFromRedis(pHash);
-      if(redisOutput) {
+      if (redisOutput) {
         setResult(redisOutput);
         return;
       }
 
       const openaiOutput = await getFromOpenAI(pHash, promptData);
-      if(openaiOutput) {
+      if (openaiOutput) {
         await addToRedis(pHash, openaiOutput);
         setResult(openaiOutput);
       }
@@ -50,7 +51,7 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
 
   return (
     <Card variant="outlined" sx={{ maxWidth: 320 }}>
-      <CardOverflow sx={{p:0}}>
+      <CardOverflow sx={{ p: 0 }}>
         <List
           variant="outlined"
           component={Accordion.Root}
@@ -63,7 +64,7 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
         >
           <Accordion.Item value="item-1">
             <AccordionHeader isFirst>
-              <div style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {`ABSTRACT: ${contentSnippet}`}
               </div>
             </AccordionHeader>
@@ -78,7 +79,7 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
       </Typography>
       <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
         {!result &&
-          <Box sx={{ display: "flex", justifyContent: 'center'}}>
+          <Box sx={{ display: "flex", justifyContent: 'center' }}>
             <CircularProgress variant="solid" />
           </Box>
         }
@@ -115,7 +116,7 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
             >
               <div>Prompt tokens: {result.usage?.prompt_tokens}</div>
               <div>Completion tokens: {result.usage?.completion_tokens}</div>
-              <div style={{fontWeight: 'bold'}}>Total tokens: {result.usage?.total_tokens}</div>
+              <div style={{ fontWeight: 'bold' }}>Total tokens: {result.usage?.total_tokens}</div>
             </Box>
           } variant="outlined">
             <InfoOutlined />
@@ -128,13 +129,14 @@ export function TweetCard({ hash, item }: { hash: string, item: ParsedArxivItem 
 
 type Payload = {
   hash: string,
-  text: string,
+  title: string,
+  contentSnippet: string,
   category: string,
-  model: string,
-  temperature: number,
-  maxTokens: number,
-  prompt: string,
   count: number,
+  messages: Array<{
+    role: ChatCompletionRequestMessageRoleEnum,
+    content: string,
+  }>,
 }
 
 async function getFromRedis(hash: string) {
@@ -147,7 +149,7 @@ async function getFromRedis(hash: string) {
     const redisResultJson: WithTextAndUsage = await redisResult.json();
     console.log('redisResult', redisResultJson);
     return redisResultJson;
-  } catch(e) {
+  } catch (e) {
     logError(key, begin, e);
     throw e;
   } finally {
@@ -162,15 +164,41 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
 
   try {
     console.log('promptData', promptData);
+
+    let tokensFound = false;
+    const messages = promptData.messages.map(message => {
+      if (message.content.includes('$t') || message.content.includes('$a')) {
+        tokensFound = true;
+        return {
+          ...message,
+          content: message.content
+            .replace('$t', `"${promptData.title}"`)
+            .replace('$a', `"${promptData.contentSnippet}"`),
+        };
+      }
+      return message;
+    });
+    if (!tokensFound) {
+      const lastMessage = messages[messages.length - 1];
+      messages[messages.length - 1] = {
+        ...lastMessage,
+        content: lastMessage.content + ` "${promptData.title} ${promptData.contentSnippet}"`,
+      };
+    }
+    const promptDataWithArxivData = {
+      messages,
+    };
+    console.log('item/route promptDataWithArxivData', promptDataWithArxivData);
+
     const openaiResponse = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(promptData),
+      body: JSON.stringify(promptDataWithArxivData),
     });
 
     const openaiResponseJson: WithTextAndUsage = await openaiResponse.json();
     console.log('openaiResponse', openaiResponseJson);
     return openaiResponseJson;
-  } catch(e) {
+  } catch (e) {
     logError(key, begin, e);
     throw e;
   } finally {
@@ -188,7 +216,7 @@ async function addToRedis(hash: string, openaiOutput: WithTextAndUsage) {
       method: 'PUT',
       body: JSON.stringify(openaiOutput),
     });
-  } catch(e) {
+  } catch (e) {
     logError(key, begin, e);
     throw e;
   } finally {

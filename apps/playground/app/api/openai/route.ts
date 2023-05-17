@@ -9,12 +9,10 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 type Prompt = {
-  model: string,
-  temperature: number,
-  maxTokens: number,
-  prompt: string,
-  text: string,
-  role: string,
+  messages: Array<{
+    role: ChatCompletionRequestMessageRoleEnum,
+    content: string,
+  }>,
 }
 
 export type WithTextAndUsage = {
@@ -27,52 +25,19 @@ export async function POST(request: Request) {
   const prompt = await request.json();
 
   console.log('Prompt extracted, sending to OpenAI');
-  const completion = prompt.model === 'text-davinci-003'
-    ? await davinciPrompt(prompt)
-    : await gptPrompt(prompt);
+  const completion = await gptPrompt(prompt);
 
   return NextResponse.json(completion);
 }
 
-async function davinciPrompt({ text, maxTokens, temperature, model, prompt }: Prompt) {
-  const key = `OpenAI[${model}/${temperature}/${maxTokens}]`;
-  const begin = now();
-
-  try {
-    console.log('Creating completion');
-    const completion = await openai.createCompletion({
-      model,
-      temperature,
-      max_tokens: maxTokens,
-      prompt: createPrompt(prompt, text),
-    });
-
-    return { ...completion.data, text: completion.data.choices[0].text } as WithTextAndUsage;
-  } catch (e) {
-    logError(key, begin, e);
-    throw e;
-  } finally {
-    logMetric(key, begin);
-  }
-}
-
-async function gptPrompt({ text, model, role, prompt }: Prompt) {
-  const key = `OpenAI[${model}/${role}]`;
+async function gptPrompt({ messages }: Prompt) {
+  const key = `OpenAI[${messages.length}]`;
   const begin = now();
 
   try {
     const completion = await openai.createChatCompletion({
-      model: model,
-      messages: [
-        {
-          role: ChatCompletionRequestMessageRoleEnum.System,
-          content: role,
-        },
-        {
-          role: ChatCompletionRequestMessageRoleEnum.User,
-          content: createPrompt(prompt, text),
-        }
-      ],
+      model: 'gpt-3.5-turbo',
+      messages,
     });
 
     return { ...completion.data, text: completion.data.choices[0].message?.content } as WithTextAndUsage;
@@ -82,8 +47,4 @@ async function gptPrompt({ text, model, role, prompt }: Prompt) {
   } finally {
     logMetric(key, begin);
   }
-}
-
-function createPrompt(prompt: string, abstract: string) {
-  return `${prompt} "${abstract}"`;
 }

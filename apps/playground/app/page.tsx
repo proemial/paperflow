@@ -6,16 +6,26 @@ import { Md5 } from "ts-md5";
 import { useEffect } from "react";
 import { promptInputState } from "@/state/promptInputState";
 import { useSetRecoilState } from "recoil";
+import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
 const defaultValues = {
   category: arxivCategories[0],
   count: 3,
+  messages: [
+    {
+      role: ChatCompletionRequestMessageRoleEnum.Assistant,
+      content: "You are a helpful assistant.",
+    },
+    {
+      role: ChatCompletionRequestMessageRoleEnum.System,
+      content: "Analyse the following text $t $a",
+    },
+    {
+      role: ChatCompletionRequestMessageRoleEnum.User,
+      content: "Summarise and rephrase it in the style of Marvin the depressed robot",
+    }
+  ],
 
-  model: "gpt-3.5-turbo",
-  temperature: 0.6,
-  maxTokens: 100,
-  role: 'You are a helpful assistant.',
-  prompt: "Write an extremely short summary of the following text in the style of an engaging tweet for kids",
 };
 
 const defaultHash = Md5.hashStr(JSON.stringify(defaultValues));
