@@ -141,7 +141,7 @@ export function PromptForm({ initialValues, onSubmit }: Props) {
                             })}
                             <tr>
                               <td colSpan={2}>
-                                Roles: <b>&quot;User&quot;:</b> You or whoever is chatting/asking questions to chat gpt, <b>&quot;Assistant&quot;:</b> Open AI(chat gpt) server - who is replying to your("user" role) questions, <b>&quot;System&quot;:</b> The system developer who can give some internal instructions for the conversation. developers can provide option for user input also which depends on the system requirements.
+                                Roles: <b>&quot;User&quot;:</b> You or whoever is chatting/asking questions to chat gpt, <b>&quot;Assistant&quot;:</b> Open AI(chat gpt) server - who is replying to your(&quot;user&quot; role) questions, <b>&quot;System&quot;:</b> The system developer who can give some internal instructions for the conversation. developers can provide option for user input also which depends on the system requirements.
                               </td>
                               <td style={{ textAlign: 'right', paddingRight: 4 }}>
                                 <Button
