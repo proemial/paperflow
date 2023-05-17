@@ -1,4 +1,4 @@
-import { ChildFriendly, Elderly } from '@mui/icons-material';
+import { Diversity2, Science } from '@mui/icons-material';
 import { Tooltip } from '@mui/joy';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import List from '@mui/joy/List';
@@ -50,7 +50,7 @@ export default function FirstSidebar() {
           <ListItemButton>
             <Tooltip title="GPT playground">
               <Link href="/">
-                <ChildFriendly />
+                <Diversity2 />
               </Link>
             </Tooltip>
           </ListItemButton>
@@ -59,7 +59,7 @@ export default function FirstSidebar() {
           <ListItemButton>
             <Tooltip title="Old playground">
               <Link href="/old-playground">
-                <Elderly />
+                <Science />
               </Link>
             </Tooltip>
           </ListItemButton>

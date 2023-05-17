@@ -35,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
                   display: "flex",
                   flexDirection: "column",
                   minWidth: 0,
-                  height: "100dvh",
+                  height: "100%",
                   gap: 1
                 })}
               >
