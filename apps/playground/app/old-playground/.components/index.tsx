@@ -1,16 +1,16 @@
 "use client";
 import * as React from "react";
-import { PromptForm, PromptInput } from "@/components/prompt/PromptForm";
-import PromptOutput from "@/components/prompt/PromptOutput";
-import { promptInputState } from "@/state/promptInputState";
+import { PromptForm } from "./PromptForm";
+import PromptOutput from "./PromptOutput";
 import { useRecoilState } from "recoil";
 import Box from "@mui/joy/Box";
+import { DavinciInput, davinciInputState } from "@/state/promptInputState";
 
 export default function Prompt({ hash }: { hash: string }) {
-  const [input, setInput] = useRecoilState(promptInputState(hash));
+  const [input, setInput] = useRecoilState(davinciInputState(hash));
   const [disabled, setDisabled] = React.useState(true);
 
-  const handleSubmit = (input: PromptInput) => {
+  const handleSubmit = (input: DavinciInput) => {
     setDisabled(true);
     setInput(input);
   };

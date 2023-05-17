@@ -1,8 +1,6 @@
-import * as React from 'react';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import IconButton from '@mui/joy/IconButton';
 import Sheet from '@mui/joy/Sheet';
-import MuiLogo from './MuiLogo';
 import { toggleSidebar } from '../utils/responsive';
 
 export default function Header() {
@@ -40,7 +38,6 @@ export default function Header() {
       >
         <i data-feather="menu" />
       </IconButton>
-      <MuiLogo variant="plain" sx={{ boxShadow: 'none', mr: 'auto' }} />
     </Sheet>
   );
 }

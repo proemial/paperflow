@@ -1,29 +1,17 @@
 import { arxivCategories } from "@/utils/arxivCategories";
-import { Add, PlayArrow, Remove, ThumbUp } from "@mui/icons-material";
-import { Autocomplete, Button, Checkbox, IconButton, Input, List, Option, Select, Table } from "@mui/joy";
+import { Add, PlayArrow, Remove } from "@mui/icons-material";
+import { Autocomplete, Button, Input, List, Option, Select, Table } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import * as Accordion from "@radix-ui/react-accordion";
-import { useFormik, FieldArray, useField, FieldHookConfig, FieldAttributes, getIn, Formik, FormikProps } from "formik";
+import { FieldArray, FieldHookConfig, Formik, useField } from "formik";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import * as yup from "yup";
-import { AccordionContent, AccordionHeader } from "./JoyAccordion";
-
-export type PromptInput = {
-  category: {
-    key: string,
-    title: string,
-    category: string,
-  },
-  count: number,
-  messages: Array<{
-    role: ChatCompletionRequestMessageRoleEnum,
-    content: string,
-  }>,
-}
+import { AccordionContent, AccordionHeader } from "@/components/JoyAccordion";
+import { GptInput } from "@/state/promptInputState";
 
 type Props = {
-  initialValues: PromptInput,
-  onSubmit: (values: PromptInput) => void,
+  initialValues: GptInput,
+  onSubmit: (values: GptInput) => void,
   disabled: boolean
 };
 

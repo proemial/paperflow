@@ -5,11 +5,11 @@ import * as React from "react";
 import Header from "@/components/Header";
 import FirstSidebar from "@/components/FirstSidebar";
 import Box from "@mui/joy/Box";
-import Styles from "@/components/prompt/Styles";
+import Styles from "@/components/Styles";
 import { RecoilRoot } from "recoil";
 import { Analytics } from '@vercel/analytics/react';
 
-export default function RootLayout({children}: {children: React.ReactNode;}) {
+export default function RootLayout({ children }: { children: React.ReactNode; }) {
   return (
     <RecoilRoot>
       <Analytics />

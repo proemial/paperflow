@@ -1,10 +1,10 @@
 "use client";
 import * as React from "react";
-import Prompt from "@/components/prompt";
+import Prompt from "./.components";
 import { arxivCategories } from "@/utils/arxivCategories";
 import { Md5 } from "ts-md5";
 import { useEffect } from "react";
-import { promptInputState } from "@/state/promptInputState";
+import { gptInputState } from "@/state/promptInputState";
 import { useSetRecoilState } from "recoil";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
@@ -22,7 +22,7 @@ const defaultValues = {
     },
     {
       role: ChatCompletionRequestMessageRoleEnum.User,
-      content: "Summarise and rephrase it in the style of Marvin the depressed robot",
+      content: "Summarise and rephrase it as an engaging one-line pitch, in the style of a tech influencer",
     }
   ],
 
@@ -31,7 +31,7 @@ const defaultValues = {
 const defaultHash = Md5.hashStr(JSON.stringify(defaultValues));
 
 export default function HomePage() {
-  const setRecoilState = useSetRecoilState(promptInputState(defaultHash));
+  const setRecoilState = useSetRecoilState(gptInputState(defaultHash));
 
   useEffect(() => {
     setRecoilState(defaultValues);

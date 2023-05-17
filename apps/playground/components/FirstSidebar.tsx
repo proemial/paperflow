@@ -1,10 +1,11 @@
-import * as React from 'react';
+import { ChildFriendly, Elderly } from '@mui/icons-material';
+import { Tooltip } from '@mui/joy';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListItemButton from '@mui/joy/ListItemButton';
 import Sheet from '@mui/joy/Sheet';
-import MuiLogo from './MuiLogo';
+import Link from 'next/link';
 
 export default function FirstSidebar() {
   return (
@@ -23,7 +24,6 @@ export default function FirstSidebar() {
           md: 'none',
         },
         transition: 'transform 0.4s',
-        zIndex: 10000,
         height: '100dvh',
         width: 'var(--FirstSidebar-width)',
         top: 0,
@@ -45,69 +45,26 @@ export default function FirstSidebar() {
           },
         }}
       />
-      <MuiLogo />
       <List sx={{ '--ListItem-radius': '8px', '--List-gap': '12px' }}>
         <ListItem>
           <ListItemButton>
-            <i data-feather="home" />
+            <Tooltip title="GPT playground">
+              <Link href="/">
+                <ChildFriendly />
+              </Link>
+            </Tooltip>
           </ListItemButton>
         </ListItem>
-        {/*<ListItem>*/}
-        {/*  <ListItemButton*/}
-        {/*    selected*/}
-        {/*    variant="solid"*/}
-        {/*    color="primary"*/}
-        {/*    onClick={() => openSidebar()}*/}
-        {/*  >*/}
-        {/*    <i data-feather="bar-chart-2" />*/}
-        {/*  </ListItemButton>*/}
-        {/*</ListItem>*/}
-        {/*<ListItem>*/}
-        {/*  <ListItemButton onClick={() => openSidebar()}>*/}
-        {/*    <i data-feather="layers" />*/}
-        {/*  </ListItemButton>*/}
-        {/*</ListItem>*/}
-        {/*<ListItem>*/}
-        {/*  <ListItemButton onClick={() => openSidebar()}>*/}
-        {/*    <i data-feather="check-square" />*/}
-        {/*  </ListItemButton>*/}
-        {/*</ListItem>*/}
-        {/*<ListItem>*/}
-        {/*  <ListItemButton onClick={() => openSidebar()}>*/}
-        {/*    <i data-feather="flag" />*/}
-        {/*  </ListItemButton>*/}
-        {/*</ListItem>*/}
-        {/*<ListItem>*/}
-        {/*  <ListItemButton onClick={() => openSidebar()}>*/}
-        {/*    <i data-feather="users" />*/}
-        {/*  </ListItemButton>*/}
-        {/*</ListItem>*/}
+        <ListItem>
+          <ListItemButton>
+            <Tooltip title="Old playground">
+              <Link href="/old-playground">
+                <Elderly />
+              </Link>
+            </Tooltip>
+          </ListItemButton>
+        </ListItem>
       </List>
-
-
-      {/*<List*/}
-      {/*  sx={{*/}
-      {/*    mt: 'auto',*/}
-      {/*    flexGrow: 0,*/}
-      {/*    '--ListItem-radius': '8px',*/}
-      {/*    '--List-gap': '8px',*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <ListItem>*/}
-      {/*    <ListItemButton>*/}
-      {/*      <i data-feather="life-buoy" />*/}
-      {/*    </ListItemButton>*/}
-      {/*  </ListItem>*/}
-      {/*  <ListItem>*/}
-      {/*    <ListItemButton>*/}
-      {/*      <i data-feather="settings" />*/}
-      {/*    </ListItemButton>*/}
-      {/*  </ListItem>*/}
-      {/*</List>*/}
-
-
-      {/*<Divider />*/}
-      {/*<Avatar variant="outlined" src="/static/images/avatar/3.jpg" />*/}
     </Sheet>
   );
 }

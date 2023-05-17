@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { Md5 } from "ts-md5";
-import { WithTextAndUsage } from "@/app/api/openai/route";
+import { WithTextAndUsage } from "@/app/api/openai/gpt3/route";
 import { logError, logMetric, now } from "@/utils/metrics";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
@@ -84,7 +84,7 @@ async function getFromRedis(hash: string, host: string | null) {
 }
 
 async function getFromOpenAI(hash: string, host: string | null, promptData: { messages: WithMessages }) {
-  const url = `${host}/api/openai/`;
+  const url = `${host}/api/openai/gpt3/`;
   const key = `POST[${url}]`;
   const begin = now();
 
