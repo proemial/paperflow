@@ -55,7 +55,7 @@ export function PromptForm({ initialValues, onSubmit }: Props) {
           >
             <Accordion.Item value="item-1">
               <AccordionHeader isFirst>
-                <b>{props.values.count}x {props.values.category.title}</b>: <i>"{props.values.messages.length > 0 && props.values.messages[props.values.messages.length - 1].content}"</i>
+                <b>{props.values.count}x {props.values.category.title}</b>: <i>&quot;{props.values.messages.length > 0 && props.values.messages[props.values.messages.length - 1].content}&quot;</i>
               </AccordionHeader>
               <AccordionContent>
                 <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
@@ -141,7 +141,7 @@ export function PromptForm({ initialValues, onSubmit }: Props) {
                             })}
                             <tr>
                               <td colSpan={2}>
-                                Roles: <b>"User":</b> You or whoever is chatting/asking questions to chat gpt, <b>"Assistant":</b> Open AI(chat gpt) server - who is replying to your("user" role) questions, <b>"System":</b> The system developer who can give some internal instructions for the conversation. developers can provide option for user input also which depends on the system requirements.
+                                Roles: <b>&quot;User&quot;:</b> You or whoever is chatting/asking questions to chat gpt, <b>&quot;Assistant&quot;:</b> Open AI(chat gpt) server - who is replying to your("user" role) questions, <b>&quot;System&quot;:</b> The system developer who can give some internal instructions for the conversation. developers can provide option for user input also which depends on the system requirements.
                               </td>
                               <td style={{ textAlign: 'right', paddingRight: 4 }}>
                                 <Button
