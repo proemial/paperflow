@@ -98,9 +98,9 @@ function WithTags({ text }: { text?: string }) {
   return (<>
     {output.map((segment, i) => {
       if (segment.startsWith('#')) {
-        return <span><Link sx={{ color: 'blue' }} key={i} href={`https://twitter.com/hashtag/${segment.replace('#', '').trim()}`} target="_blank" color="neutral">{segment}</Link> </span>
+        return <span key={i}><Link sx={{ color: 'blue' }} key={i} href={`https://twitter.com/hashtag/${segment.replace('#', '').trim()}`} target="_blank" color="neutral">{segment}</Link> </span>
       } else {
-        return <span>{segment}</span>
+        return <span key={i}>{segment}</span>
       }
     })}
   </>);
