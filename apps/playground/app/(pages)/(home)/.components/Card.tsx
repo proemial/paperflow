@@ -92,8 +92,8 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
         return {
           ...message,
           content: message.content
-            .replace('$t', `"${promptData.title}"`)
-            .replace('$a', `"${promptData.contentSnippet}"`),
+            .replace('$t', `${promptData.title}`)
+            .replace('$a', `${promptData.contentSnippet}`),
         };
       }
       return message;
@@ -102,7 +102,7 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
       const lastMessage = messages[messages.length - 1];
       messages[messages.length - 1] = {
         ...lastMessage,
-        content: lastMessage.content + ` "${promptData.title} ${promptData.contentSnippet}"`,
+        content: lastMessage.content + ` ${promptData.title} ${promptData.contentSnippet}`,
       };
     }
     const promptDataWithArxivData = {

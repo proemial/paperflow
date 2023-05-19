@@ -14,15 +14,15 @@ const defaultValues = {
   messages: [
     {
       role: ChatCompletionRequestMessageRoleEnum.Assistant,
-      content: "You are a helpful assistant.",
+      content: "You are a helpful assistant who can explain scientific concepts in terms that allow researchers from one scientific domain to grasp and be inspired by ideas from another domain.",
     },
     {
       role: ChatCompletionRequestMessageRoleEnum.System,
-      content: "Analyse the following text $t $a",
+      content: "Analyse the following scientific article with title: $t and abstract: $a",
     },
     {
       role: ChatCompletionRequestMessageRoleEnum.User,
-      content: "Summarise and rephrase it as an engaging one-line pitch, in the style of a tech influencer",
+      content: "Write a captivating summary in 20 words or less of the most significant finding for an engaging tweet that will capture the minds of other researchers, using layman's terminology, and without mentioning abstract entities like \"you\", \"researchers\", \"authors\", \"propose\", or \"study\" but rather stating the finding as a statement of fact. Make sure to use 20 words or less and add three appropriate hashtags at the end to increase exposure of the tweet",
     }
   ],
 
