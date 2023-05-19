@@ -56,7 +56,7 @@ export default function FirstSidebar() {
             </Tooltip>
           </ListItemButton>
         </ListItem>
-        <ListItem>
+        {/* <ListItem>
           <ListItemButton>
             <Tooltip title="Old playground">
               <Link href="/old-playground">
@@ -64,7 +64,7 @@ export default function FirstSidebar() {
               </Link>
             </Tooltip>
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
       </List>
     </Sheet>
   );
