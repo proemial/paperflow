@@ -1,4 +1,4 @@
-import { PapersDao } from '@/data/db/paper-dao';
+import { PapersDao } from 'data/db/paper-dao';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 

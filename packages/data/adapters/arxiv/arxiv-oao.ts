@@ -1,5 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
-import { fetchData, } from "@/data/adapters/fetch";
+import { fetchData, } from "../fetch";
 
 const idsByDate = (date: string) => `https://export.arxiv.org/oai2?verb=ListIdentifiers&from=${date}&until=${date}&metadataPrefix=arXivRaw`;
 

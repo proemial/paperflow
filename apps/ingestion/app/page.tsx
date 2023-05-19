@@ -1,5 +1,5 @@
 import IngestionSummary from '@/components/ingestion-summary';
-import { IngestionDao } from '@/data/db/ingestion-dao';
+import { IngestionDao } from 'data/db/ingestion-dao';
 import dayjs from 'dayjs';
 
 export const revalidate = 60;

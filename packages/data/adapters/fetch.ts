@@ -1,5 +1,4 @@
-import { DateMetrics } from "../../utils/date";
-
+import { DateMetrics } from "utils/date";
 
 export const fetchData = async (url: string) => {
   const begin = DateMetrics.now();

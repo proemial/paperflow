@@ -3,7 +3,7 @@ import { ParsedArxivItem } from "@/app/api/flow/prompt/route";
 import { WithTextAndUsage } from "@/app/api/openai/gpt3/route";
 import { PromptOutputCard } from "@/components/PromptOutputCard";
 import { gptInputState } from "@/state/promptInputState";
-import { logError, logMetric, now } from "@/utils/metrics";
+import { logError, logMetric, now } from "utils/metrics";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 import * as React from "react";
 import { useEffect } from "react";
@@ -83,8 +83,6 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
   const begin = now();
 
   try {
-    console.log('promptData', promptData);
-
     let tokensFound = false;
     const messages = promptData.messages.map(message => {
       if (message.content.includes('$t') || message.content.includes('$a')) {

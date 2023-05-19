@@ -1,10 +1,9 @@
-import { DateMetrics } from '@/utils/date';
+import { DateMetrics } from 'utils/date';
 import { MongoClient } from 'mongodb';
 import { Env } from '../env';
 
-const uri = process.env.MONGO_CONNECT_STRING;
+const uri = Env.connectors.mongo.uri;
 const options = {};
-
 
 if (!uri) {
   throw new Error("Please add your Mongo URI to .env.local");

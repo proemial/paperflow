@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Md5 } from "ts-md5";
 import { ArxivFeedItem } from "@/app/api/arxiv/rss/[category]/route";
-import { logError, logMetric, now } from "@/utils/metrics";
+import { logError, logMetric, now } from "utils/metrics";
 import { ChatCompletionRequestMessageRoleEnum } from "openai";
 
 export const revalidate = 1;

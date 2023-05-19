@@ -3,7 +3,7 @@ import { useColorScheme } from "@mui/joy/styles";
 import { useEffect } from "react";
 
 export default function useAutoColorScheme() {
-  const {setMode} = useColorScheme();
+  const { setMode } = useColorScheme();
 
   useEffect(() => {
     const query = '(prefers-color-scheme: dark)';
@@ -17,7 +17,7 @@ export default function useAutoColorScheme() {
 
     // Remove listener
     return () => {
-      window.matchMedia(query).removeEventListener('change', () => {});
+      window.matchMedia(query).removeEventListener('change', () => { });
     }
-  }, []);
+  }, [setMode]);
 }

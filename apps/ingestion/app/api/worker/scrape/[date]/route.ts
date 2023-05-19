@@ -1,9 +1,9 @@
-import { fetchUpdatedItems } from "@/data/adapters/arxiv/arxiv-api";
-import { PapersDao } from "@/data/db/paper-dao";
-import { DateFactory } from "@/utils/date";
+import { fetchUpdatedItems } from "data/adapters/arxiv/arxiv-api";
+import { PapersDao } from "data/db/paper-dao";
+import { DateFactory } from "utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";
-import { IngestionDao } from './../../../../../data/db/ingestion-dao';
+import { IngestionDao } from 'data/db/ingestion-dao';
 
 export const revalidate = 1;
 

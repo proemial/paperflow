@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Prompt from "./.components";
-import { arxivCategories } from "@/utils/arxivCategories";
+import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
 import { Md5 } from "ts-md5";
 import { useEffect } from "react";
 import { gptInputState } from "@/state/promptInputState";
@@ -35,7 +35,7 @@ export default function HomePage() {
 
   useEffect(() => {
     setRecoilState(defaultValues);
-  }, []);
+  }, [setRecoilState]);
 
   return (
     <Prompt hash={defaultHash} />

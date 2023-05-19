@@ -1,11 +1,11 @@
-import { fetchUpdatedIds } from "@/data/adapters/arxiv/arxiv-oao";
-import { IngestionDao, IngestionState } from "@/data/db/ingestion-dao";
-import { DateMetrics } from "@/utils/date";
+import { fetchUpdatedIds } from "data/adapters/arxiv/arxiv-oao";
+import { IngestionDao, IngestionState } from "data/db/ingestion-dao";
+import { DateMetrics } from "utils/date";
 import { log } from "console";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
-import { Workers, qstash } from "@/data/adapters/qstash/qstash-client";
-import { PapersDao } from "@/data/db/paper-dao";
+import { Workers, qstash } from "data/adapters/qstash/qstash-client";
+import { PapersDao } from "data/db/paper-dao";
 
 export const revalidate = 1;
 

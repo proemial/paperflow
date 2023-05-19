@@ -1,5 +1,5 @@
-import { db } from "@/data/adapters/mongo/mongo-client";
-import { DateMetrics } from "@/utils/date";
+import { db } from "../adapters/mongo/mongo-client";
+import { DateMetrics } from "utils/date";
 
 type IngestionIds = {
   newIds: string[],

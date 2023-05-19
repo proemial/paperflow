@@ -1,8 +1,8 @@
-import { gptPrompt } from "@/data/adapters/openai/openai";
-import { PapersDao } from "@/data/db/paper-dao";
-import { ConfigDao } from "@/data/db/config-dao";
-import { SummariesDao } from "@/data/db/summaries-dao";
-import { DateMetrics } from "@/utils/date";
+import { gptPrompt } from "data/adapters/openai/openai";
+import { PapersDao } from "data/db/paper-dao";
+import { ConfigDao } from "data/db/config-dao";
+import { SummariesDao } from "data/db/summaries-dao";
+import { DateMetrics } from "utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";
 import { Md5 } from "ts-md5";

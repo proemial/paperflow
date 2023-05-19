@@ -1,5 +1,5 @@
 import IngestionSummary from '@/components/ingestion-summary';
-import { IngestionDao } from '@/data/db/ingestion-dao';
+import { IngestionDao } from 'data/db/ingestion-dao';
 
 export default async function Page({ params }: { params: { date: string } }) {
   const ingestionState = await IngestionDao.get(params.date);

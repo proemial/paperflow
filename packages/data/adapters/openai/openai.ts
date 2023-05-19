@@ -1,6 +1,7 @@
-import { PromptTemplate } from "@/data/db/config-dao";
-import { DateMetrics } from "@/utils/date";
+import { PromptTemplate } from "../../db/config-dao";
+import { DateMetrics } from "utils/date";
 import { ChatCompletionRequestMessageRoleEnum, Configuration, CreateCompletionResponseUsage, OpenAIApi } from "openai";
+import { Env } from "../env";
 
 export type GptPrompt = {
   role: ChatCompletionRequestMessageRoleEnum,
@@ -12,8 +13,10 @@ export type WithTextAndUsage = {
   usage?: CreateCompletionResponseUsage,
 }
 
+console.log('Env.connectors.openai.apiKey', Env.connectors.openai.apiKey);
+
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: Env.connectors.openai.apiKey,
 });
 
 const openai = new OpenAIApi(configuration);

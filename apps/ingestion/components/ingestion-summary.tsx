@@ -1,5 +1,5 @@
-import { IngestionState } from "@/data/db/ingestion-dao";
-import { PapersDao, RevisionedPaper } from "@/data/db/paper-dao";
+import { IngestionState } from "data/db/ingestion-dao";
+import { PapersDao, RevisionedPaper } from "data/db/paper-dao";
 import Link from "next/link";
 
 export default async function IngestionSummary({ ingestionState }: { ingestionState?: IngestionState }) {

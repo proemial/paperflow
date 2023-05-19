@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { XMLParser } from "fast-xml-parser";
-import { splitIntoBuckets } from "../../../utils/array";
-import { DateMetrics } from "../../../utils/date";
+import { splitIntoBuckets } from "utils/array";
+import { DateMetrics } from "utils/date";
 import { fetchData, } from "../fetch";
 import { ArxivPaper, RawArxivPaper, extractId } from "./arxiv.models";
 import { Md5 } from "ts-md5";

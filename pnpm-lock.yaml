@@ -3,6 +3,10 @@ lockfileVersion: '6.0'
 importers:
 
   .:
+    dependencies:
+      dotenv-cli:
+        specifier: ^7.2.1
+        version: 7.2.1
     devDependencies:
       eslint:
         specifier: ^7.32.0
@@ -15,7 +19,7 @@ importers:
         version: 2.7.1
       turbo:
         specifier: latest
-        version: 1.9.3
+        version: 1.9.8
 
   apps/ingestion:
     dependencies:
@@ -31,6 +35,9 @@ importers:
       clsx:
         specifier: 1.2.1
         version: 1.2.1
+      data:
+        specifier: workspace:*
+        version: link:../../packages/data
       dayjs:
         specifier: ^1.11.7
         version: 1.11.7
@@ -79,6 +86,9 @@ importers:
       use-count-up:
         specifier: 3.0.1
         version: 3.0.1(react@18.2.0)
+      utils:
+        specifier: workspace:*
+        version: link:../../packages/utils
     devDependencies:
       '@types/node':
         specifier: 20.0.0
@@ -216,9 +226,21 @@ importers:
       clsx:
         specifier: 1.2.1
         version: 1.2.1
+      data:
+        specifier: workspace:*
+        version: link:../../packages/data
+      dayjs:
+        specifier: ^1.11.7
+        version: 1.11.7
+      dayjs-plugin-utc:
+        specifier: ^0.1.2
+        version: 0.1.2
       formik:
         specifier: ^2.2.9
         version: 2.2.9(react@18.2.0)
+      mongodb:
+        specifier: ^5.4.0
+        version: 5.4.0
       next:
         specifier: 13.4.0
         version: 13.4.0(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
@@ -258,6 +280,9 @@ importers:
       use-count-up:
         specifier: 3.0.1
         version: 3.0.1(react@18.2.0)
+      utils:
+        specifier: workspace:*
+        version: link:../../packages/utils
       yup:
         specifier: ^1.1.1
         version: 1.1.1
@@ -302,6 +327,43 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
 
+  packages/data:
+    dependencies:
+      '@upstash/qstash':
+        specifier: ^0.3.6
+        version: 0.3.6
+      '@upstash/redis':
+        specifier: ^1.20.6
+        version: 1.20.6
+      dayjs:
+        specifier: ^1.11.7
+        version: 1.11.7
+      dayjs-plugin-utc:
+        specifier: ^0.1.2
+        version: 0.1.2
+      fast-xml-parser:
+        specifier: ^4.2.2
+        version: 4.2.2
+      mongodb:
+        specifier: ^5.4.0
+        version: 5.4.0
+      openai:
+        specifier: ^3.2.1
+        version: 3.2.1
+      ts-md5:
+        specifier: ^1.3.1
+        version: 1.3.1
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      utils:
+        specifier: workspace:*
+        version: link:../utils
+    devDependencies:
+      typescript:
+        specifier: ^4.5.2
+        version: 4.5.2
+
   packages/eslint-config-custom:
     dependencies:
       eslint-config-next:
@@ -336,6 +398,22 @@ importers:
       react:
         specifier: ^17.0.2
         version: 17.0.2
+      tsconfig:
+        specifier: workspace:*
+        version: link:../tsconfig
+      typescript:
+        specifier: ^4.5.2
+        version: 4.5.2
+
+  packages/utils:
+    dependencies:
+      dayjs:
+        specifier: ^1.11.7
+        version: 1.11.7
+      dayjs-plugin-utc:
+        specifier: ^0.1.2
+        version: 0.1.2
+    devDependencies:
       tsconfig:
         specifier: workspace:*
         version: link:../tsconfig
@@ -3153,6 +3231,26 @@ packages:
       csstype: 3.1.2
     dev: false
 
+  /dotenv-cli@7.2.1:
+    resolution: {integrity: sha512-ODHbGTskqRtXAzZapDPvgNuDVQApu4oKX8lZW7Y0+9hKA6le1ZJlyRS687oU9FXjOVEDU/VFV6zI125HzhM1UQ==}
+    hasBin: true
+    dependencies:
+      cross-spawn: 7.0.3
+      dotenv: 16.0.3
+      dotenv-expand: 10.0.0
+      minimist: 1.2.8
+    dev: false
+
+  /dotenv-expand@10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /dotenv@16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
+    dev: false
+
   /electron-to-chromium@1.4.384:
     resolution: {integrity: sha512-I97q0MmRAAqj53+a8vZsDkEXBZki+ehYAOPzwtQzALip52aEp2+BJqHFtTlsfjoqVZYwPpHC8wM6MbsSZQ/Eqw==}
 
@@ -5482,65 +5580,65 @@ packages:
       tslib: 1.14.1
       typescript: 5.0.4
 
-  /turbo-darwin-64@1.9.3:
-    resolution: {integrity: sha512-0dFc2cWXl82kRE4Z+QqPHhbEFEpUZho1msHXHWbz5+PqLxn8FY0lEVOHkq5tgKNNEd5KnGyj33gC/bHhpZOk5g==}
+  /turbo-darwin-64@1.9.8:
+    resolution: {integrity: sha512-PkTdBjPfgpj/Dob/6SjkzP0BBP80/KmFjLEocXVEECCLJE6tHKbWLRdvc79B0N6SufdYdZ1uvvoU3KPtBokSPw==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@1.9.3:
-    resolution: {integrity: sha512-1cYbjqLBA2zYE1nbf/qVnEkrHa4PkJJbLo7hnuMuGM0bPzh4+AnTNe98gELhqI1mkTWBu/XAEeF5u6dgz0jLNA==}
+  /turbo-darwin-arm64@1.9.8:
+    resolution: {integrity: sha512-sLwqOx3XV57QCEoJM9GnDDnnqidG8wf29ytxssBaWHBdeJTjupyrmzTUrX+tyKo3Q+CjWvbPLyqVqxT4g5NuXQ==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@1.9.3:
-    resolution: {integrity: sha512-UuBPFefawEwpuxh5pM9Jqq3q4C8M0vYxVYlB3qea/nHQ80pxYq7ZcaLGEpb10SGnr3oMUUs1zZvkXWDNKCJb8Q==}
+  /turbo-linux-64@1.9.8:
+    resolution: {integrity: sha512-AMg6VT6sW7aOD1uOs5suxglXfTYz9T0uVyKGKokDweGOYTWmuTMGU5afUT1tYRUwQ+kVPJI+83Atl5Ob0oBsgw==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@1.9.3:
-    resolution: {integrity: sha512-vUrNGa3hyDtRh9W0MkO+l1dzP8Co2gKnOVmlJQW0hdpOlWlIh22nHNGGlICg+xFa2f9j4PbQlWTsc22c019s8Q==}
+  /turbo-linux-arm64@1.9.8:
+    resolution: {integrity: sha512-tLnxFv+OIklwTjiOZ8XMeEeRDAf150Ry4BCivNwgTVFAqQGEqkFP6KGBy56hb5RRF1frPQpoPGipJNVm7c8m1w==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@1.9.3:
-    resolution: {integrity: sha512-0BZ7YaHs6r+K4ksqWus1GKK3W45DuDqlmfjm/yuUbTEVc8szmMCs12vugU2Zi5GdrdJSYfoKfEJ/PeegSLIQGQ==}
+  /turbo-windows-64@1.9.8:
+    resolution: {integrity: sha512-r3pCjvXTMR7kq2E3iqwFlN1R7pFO/TOsuUjMhOSPP7HwuuUIinAckU4I9foM3q7ZCQd1XXScBUt3niDyHijAqQ==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@1.9.3:
-    resolution: {integrity: sha512-QJUYLSsxdXOsR1TquiOmLdAgtYcQ/RuSRpScGvnZb1hY0oLc7JWU0llkYB81wVtWs469y8H9O0cxbKwCZGR4RQ==}
+  /turbo-windows-arm64@1.9.8:
+    resolution: {integrity: sha512-CWzRbX2TM5IfHBC6uWM659qUOEDC4h0nn16ocG8yIq1IF3uZMzKRBHgGOT5m1BHom+R08V0NcjTmPRoqpiI0dg==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@1.9.3:
-    resolution: {integrity: sha512-ID7mxmaLUPKG/hVkp+h0VuucB1U99RPCJD9cEuSEOdIPoSIuomcIClEJtKamUsdPLhLCud+BvapBNnhgh58Nzw==}
+  /turbo@1.9.8:
+    resolution: {integrity: sha512-dTouGZBm4a2fE0OPafcTQERCp4i3ZOow0Pr0JlOyxKmzJy0JRwXypH013kbZoK6k1ET5tS/g9rwUXIM/AmWXXQ==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      turbo-darwin-64: 1.9.3
-      turbo-darwin-arm64: 1.9.3
-      turbo-linux-64: 1.9.3
-      turbo-linux-arm64: 1.9.3
-      turbo-windows-64: 1.9.3
-      turbo-windows-arm64: 1.9.3
+      turbo-darwin-64: 1.9.8
+      turbo-darwin-arm64: 1.9.8
+      turbo-linux-64: 1.9.8
+      turbo-linux-arm64: 1.9.8
+      turbo-windows-64: 1.9.8
+      turbo-windows-arm64: 1.9.8
     dev: true
 
   /type-check@0.4.0:

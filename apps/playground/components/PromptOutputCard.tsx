@@ -1,7 +1,7 @@
 "use client";
 import { ParsedArxivItem } from "@/app/api/flow/prompt/route";
 import { WithTextAndUsage } from "@/app/api/openai/gpt3/route";
-import { AccordionContent, AccordionHeader } from "@/components/JoyAccordion";
+import { AccordionContent, AccordionHeader } from "./JoyAccordion";
 import { InfoOutlined } from "@mui/icons-material";
 import { Card, CircularProgress, Link, List, Tooltip } from "@mui/joy";
 import Box from "@mui/joy/Box";

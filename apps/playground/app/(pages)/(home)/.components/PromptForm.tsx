@@ -1,4 +1,4 @@
-import { arxivCategories } from "@/utils/arxivCategories";
+import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
 import { Add, PlayArrow, Remove } from "@mui/icons-material";
 import { Autocomplete, Button, Input, List, Option, Select, Table } from "@mui/joy";
 import Box from "@mui/joy/Box";

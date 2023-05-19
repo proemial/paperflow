@@ -2,7 +2,7 @@ import { Client, PublishJsonRequest } from "@upstash/qstash";
 import { Env } from "../env";
 
 const client = new Client({
-  token: process.env.QSTASH_TOKEN as string,
+  token: Env.connectors.qstash.token,
 });
 
 const publishJSON = async <R extends PublishJsonRequest = PublishJsonRequest>(req: R): Promise<PublishResponse<R>> => {

@@ -1,10 +1,11 @@
+import { Env } from 'data/adapters/env';
 import { Configuration, OpenAIApi, ChatCompletionRequestMessageRoleEnum } from "openai";
-import { logError, logMetric, now } from "@/utils/metrics";
+import { logError, logMetric, now } from "utils/metrics";
 import { NextResponse } from "next/server";
 import { CreateCompletionResponseUsage } from "openai/api";
 
 const configuration = new Configuration({
-  apiKey: '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',
+  apiKey: Env.connectors.openai.apiKey,
 });
 const openai = new OpenAIApi(configuration);
 

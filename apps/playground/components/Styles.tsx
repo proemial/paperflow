@@ -1,5 +1,5 @@
 import useScript from "@/utils/useScript";
-import useAutoColorScheme from "@/components/useAutoColorScheme";
+import useAutoColorScheme from "./useAutoColorScheme";
 import useEnhancedEffect from "@mui/utils/useEnhancedEffect";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
