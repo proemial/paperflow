@@ -14,33 +14,15 @@ import React from "react";
 export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: ParsedArxivItem, modelOutput?: WithTextAndUsage }) {
   return (
     <Card variant="outlined" sx={{ maxWidth: 320 }}>
-      <CardOverflow sx={{ p: 0 }}>
-        <List
-          variant="outlined"
-          component={Accordion.Root}
-          type="multiple"
-          sx={{
-            borderRadius: "xs",
-            "--ListDivider-gap": "0px",
-            "--focus-outline-offset": "-2px",
-          }}
-        >
-          <Accordion.Item value="item-1">
-            <AccordionHeader isFirst>
-              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                {`ABSTRACT: ${arxivOutput.contentSnippet}`}
-              </div>
-            </AccordionHeader>
-            <AccordionContent>
-              {arxivOutput.contentSnippet}
-            </AccordionContent>
-          </Accordion.Item>
-        </List>
-      </CardOverflow>
-      <Typography level="h2" sx={{ fontSize: 'md', mt: 2 }}>
+      <Typography level="h2" sx={{ fontSize: 'sm' }}>
         <Link href={arxivOutput.link} target="_blank" color="neutral">{arxivOutput.title}</Link>
       </Typography>
-      <Typography level="body2" sx={{ mt: 2, mb: 2 }}>
+      <Typography level="h2" sx={{ fontSize: 'xs', color: 'grey', mt: 1 }}>
+        <div
+          style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
+          dangerouslySetInnerHTML={{ __html: arxivOutput.authors.join(", ") }} />
+      </Typography>
+      <Typography level="body2" sx={{ mt: 2, mb: 2, fontSize: 'md' }}>
         {!modelOutput &&
           <Box sx={{ display: "flex", justifyContent: 'center' }}>
             <CircularProgress variant="solid" />
@@ -50,41 +32,48 @@ export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: Pa
       </Typography>
       <Divider />
       <CardOverflow
-        variant="soft"
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          py: 1.5,
-          px: 'var(--Card-padding)',
-          bgcolor: 'background.level1',
+          p: 0
         }}
       >
-        <Typography level="body3" sx={{
-          fontWeight: 'md',
-          color: 'text.secondary',
-        }}>
-          <div dangerouslySetInnerHTML={{ __html: arxivOutput.authors.join(", ") }} />
-        </Typography>
-        {modelOutput &&
-          <Tooltip title={
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                maxWidth: 320,
-                justifyContent: 'center',
-                p: 1,
-              }}
-            >
-              <div>Prompt tokens: {modelOutput.usage?.prompt_tokens}</div>
-              <div>Completion tokens: {modelOutput.usage?.completion_tokens}</div>
-              <div style={{ fontWeight: 'bold' }}>Total tokens: {modelOutput.usage?.total_tokens}</div>
-            </Box>
-          } variant="outlined">
-            <InfoOutlined />
-          </Tooltip>
-        }
+        <List
+          component={Accordion.Root}
+          type="multiple"
+          sx={{ "--ListDivider-gap": "0px" }}
+        >
+          <Accordion.Item value="item-1">
+            <AccordionHeader isFirst>
+              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <i>{arxivOutput.contentSnippet}</i>
+              </div>
+            </AccordionHeader>
+            <AccordionContent>
+              <div style={{ display: 'inline-flex' }}>
+                {arxivOutput.contentSnippet}
+
+                {modelOutput &&
+                  <Tooltip title={
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        maxWidth: 320,
+                        justifyContent: 'center',
+                        p: 1,
+                      }}
+                    >
+                      <div>Prompt tokens: {modelOutput.usage?.prompt_tokens}</div>
+                      <div>Completion tokens: {modelOutput.usage?.completion_tokens}</div>
+                      <div style={{ fontWeight: 'bold' }}>Total tokens: {modelOutput.usage?.total_tokens}</div>
+                    </Box>
+                  } variant="outlined">
+                    <InfoOutlined />
+                  </Tooltip>
+                }
+              </div>
+            </AccordionContent>
+          </Accordion.Item>
+        </List>
       </CardOverflow>
     </Card>
   );

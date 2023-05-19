@@ -18,12 +18,12 @@ const slideUp = keyframes({
 });
 
 export const AccordionHeader = ({
-                                    children,
-                                    isFirst,
-                                    isLast,
-                                    sx,
-                                    ...props
-                                }: ListItemButtonProps & {
+    children,
+    isFirst,
+    isLast,
+    sx,
+    ...props
+}: ListItemButtonProps & {
     /**
      * If `true`, the top border-radius is applied
      */
@@ -40,7 +40,6 @@ export const AccordionHeader = ({
             {
                 width: "100%",
                 color: "text.secondary",
-                fontWeight: "md",
                 "&:hover": {
                     bgcolor: "background.surface"
                 },
@@ -69,9 +68,9 @@ export const AccordionHeader = ({
 );
 
 export const AccordionContent = ({
-                                     children,
-                                     isLast
-                                 }: BoxProps & {
+    children,
+    isLast
+}: BoxProps & {
     /**
      * If `true`, the bottom border-radius is applied
      */
