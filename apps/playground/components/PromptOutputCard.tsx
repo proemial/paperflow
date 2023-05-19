@@ -64,7 +64,7 @@ export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: Pa
           fontWeight: 'md',
           color: 'text.secondary',
         }}>
-          {arxivOutput.authors.join(", ")}
+          <div dangerouslySetInnerHTML={{ __html: arxivOutput.authors.join(", ") }} />
         </Typography>
         {modelOutput &&
           <Tooltip title={
