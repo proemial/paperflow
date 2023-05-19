@@ -9,6 +9,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import * as Accordion from "@radix-ui/react-accordion";
+import React from "react";
 
 export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: ParsedArxivItem, modelOutput?: WithTextAndUsage }) {
   return (
@@ -45,7 +46,7 @@ export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: Pa
             <CircularProgress variant="solid" />
           </Box>
         }
-        {modelOutput?.text}
+        <WithTags text={modelOutput?.text} />
       </Typography>
       <Divider />
       <CardOverflow
@@ -87,4 +88,40 @@ export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: Pa
       </CardOverflow>
     </Card>
   );
+}
+
+function WithTags({ text }: { text?: string }) {
+  if (!text) return null;
+
+  const output = splitOnHash(text);
+
+  return (<>
+    {output.map((segment, i) => {
+      if (segment.startsWith('#')) {
+        return <span><Link sx={{ color: 'blue' }} key={i} href={`https://twitter.com/hashtag/${segment.replace('#', '').trim()}`} target="_blank" color="neutral">{segment}</Link> </span>
+      } else {
+        return <span>{segment}</span>
+      }
+    })}
+  </>);
+}
+
+// https://twitter.com/hashtag/ClimateAction
+function splitOnHash(text?: string) {
+  const output: string[] = [];
+
+  let str = '';
+  text?.split(' ').forEach(word => {
+    if (!word.startsWith('#')) {
+      str += word + ' ';
+    } else {
+      if (str.length > 0) {
+        output.push(str);
+        str = '';
+      }
+      output.push(word + ' ');
+    }
+  });
+
+  return output;
 }
