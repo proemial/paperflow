@@ -1,25 +1,35 @@
 import { fetchUpdatedItems } from "@/data/adapters/arxiv/arxiv-api";
-import { IngestionDao } from "@/data/db/ingestion-dao";
 import { PapersDao } from "@/data/db/paper-dao";
 import { DateFactory } from "@/utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";
+import { IngestionDao } from './../../../../../data/db/ingestion-dao';
 
 export const revalidate = 1;
 
-export async function POST(request: Request) {
-  const { date, ids } = await request.json() as { date: string, ids: string[] };
-  log('[scrape>>', date, ids);
+export async function GET(request: Request, { params }: { params: { date: string } }) {
+  const response = await run(params.date);
+
+  return NextResponse.json(response);
+}
+export async function POST(request: Request, { params }: { params: { date: string } }) {
+  const response = await run(params.date);
+
+  return NextResponse.json(response);
+}
+
+async function run(date: string) {
+  log('[scrape>>', date);
+
+  const ingestionState = await IngestionDao.getOrCreate(date);
 
   const limit = DateFactory.yesterday();
-  const output = await fetchUpdatedItems(ids, limit);
+  const output = await fetchUpdatedItems(ingestionState.ids.newIds, limit);
 
   if (output.misses.length > 0 || output.hits.length > 0) {
     if (output.hits.length > 0) {
       await PapersDao.upsertMany(output.hits);
     }
-
-    let ingestionState = await IngestionDao.getOrCreate(date);
 
     ingestionState.ids.hits.push(...output.hits.map(item => item.parsed.id));
     ingestionState.ids.misses.push(...output.misses.map(item => item.parsed.id));
@@ -33,5 +43,5 @@ export async function POST(request: Request) {
     }
   }
   log('<<scrape]', response);
-  return NextResponse.json(response);
+  return response;
 }

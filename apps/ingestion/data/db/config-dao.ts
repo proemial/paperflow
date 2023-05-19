@@ -1,18 +1,12 @@
 import { db } from "@/data/adapters/mongo/mongo-client";
 import { DateMetrics } from "@/utils/date";
+import { GptPrompt } from "../adapters/openai/openai";
 
-export type Prompt = {
+export type PromptTemplate = {
   hash: string,
   args: {
-    [key: string]: string,
-  }
-}
-
-export function asOpenAIPrompt({ args }: Prompt) {
-  return {
-    model: args.model,
-    prompt: args.prompt,
-    role: args.role,
+    model: string,
+    messages: Array<GptPrompt>,
   }
 }
 
@@ -22,7 +16,7 @@ export const ConfigDao = {
     const begin = DateMetrics.now();
 
     try {
-      const prompt = await mongo.findOne<Prompt>({ _type: 'prompt' });
+      const prompt = await mongo.findOne<PromptTemplate>({ _type: 'prompt' });
 
       return prompt;
     } catch (error) {

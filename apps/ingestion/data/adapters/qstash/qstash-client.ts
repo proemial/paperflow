@@ -36,9 +36,9 @@ export const qstash = {
     return await publishJSON(req);
   },
 
-  publish: async (worker: Workers, body: any) => {
+  publish: async (url: Workers, body: any, args?: string) => {
     return await publishJSON({
-      url: worker,
+      url: !args ? url : `${url}/${args}`,
       body,
     });
   }

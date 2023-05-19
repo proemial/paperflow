@@ -1,16 +1,27 @@
 import { gptPrompt } from "@/data/adapters/openai/openai";
 import { PapersDao } from "@/data/db/paper-dao";
-import { ConfigDao, asOpenAIPrompt } from "@/data/db/config-dao";
+import { ConfigDao } from "@/data/db/config-dao";
 import { SummariesDao } from "@/data/db/summaries-dao";
 import { DateMetrics } from "@/utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";
+import { Md5 } from "ts-md5";
 
 export const revalidate = 1;
 
-export async function POST(request: Request) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const response = await run(params.id);
+
+  return NextResponse.json(response);
+}
+export async function POST(request: Request, { params }: { params: { id: string } }) {
+  const response = await run(params.id);
+
+  return NextResponse.json(response);
+}
+
+async function run(id: string) {
   const begin = DateMetrics.now();
-  const { id } = await request.json() as { id: string };
   log('[summarise>>', id);
 
   try {
@@ -26,7 +37,7 @@ export async function POST(request: Request) {
     if (!prompt) {
       return NextResponse.json({ error: 'prompt not found' }, { status: 404 });
     }
-    log('prompt', prompt.hash);
+    log('prompt', prompt.hash, Md5.hashStr(JSON.stringify(prompt.args)));
 
     // Check if summarisation is already done
     const cachedSummary = await SummariesDao.get(paper.parsed.hash, prompt.hash);
@@ -36,7 +47,7 @@ export async function POST(request: Request) {
     }
 
     // Run summarisation
-    const summary = await gptPrompt(paper.parsed.abstract, asOpenAIPrompt(prompt));
+    const summary = await gptPrompt(paper.parsed.title, paper.parsed.abstract, prompt);
     log('summary', summary.text);
 
     if (summary.text) {

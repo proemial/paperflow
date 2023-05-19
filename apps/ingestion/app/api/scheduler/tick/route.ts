@@ -22,10 +22,9 @@ export async function GET() {
 
     // 2. Schedule scraping
     if (ids.length > 0) {
-      await qstash.publish(Workers.scraper, { date, ids });
-
       ingestionState.ids.newIds.push(...ids);
       await IngestionDao.update(date, ingestionState);
+      await qstash.publish(Workers.scraper, { date }, date);
     }
 
     // 3. Get papers to summarise (status intial, category from config)
@@ -35,7 +34,7 @@ export async function GET() {
     // 4. Schedule summarisation
     if (papers.length > 0) {
       papers.forEach(async paper => {
-        await qstash.publish(Workers.summariser, { id: paper.id });
+        await qstash.publish(Workers.summariser, { id: paper.id }, paper.id);
       });
 
       // ingestionState.ids.newIds.push(...ids);
