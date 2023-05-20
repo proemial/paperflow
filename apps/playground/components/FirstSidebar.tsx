@@ -1,4 +1,4 @@
-import { Diversity2, Science } from '@mui/icons-material';
+import { Diversity2, Update } from '@mui/icons-material';
 import { Tooltip } from '@mui/joy';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import List from '@mui/joy/List';
@@ -52,6 +52,15 @@ export default function FirstSidebar() {
             <Tooltip title="GPT playground">
               <Link href="/">
                 <Diversity2 />
+              </Link>
+            </Tooltip>
+          </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemButton>
+            <Tooltip title="Ingestion history">
+              <Link href="/ingestion">
+                <Update />
               </Link>
             </Tooltip>
           </ListItemButton>

@@ -11,7 +11,7 @@ import Typography from "@mui/joy/Typography";
 import * as Accordion from "@radix-ui/react-accordion";
 import React from "react";
 
-export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: ParsedArxivItem, modelOutput?: WithTextAndUsage }) {
+export function PromptOutputCard({ arxivOutput, modelOutput, modelOutputString }: { arxivOutput: ParsedArxivItem, modelOutput?: WithTextAndUsage, modelOutputString?: string }) {
   return (
     <Card variant="outlined" sx={{ maxWidth: 320 }}>
       <Typography level="h2" sx={{ fontSize: 'sm' }}>
@@ -23,12 +23,12 @@ export function PromptOutputCard({ arxivOutput, modelOutput }: { arxivOutput: Pa
           dangerouslySetInnerHTML={{ __html: arxivOutput.authors.join(", ") }} />
       </Typography>
       <Typography level="body2" sx={{ mt: 2, mb: 2, fontSize: 'md' }}>
-        {!modelOutput &&
+        {!modelOutput && !modelOutputString &&
           <Box sx={{ display: "flex", justifyContent: 'center' }}>
             <CircularProgress variant="solid" />
           </Box>
         }
-        <WithTags text={modelOutput?.text} />
+        <WithTags text={modelOutput?.text || modelOutputString} />
       </Typography>
       <Divider />
       <CardOverflow
