@@ -100,8 +100,8 @@ function ProcessedPapers({ cats }: { cats: Categorised }) {
           </h2>
           <div style={{ display: 'flex', gap: 8, overflow: 'scroll' }}>
             {cats[catKey].processed.map((paper, i) => (
-              <div>
-                <PromptOutputCard key={i}
+              <div key={i}>
+                <PromptOutputCard
                   arxivOutput={{ ...paper.parsed, contentSnippet: paper.parsed.abstract, link: paper.parsed.link.source }}
                   modelOutputString={paper.summary}
                 />
