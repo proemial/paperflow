@@ -42,6 +42,19 @@ export const arxivCategories = [
   { key: "cs.SC", title: "Symbolic Computation", category: "Computer Science" },
   { key: "cs.SY", title: "Systems and Control", category: "Computer Science" },
 
+  { key: "math", title: "Mathematics", category: "Mathematics" },
+  { key: "math.PR", title: "Probability", category: "Mathematics" },
+
+  { key: "physics", title: "Physics", category: "Physics" },
+  { key: "astro-ph", title: "Astrophysics", category: "Physics" },
+  { key: "astro-ph.EP", title: "Earth and Planetary Astrophysics", category: "Physics" },
+  { key: "nucl-th", title: "Nuclear Theory", category: "Physics" },
+  { key: "physics.space-ph", title: "Space Physics", category: "Physics" },
+  { key: "physics.quant-ph", title: "Quantum Physics", category: "Physics" },
+
+  { key: "q-bio", title: "Quantitative Biology", category: "Quantitative Biology" },
+  { key: "q-bio.NC", title: "Neurons and Cognition", category: "Quantitative Biology" },
+
   { key: "stat", title: "Statistics", category: "Statistics" },
   { key: "stat.AP", title: "Applications", category: "Statistics" },
   { key: "stat.CO", title: "Computation", category: "Statistics" },
