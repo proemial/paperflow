@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { IngestionState } from "data/db/ingestion-dao";
 import { RevisionedPaper } from "data/db/paper-dao";
 import { ArxivPaper, arxivCategories } from "data/adapters/arxiv/arxiv.models";
-import { Card, List, Sheet, Stack, styled } from "@mui/joy";
+import { Card, Chip, CircularProgress, List, Sheet, Stack, styled } from "@mui/joy";
 import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionContent, AccordionHeader } from "@/components/JoyAccordion";
 import { PromptOutputCard } from "@/components/PromptOutputCard";
@@ -87,10 +87,13 @@ function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
     <div style={{
       width: '100%',
     }}>
+      {!data &&
+        <CircularProgress variant="solid" />
+      }
       {data &&
         <div>
           <h1 style={{ marginBottom: 0 }}>{data.ingestion.date}</h1>
-          <div>({data.papers.length} papers, {Object.keys(cats).length} categories)</div>
+          <div>({data.papers.length} papers in {Object.keys(cats).length} categories ingested)</div>
           <ProcessedPapers cats={cats} />
           <UnprocessedPapers cats={cats} />
         </div>
@@ -104,8 +107,13 @@ function ProcessedPapers({ cats }: { cats: Categorised }) {
     <Stack spacing={2}>
       {Object.keys(cats).filter((catKey) => cats[catKey].processed.length > 0).sort().map((catKey, i) => (
         <Item key={i}>
-          <h2 style={{ padding: 8, marginBottom: 8, textDecoration: 'underline', marginTop: 0 }}>
-            {arxivCategories.find(c => c.key === catKey)?.title}
+          <h2 style={{ padding: 8, marginBottom: 8, marginTop: 0 }}>
+            <Chip variant="soft">
+              {arxivCategories.find(c => c.key === catKey)?.category}
+            </Chip>
+            <span style={{ marginLeft: 6 }}>
+              {arxivCategories.find(c => c.key === catKey)?.title}
+            </span>
           </h2>
           <div style={{ display: 'flex', gap: 8, overflow: 'scroll' }}>
             {cats[catKey].processed.map((paper, i) => (
@@ -129,7 +137,7 @@ function UnprocessedPapers({ cats }: { cats: Categorised }) {
       <List
         component={Accordion.Root}
         type="multiple"
-        sx={{ "--ListDivider-gap": "0px" }}
+        sx={{ "--ListDivider-gap": "0px", border: '1px solid lightgrey', borderRadius: 8, marginLeft: 1, marginRight: 1, marginTop: 2, marginBottom: 2 }}
       >
         <Accordion.Item value="item-1">
           <AccordionHeader isFirst>
