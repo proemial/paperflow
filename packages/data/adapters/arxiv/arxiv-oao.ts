@@ -11,12 +11,12 @@ export async function fetchUpdatedIds(date: string) {
 }
 
 function parseOai(text: string) {
-  try {
-    const parser = new XMLParser({
-      ignoreAttributes: true,
-      removeNSPrefix: true
-    });
+  const parser = new XMLParser({
+    ignoreAttributes: true,
+    removeNSPrefix: true
+  });
 
+  try {
     let parsed = parser
       .parse(text)['OAI-PMH']['ListIdentifiers']['header'];
 
@@ -30,6 +30,11 @@ function parseOai(text: string) {
       .reverse();
   } catch (error) {
     console.error(error);
-    throw error;
+
+    let parsedError = parser
+      .parse(text)['OAI-PMH']['error'];
+    console.error(parsedError);
+
+    throw new Error(parsedError);
   }
 }

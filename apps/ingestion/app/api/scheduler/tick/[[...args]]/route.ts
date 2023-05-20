@@ -6,32 +6,67 @@ import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import { Workers, qstash } from "data/adapters/qstash/qstash-client";
 import { PapersDao } from "data/db/paper-dao";
+import { normalizeError } from "utils/error";
 
 export const revalidate = 1;
 
-export async function GET() {
+export async function GET(request: Request, { params }: { params: { args: string[] } }) {
   const begin = DateMetrics.now();
 
   try {
-    const date = dayjs().format("YYYY-MM-DD");
+    const date = params.args
+      ? dayjs().format(params.args[0])
+      : dayjs().format("YYYY-MM-DD");
+
     log('[tick>>', { date });
+
+    const ids = await scrape(date);
+    const papers = await summarise();
+
+    const response = { date, ids: ids?.length, papers: papers?.length };
+    log('<<tick]', response);
+    return NextResponse.json(response);
+  } catch (e) {
+    console.error(e);
+    return new NextResponse(normalizeError(e).message, { status: 500 });
+  } finally {
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick`);
+  }
+}
+
+async function scrape(date: string) {
+  const begin = DateMetrics.now();
+
+  try {
     let ingestionState = await IngestionDao.getOrCreate(date);
 
-    // 1. Check for updates
+    // Check for updates
     const ids = await fetchLatestPapers(date, ingestionState);
 
-    // 2. Schedule scraping
+    // Schedule scraping
     if (ids.length > 0) {
       ingestionState.ids.newIds.push(...ids);
       await IngestionDao.update(date, ingestionState);
       await qstash.publish(Workers.scraper, { date }, date);
     }
 
-    // 3. Get papers to summarise (status intial, category from config)
+    return ids;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick:scrape`);
+  }
+}
+
+async function summarise() {
+  const begin = DateMetrics.now();
+
+  try {
+    // Get papers to summarise (status intial, category from config)
     const papers = await PapersDao.getIdsByStatusFiltered('initial');
     log('papers', papers.length);
 
-    // 4. Schedule summarisation
+    // Schedule summarisation
     if (papers.length > 0) {
       papers.forEach(async paper => {
         await qstash.publish(Workers.summariser, { id: paper.id }, paper.id);
@@ -41,11 +76,11 @@ export async function GET() {
       // await IngestionDao.update(date, ingestionState);
     }
 
-    const response = { date, ids: ids.length, papers: papers.length };
-    log('<<tick]', response);
-    return NextResponse.json(response);
+    return papers;
+  } catch (e) {
+    console.error(e);
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick`);
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/tick:summarise`);
   }
 }
 
@@ -54,3 +89,4 @@ async function fetchLatestPapers(date: string, ingestionState: IngestionState) {
 
   return ids.filter(id => !ingestionState.ids.newIds.includes(id));
 }
+
