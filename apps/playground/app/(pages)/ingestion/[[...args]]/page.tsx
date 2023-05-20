@@ -22,12 +22,21 @@ type Categorised = {
 }
 
 export default function IngestionPage({ params }: { params: { args: string[] } }) {
-  const date = params.args
-    ? dayjs().format(params.args[0])
-    : dayjs().format("YYYY-MM-DD");
-
+  const [date, setDate] = React.useState<string>();
   const [data, setData] = React.useState<FetchResult>();
   const [cats, setCats] = React.useState<Categorised>({});
+
+  React.useEffect(() => {
+    if (params.args) {
+      setDate(dayjs().format(params.args[0]));
+    }
+
+    (async () => {
+      const res = await fetch(`/api/db/ingestion/get-latest/x`);
+      const json: IngestionState = await res.json();
+      setDate(json.date);
+    })();
+  }, []);
 
   React.useEffect(() => {
     if (!date) return;
