@@ -11,11 +11,22 @@ import { normalizeError } from "utils/error";
 export const revalidate = 1;
 
 export async function GET(request: Request, { params }: { params: { args: string[] } }) {
+  const response = await run(params.args);
+
+  return NextResponse.json(response);
+}
+export async function POST(request: Request, { params }: { params: { args: string[] } }) {
+  const response = await run(params.args);
+
+  return NextResponse.json(response);
+}
+
+export async function run(args: string[]) {
   const begin = DateMetrics.now();
 
   try {
-    const date = params.args
-      ? dayjs().format(params.args[0])
+    const date = args
+      ? dayjs().format(args[0])
       : dayjs().format("YYYY-MM-DD");
 
     log('[tick>>', { date });
