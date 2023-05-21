@@ -137,6 +137,7 @@ function IngestionDatePicker({ date, allDates }: { date?: string, allDates?: str
       <DateRange />
     </button>
   ));
+  ExampleCustomInput.displayName = "ExampleCustomInput";
 
   const handleCustomInputClick = (dateSelected: Date) => {
     router.push(`/ingestion/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
