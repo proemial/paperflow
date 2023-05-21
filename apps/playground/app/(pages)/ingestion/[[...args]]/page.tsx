@@ -11,6 +11,7 @@ import { addDays, subDays } from "date-fns";
 import dayjs from 'dayjs';
 import { useRouter } from "next/navigation";
 import * as React from "react";
+// @ts-ignore
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
