@@ -133,7 +133,7 @@ function IngestionDatePicker({ date, allDates }: { date?: string, allDates?: str
   const router = useRouter();
   const highlightDates = allDates?.map(d => dayjs(d, "YYYY-MM-DD").toDate());
 
-  const ExampleCustomInput = React.forwardRef(({ value, onClick }, ref) => (
+  const ExampleCustomInput = React.forwardRef<HTMLButtonElement, { value?: any, onClick?: any }>(({ onClick }, ref) => (
     <button className="example-custom-input" onClick={onClick} ref={ref}>
       <DateRange />
     </button>
@@ -143,7 +143,6 @@ function IngestionDatePicker({ date, allDates }: { date?: string, allDates?: str
   const handleCustomInputClick = (dateSelected: Date) => {
     router.push(`/ingestion/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
   };
-
 
   return (
     <div style={{ width: 40 }}>
