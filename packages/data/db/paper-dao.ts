@@ -73,7 +73,7 @@ export const PapersDao = {
     }
   },
 
-  updateSummary: async (id: string, revId: string, summary: string) => {
+  updateSummary: async (id: string, revId: string, summary: string, promptHash: string) => {
     const mongo = await db('papers');
     const begin = DateMetrics.now();
 
@@ -83,7 +83,8 @@ export const PapersDao = {
         {
           $set: {
             status: 'summarised',
-            "revisions.$.summary": summary
+            "revisions.$.summary": summary,
+            "revisions.$.prompt": promptHash,
           }
         });
 

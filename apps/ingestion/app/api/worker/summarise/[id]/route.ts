@@ -52,7 +52,7 @@ async function run(id: string) {
 
     if (summary.text) {
       // Update DB
-      const dbResult = await PapersDao.updateSummary(id, paper.raw.id, summary.text);
+      const dbResult = await PapersDao.updateSummary(id, paper.raw.id, summary.text, prompt.hash);
       log('summary updated', dbResult.modifiedCount);
 
       // Update cache
