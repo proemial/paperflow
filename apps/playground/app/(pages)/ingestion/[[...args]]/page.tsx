@@ -91,7 +91,7 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
       width: '100%',
     }}>
       <div>
-        <h1 style={{ display: 'flex', gap: 16 }}>
+        <h1 style={{ display: 'flex', gap: 16, marginBottom: 0 }}>
           {date}
           <IngestionDatePicker
             date={date}
