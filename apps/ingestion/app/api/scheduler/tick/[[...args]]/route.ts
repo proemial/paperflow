@@ -21,7 +21,7 @@ export async function POST(request: Request, { params }: { params: { args: strin
   return NextResponse.json(response);
 }
 
-export async function run(args: string[]) {
+async function run(args: string[]) {
   const begin = DateMetrics.now();
 
   try {
