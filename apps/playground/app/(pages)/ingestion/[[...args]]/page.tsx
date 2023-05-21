@@ -91,22 +91,24 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
       width: '100%',
     }}>
       <div>
-        <h1 style={{ display: 'flex', gap: 16, marginBottom: 0 }}>
-          {date}
-          <IngestionDatePicker
-            date={date}
-            allDates={[
-              '2023-05-11',
-              '2023-05-12',
-              '2023-05-16',
-              '2023-05-17',
-              '2023-05-18',
-              '2023-05-19',
-              '2023-05-20',
-              '2023-05-21',
-            ]}
-          />
-        </h1>
+        {date &&
+          <h1 style={{ display: 'flex', gap: 16, marginBottom: 0 }}>
+            {date}
+            <IngestionDatePicker
+              date={date}
+              allDates={[
+                '2023-05-11',
+                '2023-05-12',
+                '2023-05-16',
+                '2023-05-17',
+                '2023-05-18',
+                '2023-05-19',
+                '2023-05-20',
+                '2023-05-21',
+              ]}
+            />
+          </h1>
+        }
         {!data &&
           <CircularProgress variant="solid" />
         }
@@ -127,8 +129,6 @@ function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
 }
 
 function IngestionDatePicker({ date, allDates }: { date?: string, allDates?: string[] }) {
-  if (!date) return null;
-
   const router = useRouter();
   const highlightDates = allDates?.map(d => dayjs(d, "YYYY-MM-DD").toDate());
 
