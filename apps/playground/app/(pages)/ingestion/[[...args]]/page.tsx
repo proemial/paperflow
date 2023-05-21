@@ -1,13 +1,18 @@
 "use client";
-import * as React from "react";
-import dayjs from 'dayjs';
-import { IngestionState } from "data/db/ingestion-dao";
-import { RevisionedPaper } from "data/db/paper-dao";
-import { ArxivPaper, arxivCategories } from "data/adapters/arxiv/arxiv.models";
-import { Card, Chip, CircularProgress, List, Sheet, Stack, styled } from "@mui/joy";
-import * as Accordion from "@radix-ui/react-accordion";
 import { AccordionContent, AccordionHeader } from "@/components/JoyAccordion";
 import { PromptOutputCard } from "@/components/PromptOutputCard";
+import { DateRange } from "@mui/icons-material";
+import { Chip, CircularProgress, List, Sheet, Stack, styled } from "@mui/joy";
+import * as Accordion from "@radix-ui/react-accordion";
+import { ArxivPaper, arxivCategories } from "data/adapters/arxiv/arxiv.models";
+import { IngestionState } from "data/db/ingestion-dao";
+import { RevisionedPaper } from "data/db/paper-dao";
+import { addDays, subDays } from "date-fns";
+import dayjs from 'dayjs';
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type FetchResult = {
   ingestion: IngestionState,
@@ -29,6 +34,7 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
   React.useEffect(() => {
     if (params.args) {
       setDate(dayjs().format(params.args[0]));
+      return;
     }
 
     (async () => {
@@ -36,7 +42,7 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
       const json: IngestionState = await res.json();
       setDate(json.date);
     })();
-  }, []);
+  }, [params.args]);
 
   React.useEffect(() => {
     if (!date) return;
@@ -49,7 +55,10 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
   }, [date]);
 
   React.useEffect(() => {
-    if (!data) return;
+    if (!data?.ingestion) return;
+
+    console.log('data', data);
+
 
     (async () => {
       const categories: Categorised = {};
@@ -75,29 +84,74 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
   }, [data]);
 
   console.log('cats', cats);
+  // TODO: Fetch ingestion dates and use conditional formatting to render them in the date picker
 
-
-  return (
-    <Content data={data} cats={cats} />
-  );
-}
-
-function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
   return (
     <div style={{
       width: '100%',
     }}>
-      {!data &&
-        <CircularProgress variant="solid" />
-      }
-      {data &&
-        <div>
-          <h1 style={{ marginBottom: 0 }}>{data.ingestion.date}</h1>
-          <div>({data.papers.length} papers in {Object.keys(cats).length} categories ingested)</div>
-          <ProcessedPapers cats={cats} />
-          <UnprocessedPapers cats={cats} />
-        </div>
-      }
+      <div>
+        <h1 style={{ display: 'flex', gap: 16 }}>
+          {date}
+          <IngestionDatePicker
+            date={date}
+            allDates={[
+              '2023-05-11',
+              '2023-05-12',
+              '2023-05-16',
+              '2023-05-17',
+              '2023-05-18',
+              '2023-05-19',
+              '2023-05-20',
+              '2023-05-21',
+            ]}
+          />
+        </h1>
+        {!data &&
+          <CircularProgress variant="solid" />
+        }
+        <Content data={data} cats={cats} />
+      </div>
+    </div>
+  );
+}
+
+function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
+  return (<>
+    {data?.ingestion && <>
+      <div>({data.papers.length} papers in {Object.keys(cats).length} categories ingested)</div>
+      <ProcessedPapers cats={cats} />
+      <UnprocessedPapers cats={cats} />
+    </>}
+  </>);
+}
+
+function IngestionDatePicker({ date, allDates }: { date?: string, allDates?: string[] }) {
+  if (!date) return null;
+
+  const router = useRouter();
+  const highlightDates = allDates?.map(d => dayjs(d, "YYYY-MM-DD").toDate());
+
+  const ExampleCustomInput = React.forwardRef(({ value, onClick }, ref) => (
+    <button className="example-custom-input" onClick={onClick} ref={ref}>
+      <DateRange />
+    </button>
+  ));
+
+  const handleCustomInputClick = (dateSelected: Date) => {
+    router.push(`/ingestion/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
+  };
+
+
+  return (
+    <div style={{ width: 40 }}>
+      <DatePicker
+        selected={dayjs(date, "YYYY-MM-DD").toDate()}
+        onChange={handleCustomInputClick}
+        highlightDates={highlightDates}
+        placeholderText="This highlights a week ago and a week from today"
+        customInput={<ExampleCustomInput />}
+      />
     </div>
   );
 }
