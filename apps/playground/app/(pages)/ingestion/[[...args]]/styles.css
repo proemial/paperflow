@@ -1,0 +1,14 @@
+.react-datepicker__day--highlighted-custom-1 {
+  border-radius: 0.3rem;
+  background-color: #3dcc4a;
+  color: #fff;
+}
+.react-datepicker__day--highlighted-custom-2 {
+  border-radius: 0.3rem;
+  background-color: grey;
+  color: #fff;
+}
+
+.react-datepicker__day--selected {
+  text-decoration: underline;
+}

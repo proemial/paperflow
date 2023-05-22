@@ -39,6 +39,9 @@ async function ingestionDao(operation: string, arg: string) {
     case 'get-latest':
       return await IngestionDao.getLatest();
 
+    case 'get-counts':
+      return await IngestionDao.getCounts();
+
     default:
       throw new Error(`Unknown operation: ${operation}`);
   }

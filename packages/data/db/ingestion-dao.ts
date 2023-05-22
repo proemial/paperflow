@@ -12,6 +12,11 @@ export type IngestionState = {
   ids: IngestionIds,
 };
 
+export type IngestionCounts = {
+  date: string,
+  count: number,
+}
+
 export const IngestionDao = {
   get: async (date: string) => {
     const mongo = await db('ingestion');
@@ -86,6 +91,26 @@ export const IngestionDao = {
       throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.update`);
+    }
+  },
+
+  getCounts: async () => {
+    const mongo = await db('ingestion');
+    const begin = DateMetrics.now();
+
+    try {
+      const ingestionEntriesCursor = mongo.find<IngestionState>({}, { sort: { _id: -1 } });
+      const ingestionEntries = await ingestionEntriesCursor.toArray();
+
+      return ingestionEntries.map(entry => ({
+        date: entry.date,
+        count: entry.ids.hits.length,
+      })) || [];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.get`);
     }
   },
 };
