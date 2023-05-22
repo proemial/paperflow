@@ -35,9 +35,6 @@ export function IngestionDatePicker({ date }: { date?: string }) {
     router.push(`/ingestion/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
   };
 
-  console.log(date, 'highlightDates', highlightDates);
-
-
   return (
     <div style={{ width: 40 }}>
       <DatePicker
