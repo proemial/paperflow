@@ -47,9 +47,13 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
 }
 
 function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
+  const summarisedCount = data?.papers?.filter(p => p.status === 'summarised').length;
+
   return (<>
     {data?.ingestion && <>
-      <div>({data.papers.length} papers in {Object.keys(cats).length} categories ingested)</div>
+      <div>
+        {data.papers?.length} papers in {Object.keys(cats).length} categories scraped, {summarisedCount} papers summarised
+      </div>
       <ProcessedPapers cats={cats} />
       <UnprocessedPapers cats={cats} />
     </>}
