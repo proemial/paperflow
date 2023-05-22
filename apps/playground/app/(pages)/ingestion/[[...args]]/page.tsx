@@ -22,11 +22,9 @@ export type Categorised = {
 }
 
 export default function IngestionPage({ params }: { params: { args: string[] } }) {
-  const latestIngestionDate = useLatestIngestionDate(params.args[0]);
-  const ingestionData = useIngestionData(params.args[0]);
+  const latestIngestionDate = useLatestIngestionDate(params.args && params.args[0]);
+  const ingestionData = useIngestionData(latestIngestionDate);
   const categories = useCategories(ingestionData);
-
-  console.log('cats', categories);
 
   return (
     <div style={{
@@ -77,7 +75,7 @@ function useLatestIngestionDate(inputDate: string) {
   return date;
 }
 
-function useIngestionData(date: string) {
+function useIngestionData(date?: string) {
   const [data, setData] = React.useState<FetchResult>();
 
   React.useEffect(() => {
@@ -96,9 +94,6 @@ function useCategories(data?: FetchResult) {
 
   React.useEffect(() => {
     if (!data?.ingestion) return;
-
-    console.log('data', data);
-
 
     (async () => {
       const categories: Categorised = {};
