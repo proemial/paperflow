@@ -43,6 +43,11 @@ async function run(id: string) {
     const cachedSummary = await SummariesDao.get(paper.parsed.hash, prompt.hash);
     if (cachedSummary) {
       log('cachedSummary found');
+      if (!paper.raw.summary) {
+        // Update DB
+        const dbResult = await PapersDao.updateSummary(id, paper.raw.id, cachedSummary as string, prompt.hash);
+        log('summary updated', dbResult.modifiedCount);
+      }
       return NextResponse.json({ summary: cachedSummary });
     }
 

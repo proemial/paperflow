@@ -34,7 +34,7 @@ async function run(args: string[]) {
     const ids = await scrape(date);
     const papers = await summarise();
 
-    const response = { date, ids: ids?.length, papers: papers?.length };
+    const response = { date, newIds: ids?.length, papersSummarized: papers?.length };
     log('<<tick]', response);
     return NextResponse.json(response);
   } catch (e) {
@@ -53,11 +53,16 @@ async function scrape(date: string) {
 
     // Check for updates
     const ids = await fetchLatestPapers(date, ingestionState);
+    console.log('ids', ingestionState.ids.newIds.length, ids.length);
 
-    // Schedule scraping
+    // Update ingestion state
     if (ids.length > 0) {
       ingestionState.ids.newIds.push(...ids);
       await IngestionDao.update(date, ingestionState);
+    }
+
+    // Schedule scraping
+    if (ingestionState.ids.newIds.length > 0 && ingestionState.ids.hits.length === 0 && ingestionState.ids.misses.length === 0) {
       await qstash.publish(Workers.scraper, { date }, date);
     }
 
