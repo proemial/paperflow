@@ -56,6 +56,17 @@ async function papersDao(operation: string, arg: string) {
       const ingestion = await IngestionDao.get(arg)
       const papers = ingestion && await PapersDao.getByIds(ingestion.ids.hits);
       return { ingestion, papers };
+    case 'get-by-ids-filtered':
+      if (!arg)
+        return [];
+
+      const ingestion2 = await IngestionDao.get(arg)
+      if (!ingestion2)
+        return [];
+
+      const papers2 = ingestion2 && await PapersDao.getIdsByIdsFiltered(ingestion2?.ids.hits || []);
+
+      return papers2;
     default:
       throw new Error(`Unknown operation: ${operation}`);
   }

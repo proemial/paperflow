@@ -190,6 +190,27 @@ export const PapersDao = {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
     }
   },
+
+  getIdsByIdsFiltered: async (ids: string[]) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    const filterConfig = await ConfigDao.getFilter();
+    const filter = { 'revisions.parsed.category': { $regex: filterConfig?.regex } };
+
+    try {
+      const paperIds = mongo.find<WithId>({ id: { $in: ids }, ...filter }, {
+        projection: { id: 1 }
+      });
+
+      return await paperIds.toArray();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+    }
+  },
 };
 
 async function getCategoryFilter(filter?: boolean) {

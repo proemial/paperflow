@@ -2,7 +2,7 @@
 import { CircularProgress } from "@mui/joy";
 import { ArxivPaper } from "data/adapters/arxiv/arxiv.models";
 import { IngestionState } from "data/db/ingestion-dao";
-import { RevisionedPaper } from "data/db/paper-dao";
+import { RevisionedPaper, WithId } from "data/db/paper-dao";
 import dayjs from 'dayjs';
 import * as React from "react";
 import { IngestionDatePicker } from "./date-picker";
@@ -25,6 +25,7 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
   const latestIngestionDate = useLatestIngestionDate(params.args && params.args[0]);
   const ingestionData = useIngestionData(latestIngestionDate);
   const categories = useCategories(ingestionData);
+  const ingestionCandidateCount = useIngestionCandidateCount(latestIngestionDate);
 
   return (
     <div style={{
@@ -40,19 +41,19 @@ export default function IngestionPage({ params }: { params: { args: string[] } }
         {!ingestionData &&
           <CircularProgress variant="solid" />
         }
-        <Content data={ingestionData} cats={categories} />
+        <Content data={ingestionData} cats={categories} count={ingestionCandidateCount} />
       </div>
     </div>
   );
 }
 
-function Content({ data, cats }: { data?: FetchResult, cats: Categorised }) {
+function Content({ data, cats, count }: { data?: FetchResult, cats: Categorised, count: number }) {
   const summarisedCount = data?.papers?.filter(p => p.status === 'summarised').length;
 
   return (<>
     {data?.ingestion && <>
       <div>
-        {data.papers?.length} papers in {Object.keys(cats).length} categories scraped, {summarisedCount} papers summarised
+        {data.papers?.length} papers in {Object.keys(cats).length} categories scraped, {summarisedCount}/{count} papers summarised
       </div>
       <ProcessedPapers cats={cats} />
       <UnprocessedPapers cats={cats} />
@@ -123,4 +124,18 @@ function useCategories(data?: FetchResult) {
   }, [data]);
 
   return categories;
+}
+
+function useIngestionCandidateCount(date?: string) {
+  const [data, setData] = React.useState<Array<WithId>>([]);
+
+  React.useEffect(() => {
+    (async () => {
+      const res = await fetch(`/api/db/papers/get-by-ids-filtered/${date}`);
+      const json: Array<WithId> = await res.json();
+      setData(json);
+    })();
+  }, [date]);
+
+  return data.length;
 }
