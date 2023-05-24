@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler
  
 class handler(BaseHTTPRequestHandler):
- 
+#  dummy
     def do_GET(self):
         self.send_response(200)
         self.send_header('Content-type','text/plain')
