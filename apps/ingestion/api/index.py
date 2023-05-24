@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
- 
+# comment
 class handler(BaseHTTPRequestHandler):
  
     def do_GET(self):
