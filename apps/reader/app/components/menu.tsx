@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import { Button } from "./Button";
 import { Toaster } from "./Toaster";
 import { useToast } from "./ToastHook";
-import { ToastAction } from "./Toast";
+import { Share1Icon } from "@radix-ui/react-icons";
 
 export function Menu() {
   const router = useParams();
@@ -20,7 +20,7 @@ export function Menu() {
     <>
       <div className="flex justify-end p-2 h-full items-end">
         <Button variant="outline" onClick={handleClick}>
-          Share
+          <Share1Icon />
         </Button>
       </div>
       <Toaster />
