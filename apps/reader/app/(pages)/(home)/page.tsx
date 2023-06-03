@@ -27,70 +27,82 @@ export default function HomePage() {
 
   // Stats must be lazy-loaded (on reader page)
 
-  return <CardList data={[
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    },
-    {
-      url: 'https://arxiv.org/abs/2207.05636',
-      pubDate: '2023-06-02',
-      title: 'Neural Posterior Estimation with Differentiable Simulators',
-      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
-      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
-      tags: [],
-    }
-  ]} />;
+  return (
+    <CardList
+      data={[
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+        {
+          url: "https://arxiv.org/abs/2207.05636",
+          pubDate: "2023-06-02",
+          title: "Neural Posterior Estimation with Differentiable Simulators",
+          authors: ["Zeghal", "Lanusse", "Boucaud", "Remy", "Aubourg"],
+          summary:
+            "Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.",
+          tags: [],
+        },
+      ]}
+    />
+  );
 }
