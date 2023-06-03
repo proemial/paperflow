@@ -21,11 +21,11 @@ export default function HomePage() {
   //     }
   //   }
 
+  // - 
   // - A random handfull must be selected and displayed
-
   // - A "load more" button fetches another handfull
 
-  // Stats must be lazy-loaded
+  // Stats must be lazy-loaded (on reader page)
 
   return (
     <div className="flex flex-col gap-1">
