@@ -21,7 +21,8 @@
     "react-dom": "18.2.0",
     "data": "workspace:*",
     "utils": "workspace:*",
-    "dayjs": "^1.11.8"
+    "dayjs": "^1.11.8",
+    "@vercel/analytics": "^1.0.1"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",

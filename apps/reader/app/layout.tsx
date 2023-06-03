@@ -1,4 +1,5 @@
-import { Menu } from "./components/menu";
+import { Analytics } from '@vercel/analytics/react';
+ import { Menu } from "./components/menu";
 import "./globals.css";
 import { Inter } from "next/font/google";
 
@@ -26,6 +27,7 @@ export default function RootLayout({
             <Menu />
           </div>
         </main>
+        <Analytics />
       </body>
     </html>
   );
