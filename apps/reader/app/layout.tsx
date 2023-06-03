@@ -21,7 +21,7 @@ export default function RootLayout({
           <div className="max-sm:border-t md:border-r border-zinc-300">
             <Menu />
           </div>
-          <div className='flex-1'>
+          <div className='flex-1 p-2'>
             {children}
           </div>
         </main>
