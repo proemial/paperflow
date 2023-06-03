@@ -25,7 +25,7 @@ export default async function HomePage() {
   const mapped = papers.map((versionedPaper) => {
     const latest = versionedPaper.revisions.at(-1);
 
-    const { id, link, published, title, authors } = latest.parsed;
+    const { id, link, published, title, authors, category } = latest.parsed;
     const { summary } = latest;
 
     return {
@@ -35,6 +35,7 @@ export default async function HomePage() {
       summary,
       authors: authors.map((author) => author.split(" ").at(-1)),
       link: link.source,
+      category,
     };
   });
 
