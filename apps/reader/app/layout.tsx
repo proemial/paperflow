@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main className="flex min-h-screen flex-col-reverse md:flex-row justify-between">
-          <div className="border-t border-zinc-300">
+          <div className="max-sm:border-t md:border-r border-zinc-300">
             <Menu />
           </div>
           <div>

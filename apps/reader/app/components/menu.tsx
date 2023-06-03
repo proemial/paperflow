@@ -18,7 +18,7 @@ export function Menu() {
 
     return (
         <>
-            <div className="flex justify-end p-2">
+            <div className="flex justify-end p-2 h-full items-end">
                 <Button variant="outline" onClick={handleClick}>Share</Button>
             </div>
             <Toaster />
