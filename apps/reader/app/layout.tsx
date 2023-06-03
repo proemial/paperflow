@@ -17,12 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="flex min-h-screen flex-col-reverse md:flex-row justify-between">
-          <div className="max-sm:border-t md:border-r border-zinc-300">
-            <Menu />
-          </div>
-          <div className='flex-1 p-2'>
+        <main className="flex min-h-screen max-h-screen flex-col md:flex-row-reverse justify-between">
+          <div className='flex-1 p-2 overflow-scroll'>
             {children}
+          </div>
+          <div className="border-zinc-300 max-sm:shadow-inner md:border-r md:h-screen sticky top-0">
+            <Menu />
           </div>
         </main>
       </body>
