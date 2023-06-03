@@ -1,5 +1,6 @@
 import { PaperflowCard } from "app/components/paperflow-card";
 import Link from "next/link";
+import { CardList } from "./card-list";
 
 export default function HomePage() {
   // - Latest summarized recent id's must be in redis
@@ -26,23 +27,70 @@ export default function HomePage() {
 
   // Stats must be lazy-loaded (on reader page)
 
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="max-sm:flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 flex-1">
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-        <PaperflowCard>Card Content</PaperflowCard>
-      </div>
-      <div className="flex items-end justify-end">
-        <Link href="">Load more</Link>
-      </div>
-    </div>
-  );
+  return <CardList data={[
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    },
+    {
+      url: 'https://arxiv.org/abs/2207.05636',
+      pubDate: '2023-06-02',
+      title: 'Neural Posterior Estimation with Differentiable Simulators',
+      authors: ['Zeghal', 'Lanusse', 'Boucaud', 'Remy', 'Aubourg'],
+      summary: 'Haze on some exoplanets can create water droplets that produce organic prebiotic molecules.',
+      tags: [],
+    }
+  ]} />;
 }
