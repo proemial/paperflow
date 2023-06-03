@@ -18,11 +18,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <main className="flex min-h-screen flex-col-reverse md:flex-row justify-between">
-          <div className="border-2 border-orange-500">
+          <div className="border-t border-zinc-300">
             <Menu />
           </div>
-          <div className="border-2 flex-1 border-green-500">
-          {children}
+          <div>
+            {children}
           </div>
         </main>
       </body>

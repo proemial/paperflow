@@ -9,24 +9,29 @@
     "format": "prettier --write \"**/*.{js,ts,tsx,md}\""
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-toast": "^1.1.4",
+    "class-variance-authority": "^0.6.0",
+    "clsx": "1.2.1",
+    "lucide-react": "^0.233.0",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "autoprefixer": "10.4.14",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.9",
     "@types/node": "20.2.5",
     "@types/react": "18.2.8",
     "@types/react-dom": "18.2.4",
-    "@tailwindcss/line-clamp": "^0.4.4",
-    "@tailwindcss/typography": "^0.5.9",
-    "tailwind-merge": "^1.12.0",
-    "tailwindcss-animate": "^1.0.5",
+    "autoprefixer": "10.4.14",
     "postcss": "8.4.24",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.12",
+    "tailwind-merge": "^1.12.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
-    "tsconfig": "workspace:*"
+    "tailwindcss-animate": "^1.0.5",
+    "tsconfig": "workspace:*",
+    "typescript": "5.0.4"
   }
 }
