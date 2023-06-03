@@ -94,11 +94,11 @@ export function PromptForm({ initialValues, onSubmit }: Props) {
                   {props.errors.messages && <div style={{ color: 'red' }}>Missing prompt message</div>}
                   <Table>
                     <tbody>
+                      {/* @ts-ignore */}
                       <FieldArray name="messages">
                         {(arrayHelpers) => (
                           <>
                             {props.values.messages.map((message, index) => {
-
                               return (
                                 <tr key={index}>
                                   <td style={{ width: 140 }}>

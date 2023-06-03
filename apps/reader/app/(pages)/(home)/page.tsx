@@ -21,7 +21,6 @@ export default function HomePage() {
   //     }
   //   }
 
-  // - 
   // - A random handfull must be selected and displayed
   // - A "load more" button fetches another handfull
 
