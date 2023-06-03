@@ -30,7 +30,7 @@ export function PaperflowCard({
     <Card className="w-full">
       <CardHeader>
         <CardTitle>
-          <Link href={`/read/${id}`}>{title}</Link>
+          <Link href={`/read/${id}`} className="underline">{title}</Link>
         </CardTitle>
         <CardDescription>{summary}</CardDescription>
       </CardHeader>
