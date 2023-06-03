@@ -7,8 +7,10 @@ import {
   CardTitle,
 } from "app/components/Card";
 import dayjs from "dayjs";
+import Link from "next/link";
 
 export type CardProps = {
+  id: string;
   link?: string;
   published?: Date;
   title?: string;
@@ -18,6 +20,7 @@ export type CardProps = {
 };
 
 export function PaperflowCard({
+  id,
   published,
   title,
   summary,
@@ -26,7 +29,9 @@ export function PaperflowCard({
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          <Link href={`/read/${id}`}>{title}</Link>
+        </CardTitle>
         <CardDescription>{summary}</CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">

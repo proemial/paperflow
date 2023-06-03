@@ -2,22 +2,12 @@ import { CardList } from "./card-list";
 import { IngestionDao } from "data/db/ingestion-dao";
 import { PapersDao } from "data/db/paper-dao";
 
-// export const revalidate = 1;
+export const revalidate = 1;
 
 function getMultipleRandom(arr, num) {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
 
   return shuffled.slice(0, num);
-}
-
-function separateTags(input: string) {
-  const pattern = /(?:^|\s)(#[^\s#]+|[^\s#]+#)(?=$|\s)/;
-  const m = input.match(pattern);
-  if (m) {
-    console.log(input);
-    console.log(m);
-    console.log("==================");
-  }
 }
 
 export default async function HomePage() {
@@ -35,11 +25,11 @@ export default async function HomePage() {
   const mapped = papers.map((versionedPaper) => {
     const latest = versionedPaper.revisions.at(-1);
 
-    const { link, published, title, authors } = latest.parsed;
+    const { id, link, published, title, authors } = latest.parsed;
     const { summary } = latest;
-    separateTags(summary);
 
     return {
+      id,
       published,
       title,
       summary,
