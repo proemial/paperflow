@@ -15,12 +15,17 @@ export default async function ReaderPage({
   const data = await IngestionDao.getByIdFromRedis(params.id);
 
   return (
-    <div className="md:flex">
-      <div className="m-2">
-        <PaperflowCard {...data} />
+    <div className="lg:flex">
+      <div className="flex-1">
+        <div className="m-2 lg:m-4">
+          <PaperflowCard {...data} />
+        </div>
+        <div className="border-t border-zinc-300 max-lg:hidden p-4 mt-4">
+          {data.abstract}
+        </div>
       </div>
-      <div className="max-sm:mt-2 md:border-l md:ml-2 md:h-[100dvh] md:w-full md:max-w-[420px]">
-        <div className="flex justify-between border-zinc-300 max-sm:border-y md:border-b p-4">
+      <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
+        <div className="flex justify-between border-zinc-300 max-md:border-y lg:border-b p-4">
           <div>Stats</div>
           <div className="flex gap-3">
             <div>💬 12</div>
@@ -30,8 +35,8 @@ export default async function ReaderPage({
           </div>
         </div>
         <div>
-          <Accordion type="single" collapsible defaultValue="summary">
-            <AccordionItem value="summary" className="px-4 py2">
+          <Accordion type="single" collapsible defaultValue="related">
+            <AccordionItem value="summary" className="px-4 py2 lg:hidden">
               <AccordionTrigger>Summary</AccordionTrigger>
               <AccordionContent>{data.abstract}</AccordionContent>
             </AccordionItem>
