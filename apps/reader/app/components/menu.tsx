@@ -1,16 +1,16 @@
 "use client";
-import { useParams } from "next/navigation";
 import { Button } from "./shadcn-ui/Button";
 import { Toaster } from "./shadcn-ui/Toaster";
 import { useToast } from "./shadcn-ui/ToastHook";
 import { Share1Icon } from "@radix-ui/react-icons";
+import { Analytics } from "./utils/AnalyticsClient";
 
 export function Menu() {
-  const router = useParams();
   const { toast } = useToast();
 
   const handleClick = () => {
     navigator.clipboard.writeText(window.location.href);
+    Analytics.track('Share');
     toast({
       title: "It's on your clipboard, now go share it 🙏",
     });
