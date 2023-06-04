@@ -25,7 +25,7 @@ export default function RootLayout({
             maxHeight: "100dvh",
           }}
         >
-          <div className="flex-1 p-2 overflow-scroll">{children}</div>
+          <div className="flex-1 overflow-scroll">{children}</div>
           <div className="border-zinc-300 max-sm:shadow-inner md:border-r md:h-screen sticky top-0">
             <Menu />
           </div>

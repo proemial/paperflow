@@ -19,7 +19,7 @@ export function PaperflowCard({
   link,
 }: SummarisedPaper) {
   return (
-    <Card className="w-full">
+    <Card className="max-sm:w-full md:max-w-5xl">
       <CardHeader>
         <CardTitle>
           <CardLink id={id} title={title} link={link} />
