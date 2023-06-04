@@ -61,7 +61,7 @@ async function run(id: string) {
       log('summary updated', dbResult.modifiedCount);
 
       // Update cache
-      const cacheResult = await SummariesDao.set(paper.parsed.hash, prompt.hash, summary.text);
+      const cacheResult = await SummariesDao.set(paper, prompt.hash, summary.text);
       log('summary cached', cacheResult);
     }
 
