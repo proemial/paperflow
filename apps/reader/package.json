@@ -22,7 +22,9 @@
     "data": "workspace:*",
     "utils": "workspace:*",
     "dayjs": "^1.11.8",
-    "@vercel/analytics": "^1.0.1"
+    "@vercel/analytics": "^1.0.1",
+    "posthog-js": "^1.63.3",
+    "react-ga4": "^2.1.0"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",

@@ -26,13 +26,15 @@ export function PaperflowCard({
   title,
   summary,
   authors,
-  category
+  category,
 }: CardProps) {
   return (
     <Card className="w-full">
       <CardHeader>
         <CardTitle>
-          <Link href={`/read/${id}`} className="underline">{title}</Link>
+          <Link href={`/read/${id}`} className="underline">
+            {title}
+          </Link>
         </CardTitle>
         <CardDescription>{summary}</CardDescription>
       </CardHeader>
@@ -49,12 +51,10 @@ export function PaperflowCard({
   );
 }
 
-function Category({category}: {category: string}) {
-  console.log('category', category);
-  
-  const hit = arxivCategories.find(cat => cat.key === category);
+function Category({ category }: { category: string }) {
+  console.log("category", category);
 
-  return (
-    <span>{hit?.title} </span>
-  )
+  const hit = arxivCategories.find((cat) => cat.key === category);
+
+  return <span>{hit?.title} </span>;
 }

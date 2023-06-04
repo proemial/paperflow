@@ -20,7 +20,7 @@ export default async function ReaderPage({
     summary,
     authors: authors.map((author) => author.split(" ").at(-1)),
     link: link.source,
-    category
+    category,
   };
 
   return (
