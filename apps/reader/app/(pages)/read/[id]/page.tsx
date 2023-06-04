@@ -19,7 +19,7 @@ export default async function ReaderPage({
       <div className="m-2">
         <PaperflowCard {...data} />
       </div>
-      <div className="max-sm:mt-2 md:border-l md:ml-2 md:h-[100dvh] md:w-full">
+      <div className="max-sm:mt-2 md:border-l md:ml-2 md:h-[100dvh] md:w-full md:max-w-[420px]">
         <div className="flex justify-between border-zinc-300 max-sm:border-y md:border-b p-4">
           <div>Stats</div>
           <div className="flex gap-3">

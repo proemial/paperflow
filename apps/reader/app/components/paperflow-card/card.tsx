@@ -19,7 +19,7 @@ export function PaperflowCard({
   link,
 }: SummarisedPaper) {
   return (
-    <Card className="max-sm:w-full md:max-w-5xl">
+    <Card className="max-sm:w-full">
       <CardHeader>
         <CardTitle>
           <CardLink id={id} title={title} link={link} />
@@ -31,7 +31,7 @@ export function PaperflowCard({
           {`${category.title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
         <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
-          {authors?.join(", ")}
+          {authors.map(author => author.split(' ').at(-1))?.join(", ")}
         </div>
       </CardFooter>
     </Card>
