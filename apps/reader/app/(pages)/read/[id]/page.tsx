@@ -1,27 +1,8 @@
 import { PaperflowCard } from "@/app/components/paperflow-card";
-import { PapersDao } from "data/db/paper-dao";
+import { IngestionDao } from "data/db/ingestion-dao";
 
-export default async function ReaderPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const versionedPaper = await PapersDao.getById(params.id);
-
-  const latest = versionedPaper.revisions.at(-1);
-
-  const { id, link, published, title, authors, category } = latest.parsed;
-  const { summary } = latest;
-
-  const data = {
-    id,
-    published,
-    title,
-    summary,
-    authors: authors.map((author) => author.split(" ").at(-1)),
-    link: link.source,
-    category,
-  };
+export default async function ReaderPage({params}: {params: { id: string }}) {
+  const data = await IngestionDao.getByIdFromRedis(params.id);
 
   return (
     <div>

@@ -8,17 +8,7 @@ import {
 import dayjs from "dayjs";
 import Link from "next/link";
 import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
-
-export type CardProps = {
-  id: string;
-  link?: string;
-  published?: Date;
-  title?: string;
-  authors?: string[];
-  summary: string;
-  tags?: string[];
-  category?: string;
-};
+import { SummarisedPaper } from "data/db/ingestion-dao";
 
 export function PaperflowCard({
   id,
@@ -27,7 +17,7 @@ export function PaperflowCard({
   summary,
   authors,
   category,
-}: CardProps) {
+}: SummarisedPaper) {
   return (
     <Card className="w-full">
       <CardHeader>
@@ -40,7 +30,7 @@ export function PaperflowCard({
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          <Category category={category} />
+          {category.title}
           {dayjs(published).format("YYYY-MM-DD")}
         </CardDescription>
         <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
@@ -49,12 +39,4 @@ export function PaperflowCard({
       </CardFooter>
     </Card>
   );
-}
-
-function Category({ category }: { category: string }) {
-  console.log("category", category);
-
-  const hit = arxivCategories.find((cat) => cat.key === category);
-
-  return <span>{hit?.title} </span>;
 }
