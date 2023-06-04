@@ -1,5 +1,5 @@
 import { SummarisedPaper } from "data/db/ingestion-dao";
-import { PaperflowCard } from "@/app/components/paperflow-card";
+import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import Link from "next/link";
 
 export function CardList({ data }: { data?: SummarisedPaper[] }) {

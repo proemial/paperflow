@@ -1,4 +1,4 @@
-import { PaperflowCard } from "@/app/components/paperflow-card";
+import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import { IngestionDao } from "data/db/ingestion-dao";
 
 export default async function ReaderPage({params}: {params: { id: string }}) {
