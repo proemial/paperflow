@@ -1,6 +1,10 @@
 import { Client, PublishJsonRequest } from "@upstash/qstash";
 import { Env } from "../env";
 
+if (!Env.connectors.qstash) {
+  throw new Error("[qstash-client] Please fix your environment variables");
+}
+
 const client = new Client({
   token: Env.connectors.qstash.token,
 });

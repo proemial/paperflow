@@ -3,6 +3,10 @@ import { DateMetrics } from "utils/date";
 import { ChatCompletionRequestMessageRoleEnum, Configuration, CreateCompletionResponseUsage, OpenAIApi } from "openai";
 import { Env } from "../env";
 
+if (!Env.connectors.openai) {
+  throw new Error("[openai-client] Please fix your environment variables");
+}
+
 export type GptPrompt = {
   role: ChatCompletionRequestMessageRoleEnum,
   content: string,

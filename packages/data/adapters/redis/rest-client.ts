@@ -1,6 +1,12 @@
 import { Redis } from "@upstash/redis";
 import { Env } from "../env";
 
+const {ingestion, prompts, modelOutput} = Env.connectors.redis;
+
+if (!ingestion || !prompts || !modelOutput) {
+  throw new Error("[redis-client] Please fix your environment variables");
+}
+
 export const redis = {
   ingestion: new Redis({
     url: Env.connectors.redis.ingestion.uri,
