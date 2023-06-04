@@ -6,6 +6,9 @@ import posthog from 'posthog-js'
 import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 
+// https://www.npmjs.com/package/react-ga4
+// https://posthog.com/docs/getting-started/send-events
+
 export function AnalyticsClient() {
     const initialized = useAnalytics();
     const pathname = usePathname();
