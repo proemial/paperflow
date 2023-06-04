@@ -1,7 +1,7 @@
 import { IngestionDao } from "data/db/ingestion-dao";
 import { CardList } from "./card-list";
 
-export const revalidate = 1;
+export const revalidate = 0;
 
 function getMultipleRandom(arr, num) {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
