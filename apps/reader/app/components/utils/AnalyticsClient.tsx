@@ -27,20 +27,13 @@ export function AnalyticsClient() {
 }
 
 export const Analytics = {
-    track: (event: string) => {
-        va.track(event);
+    track: (event: string, properties?: Record<string, any>) => {
+        va.track(event, properties);
 
-        posthog.capture(event)
+        posthog.capture(event, properties)
 
-        ReactGA.event({
-            category: "events",
-            action: event,
-            // label: "your label", // optional
-            // value: 99, // optional, must be a number
-            // nonInteraction: true, // optional, true/false
-            // transport: "xhr", // optional, beacon/xhr/image
-        });
-        console.log('[AnalyticsClient] event:', event);
+        ReactGA.event(event, properties);
+        console.log('[AnalyticsClient] event:', event, properties);
     }
 }
 

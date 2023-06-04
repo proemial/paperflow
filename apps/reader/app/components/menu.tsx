@@ -10,7 +10,7 @@ export function Menu() {
 
   const handleClick = () => {
     navigator.clipboard.writeText(window.location.href);
-    Analytics.track('Share');
+    Analytics.track('Share', {path: window.location.href});
     toast({
       title: "It's on your clipboard, now go share it 🙏",
     });
