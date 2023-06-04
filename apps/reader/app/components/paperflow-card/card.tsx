@@ -16,7 +16,7 @@ export function PaperflowCard({
   summary,
   authors,
   category,
-  link
+  link,
 }: SummarisedPaper) {
   return (
     <Card className="w-full">
