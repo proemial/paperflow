@@ -5,7 +5,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/app/components/shadcn-ui/Accordion"
+} from "@/app/components/shadcn-ui/Accordion";
 
 export default async function ReaderPage({
   params,
@@ -30,26 +30,20 @@ export default async function ReaderPage({
           </div>
         </div>
         <div>
-        <Accordion type="single" collapsible defaultValue="summary">
-          <AccordionItem value="summary" className="px-4 py2">
-            <AccordionTrigger>Summary</AccordionTrigger>
-            <AccordionContent>
-              {data.summary}
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="qa" className="px-4 py2">
-            <AccordionTrigger>Ask a question</AccordionTrigger>
-            <AccordionContent>
-              ...
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="related" className="px-4 py2">
-            <AccordionTrigger>Related research</AccordionTrigger>
-            <AccordionContent>
-              ...
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+          <Accordion type="single" collapsible defaultValue="summary">
+            <AccordionItem value="summary" className="px-4 py2">
+              <AccordionTrigger>Summary</AccordionTrigger>
+              <AccordionContent>{data.abstract}</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="qa" className="px-4 py2">
+              <AccordionTrigger>Ask a question</AccordionTrigger>
+              <AccordionContent>...</AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="related" className="px-4 py2">
+              <AccordionTrigger>Related research</AccordionTrigger>
+              <AccordionContent>...</AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </div>

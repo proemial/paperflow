@@ -12,7 +12,7 @@ export const SummariesDao = {
 
     // New cache format
     const ingestionDate = dayjs().format("YYYY-MM-DD");
-    const { id, link, published, title, authors, category } = paper.parsed;
+    const { id, link, published, title, authors, category, abstract } = paper.parsed;
 
     if(ingestionDate === dayjs(published).format("YYYY-MM-DD")) {
       console.log('Appending ...');
@@ -27,7 +27,7 @@ export const SummariesDao = {
     console.log(await redis.ingestion.json.get('ingestion:status:summarised:latest'));
 
     await redis.ingestion.json.set(`ingestion:paper:summarised:${paper.parsed.id}`, "$", {
-      ingestionDate, id, published, title, summary, authors, 
+      ingestionDate, id, published, title, summary, authors, abstract,
       category: arxivCategories.find((catarxivCategory) => catarxivCategory.key === category),
       link: link.source,
     });

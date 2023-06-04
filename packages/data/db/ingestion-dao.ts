@@ -176,4 +176,10 @@ export type SummarisedPaper = {
   link: string,
   qas?: Array<{q: string, a: string}>,
   tage?: string[],
+  abstract: string,
+  related?: Array<{
+    id: string, 
+    published: string, 
+    title: string, 
+  }>,
 };
