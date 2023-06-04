@@ -1,4 +1,4 @@
-import { CardProps, PaperflowCard } from "app/components/paperflow-card";
+import { CardProps, PaperflowCard } from "@/app/components/paperflow-card";
 import Link from "next/link";
 
 export function CardList({ data }: { data?: CardProps[] }) {
