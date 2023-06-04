@@ -150,7 +150,7 @@ export const IngestionDao = {
     const begin = DateMetrics.now();
 
     try {
-      return await redis.ingestion.json.get(`ingestion:paper:summarised:${id}`);
+      return await redis.ingestion.json.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
     } catch (error) {
       console.error(error);
       throw error;
