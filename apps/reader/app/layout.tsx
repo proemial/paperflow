@@ -1,7 +1,7 @@
 import { Menu } from "./components/menu";
-import "./globals.css";
+import "./styles/globals.css";
 import { Inter } from "next/font/google";
-import { AnalyticsClient } from "./components/AnalyticsClient";
+import { AnalyticsClient } from "./components/utils/AnalyticsClient";
 
 const inter = Inter({ subsets: ["latin"] });
 

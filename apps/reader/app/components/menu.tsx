@@ -1,8 +1,8 @@
 "use client";
 import { useParams } from "next/navigation";
-import { Button } from "./Button";
-import { Toaster } from "./Toaster";
-import { useToast } from "./ToastHook";
+import { Button } from "./shadcn-ui/Button";
+import { Toaster } from "./shadcn-ui/Toaster";
+import { useToast } from "./shadcn-ui/ToastHook";
 import { Share1Icon } from "@radix-ui/react-icons";
 
 export function Menu() {

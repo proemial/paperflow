@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "app/components/Card";
+} from "app/components/shadcn-ui/Card";
 import dayjs from "dayjs";
 import Link from "next/link";
 import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
