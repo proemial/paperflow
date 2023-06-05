@@ -8,10 +8,11 @@ import {
 import { SummarisedPaper } from "data/db/ingestion-dao";
 import dayjs from "dayjs";
 import { CardLink } from "./card-link";
+import { sanitize } from "./hashtags";
 
 export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
   const { id, published, title, summary, authors, category, link, compact, useLink } = props;
-
+  
   if(compact)
     return <CompactCard {...props} />
 
@@ -21,7 +22,9 @@ export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useL
         <CardTitle>
           <CardLink id={id} title={title} link={useLink && link} />
         </CardTitle>
-        <CardDescription>{summary}</CardDescription>
+        <CardDescription>
+          {sanitize(summary).sanitized}
+        </CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
@@ -49,7 +52,9 @@ function CompactCard({
         <CardTitle>
           <CardLink id={id} title={title} link={useLink && link} />
         </CardTitle>
-        <CardDescription>{summary}</CardDescription>
+        <CardDescription>
+          {sanitize(summary).sanitized}
+        </CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-end pb-3">
         <CardDescription>
