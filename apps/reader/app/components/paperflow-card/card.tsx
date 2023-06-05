@@ -9,33 +9,52 @@ import { SummarisedPaper } from "data/db/ingestion-dao";
 import dayjs from "dayjs";
 import { CardLink } from "./card-link";
 
-export function PaperflowCard({
-  id,
-  published,
-  title,
-  summary,
-  authors,
-  category,
-  link,
-  compact,
-  useLink,
-}: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
+export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
+  const { id, published, title, summary, authors, category, link, compact, useLink } = props;
+
+  if(compact)
+    return <CompactCard {...props} />
+
   return (
     <Card className="max-sm:w-full">
       <CardHeader>
         <CardTitle>
           <CardLink id={id} title={title} link={useLink && link} />
         </CardTitle>
-        {!compact && <CardDescription>{summary}</CardDescription>}
+        <CardDescription>{summary}</CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {!compact && category.title}
+          {`${category.title} ${dayjs(published).format("YYYY-MM-DD")}`}
+        </CardDescription>
+          <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
+            {authors.map((author) => author.split(" ").at(-1))?.join(", ")}
+          </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+function CompactCard({
+  id,
+  published,
+  title,
+  summary,
+  link,
+  useLink,
+}: SummarisedPaper & { useLink?: boolean }) {
+  return (
+    <Card className="max-sm:w-full">
+      <CardHeader className="p-3">
+        <CardTitle>
+          <CardLink id={id} title={title} link={useLink && link} />
+        </CardTitle>
+        <CardDescription>{summary}</CardDescription>
+      </CardHeader>
+      <CardFooter className="flex flex-col justify-start items-end pb-3">
+        <CardDescription>
           {` ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
-        <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
-          {authors.map((author) => author.split(" ").at(-1))?.join(", ")}
-        </div>
       </CardFooter>
     </Card>
   );
