@@ -223,7 +223,7 @@ export const PapersDao = {
     };
 
     try {
-      const paperIds = mongo.find<RevisionedPaper>(filter, {limit, sort: {lastUpdated: -1}});
+      const paperIds = mongo.find<RevisionedPaper>(filter, {limit, sort: {"revisions.parsed.updated": -1}});
 
       return await paperIds.toArray();
     } catch (error) {
