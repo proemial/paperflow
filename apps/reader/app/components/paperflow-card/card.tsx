@@ -27,7 +27,7 @@ export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useL
         <CardDescription>
           {`${category.title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
-          <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
+          <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
             {authors.map((author) => author.split(" ").at(-1))?.join(", ")}
           </div>
       </CardFooter>

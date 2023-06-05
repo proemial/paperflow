@@ -7,6 +7,8 @@ import {
   AccordionTrigger,
 } from "@/app/components/shadcn-ui/Accordion";
 import { RelatedResearch } from "./related";
+import Spinner from "@/app/components/spinner";
+import { Suspense } from "react";
 
 export default async function ReaderPage({
   params,
@@ -48,10 +50,12 @@ export default async function ReaderPage({
             <AccordionItem value="related" className="px-4 py2">
               <AccordionTrigger>Related research</AccordionTrigger>
               <AccordionContent>
-                {data && (<>
-                  {/* @ts-expect-error Server Component */}
-                  <RelatedResearch id={data.id} category={data.category} />
-                </>)}
+                <Suspense fallback={<Spinner />}>
+                  {data && (<>
+                    {/* @ts-expect-error Server Component */}
+                    <RelatedResearch id={data.id} category={data.category} />
+                  </>)}
+                  </Suspense>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
