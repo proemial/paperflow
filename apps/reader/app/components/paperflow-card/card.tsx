@@ -17,21 +17,24 @@ export function PaperflowCard({
   authors,
   category,
   link,
-}: SummarisedPaper) {
+  compact,
+  useLink,
+}: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
   return (
     <Card className="max-sm:w-full">
       <CardHeader>
         <CardTitle>
-          <CardLink id={id} title={title} link={link} />
+          <CardLink id={id} title={title} link={useLink && link} />
         </CardTitle>
-        <CardDescription>{summary}</CardDescription>
+        {!compact && <CardDescription>{summary}</CardDescription>}
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${category.title} ${dayjs(published).format("YYYY-MM-DD")}`}
+          {!compact && category.title}
+          {` ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
         <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden">
-          {authors.map(author => author.split(' ').at(-1))?.join(", ")}
+          {authors.map((author) => author.split(" ").at(-1))?.join(", ")}
         </div>
       </CardFooter>
     </Card>

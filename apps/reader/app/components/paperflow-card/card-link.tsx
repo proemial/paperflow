@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 export function CardLink({
   id,
@@ -10,10 +7,9 @@ export function CardLink({
 }: {
   id: string;
   title: string;
-  link: string;
+  link?: string;
 }) {
-  const pathname = usePathname();
-  const url = pathname === "/" ? `/read/${id}` : link;
+  const url = link ? link : `/read/${id}`;
 
   return (
     <Link href={url} className="underline">
