@@ -1,22 +1,6 @@
-import { redis } from "../adapters/redis/rest-client";
 import { db } from "../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
-
-type IngestionIds = {
-  newIds: string[],
-  hits: string[],
-  misses: string[],
-};
-
-export type IngestionState = {
-  date: string,
-  ids: IngestionIds,
-};
-
-export type IngestionCounts = {
-  date: string,
-  count: number,
-}
+import { IngestionState } from "./ingestion-models";
 
 export const IngestionDao = {
   get: async (date: string) => {
@@ -114,72 +98,4 @@ export const IngestionDao = {
       console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.get`);
     }
   },
-
-  getLatestFromRedis: async () => {
-    const begin = DateMetrics.now();
-
-    try {
-      return await redis.ingestion.json.get('ingestion:status:summarised:latest') as LatestIds;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getLatestFromRedis`);
-    }
-  },
-
-  getByIdsFromRedis: async (ids: string[]) => {
-    const begin = DateMetrics.now();
-
-    try {
-      const pipeline = redis.ingestion.pipeline();
-      ids.forEach(id => {
-        pipeline.json.get(`ingestion:paper:summarised:${id}`);
-      })
-    
-      return await pipeline.exec() as Array<SummarisedPaper>;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdsFromRedis`);
-    }
-  },
-
-  getByIdFromRedis: async (id: string) => {
-    const begin = DateMetrics.now();
-
-    try {
-      return await redis.ingestion.json.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdFromRedis`);
-    }
-  },
-};
-
-export type LatestIds = {
-  date: string, 
-  ids: string[]
-};
-
-export type SummarisedPaper = {
-  ingestionDate: string, 
-  id: string, 
-  published: string, 
-  title: string, 
-  summary: string, 
-  authors: string[],
-  category: {key: string, title: string, category: string},
-  link: string,
-  qas?: Array<{q: string, a: string}>,
-  tage?: string[],
-  abstract: string,
-  related?: Array<{
-    id: string, 
-    published: string, 
-    title: string, 
-  }>,
 };

@@ -1,4 +1,4 @@
-import { IngestionDao } from "data/db/ingestion-dao";
+import { IngestionCache } from "data/db/ingestion-cache";
 import { CardList } from "./card-list";
 
 export const revalidate = 0;
@@ -10,9 +10,9 @@ function getMultipleRandom(arr, num) {
 }
 
 export default async function HomePage() {
-  const latestIds = await IngestionDao.getLatestFromRedis();
+  const latestIds = await IngestionCache.getLatestFromRedis();
   const randomIds = getMultipleRandom(latestIds.ids, 20);
-  const randomPapers = await IngestionDao.getByIdsFromRedis(randomIds);
+  const randomPapers = await IngestionCache.getByIdsFromRedis(randomIds);
 
   return <CardList data={randomPapers} />;
 }

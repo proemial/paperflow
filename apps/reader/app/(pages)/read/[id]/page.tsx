@@ -1,5 +1,5 @@
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
-import { IngestionDao } from "data/db/ingestion-dao";
+import { IngestionCache } from "data/db/ingestion-cache";
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +15,7 @@ export default async function ReaderPage({
 }: {
   params: { id: string };
 }) {
-  const data = await IngestionDao.getByIdFromRedis(params.id);
+  const data = await IngestionCache.getByIdFromRedis(params.id);
 
   return (
     <div className="lg:flex">
