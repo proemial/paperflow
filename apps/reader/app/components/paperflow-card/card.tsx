@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "app/components/shadcn-ui/Card";
-import { SummarisedPaper } from "data/db/ingestion-dao";
+import { SummarisedPaper } from "data/db/ingestion-models";
 import dayjs from "dayjs";
 import { CardLink } from "./card-link";
 import { sanitize } from "./hashtags";
