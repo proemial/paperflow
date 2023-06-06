@@ -10,9 +10,9 @@ function getMultipleRandom(arr, num) {
 }
 
 export default async function HomePage() {
-  const latestIds = await IngestionCache.getLatestFromRedis();
+  const latestIds = await IngestionCache.latestIds();
   const randomIds = getMultipleRandom(latestIds.ids, 20);
-  const randomPapers = await IngestionCache.getByIdsFromRedis(randomIds);
+  const randomPapers = await IngestionCache.papersByIds(randomIds);
 
   return <CardList data={randomPapers} />;
 }

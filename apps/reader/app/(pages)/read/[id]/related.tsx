@@ -1,5 +1,5 @@
+import { IngestionCache } from "@/../../packages/data/db/ingestion-cache";
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
-import { PapersDao } from "data/db/paper-dao";
 
 export async function RelatedResearch({
   id,
@@ -8,26 +8,11 @@ export async function RelatedResearch({
   id: string;
   category: { key: string; title: string; category: string };
 }) {
-  const related = await PapersDao.getByCategory(id, category.key, 5);
+  const related = await IngestionCache.relatedById(id);
 
   return (
     <div className="flex flex-col gap-2">
-      {related?.map((revisionedPaper, i) => {
-        const paper = revisionedPaper.revisions.at(-1);
-        const { published, title, authors, abstract } = paper.parsed;
-
-        const data = {
-          id: paper.parsed.id,
-          published: `${published}`,
-          title,
-          summary: paper.summary,
-          authors,
-          category,
-          link: paper.parsed.link.source,
-          ingestionDate: `${revisionedPaper.lastUpdated}`,
-          abstract,
-        };
-
+      {related?.map((data, i) => {
         return <PaperflowCard key={i} {...data} compact />;
       })}
     </div>

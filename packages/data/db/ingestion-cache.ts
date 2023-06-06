@@ -3,7 +3,7 @@ import { redis } from "../adapters/redis/rest-client";
 import { LatestIds, SummarisedPaper } from "./ingestion-models";
 
 export const IngestionCache = {
-  getLatestFromRedis: async () => {
+  latestIds: async () => {
     const begin = DateMetrics.now();
 
     try {
@@ -16,7 +16,7 @@ export const IngestionCache = {
     }
   },
 
-  getByIdsFromRedis: async (ids: string[]) => {
+  papersByIds: async (ids: string[]) => {
     const begin = DateMetrics.now();
 
     try {
@@ -34,11 +34,34 @@ export const IngestionCache = {
     }
   },
 
-  getByIdFromRedis: async (id: string) => {
+  paperById: async (id: string) => {
     const begin = DateMetrics.now();
 
     try {
       return await redis.ingestion.json.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdFromRedis`);
+    }
+  },
+
+  relatedById: async (id: string) => {
+    const begin = DateMetrics.now();
+
+    try {
+      return await redis.ingestion.get(`ingestion:paper:related:${id}`) as Array<{
+        id: string,
+        published: string,
+        title: string,
+        summary: string,
+        authors: string[],
+        category: {key: string, title: string, category: string},
+        link: string,
+        ingestionDate: string,
+        abstract: string,
+      }>;
     } catch (error) {
       console.error(error);
       throw error;
