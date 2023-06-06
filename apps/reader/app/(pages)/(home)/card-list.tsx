@@ -1,4 +1,4 @@
-import { SummarisedPaper } from "data/db/ingestion-dao";
+import { SummarisedPaper } from "data/db/ingestion-models";
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import Link from "next/link";
 
