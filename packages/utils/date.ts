@@ -11,8 +11,9 @@ export const DateMetrics = {
 export const DateFactory = {
   yesterday: () => {
     dayjs.extend(utc);
-    return dayjs.utc().subtract(2, 'day').set('hour', 0).set('minute', 0).set('second', 0);
+    return dayjs.utc().subtract(1, 'day').set('hour', 0).set('minute', 0).set('second', 0);
   },
+  today: () => dayjs(),
 }
 
 export const DateFormat = {

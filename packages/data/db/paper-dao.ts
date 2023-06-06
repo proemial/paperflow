@@ -166,7 +166,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getByIdAndStatus`);
     }
   },
 
@@ -187,7 +187,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getIdsByStatusFiltered`);
     }
   },
 
@@ -208,7 +208,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getById`);
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getIdsByIdsFiltered`);
     }
   },
 
@@ -231,6 +231,30 @@ export const PapersDao = {
       throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getByCategory`);
+    }
+  },
+
+  getSummarizedByDate: async (after: Date, before?: Date) => {
+    const mongo = await db('papers');
+    const begin = DateMetrics.now();
+
+    
+    const filter = before 
+      ? {status: "summarised", $and: [
+        {"revisions.parsed.published": {$gt: after}}, 
+        {"revisions.parsed.published": {$lt: before}}
+      ]}
+      : { status: "summarised", 'revisions.parsed.updated': { $gt: after }}
+
+    try {
+      const paperIds = mongo.find<RevisionedPaper>({ ...filter });
+
+      return await paperIds.toArray();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] DocsDao.getSummarizedIdsByDate`);
     }
   },
 };

@@ -23,7 +23,7 @@ async function run(date: string) {
 
   const ingestionState = await IngestionDao.getOrCreate(date);
 
-  const limit = DateFactory.yesterday();
+  const limit = DateFactory.yesterday().subtract(1, 'day');
   const output = await fetchUpdatedItems(ingestionState.ids.newIds, limit);
 
   if (output.misses.length > 0 || output.hits.length > 0) {

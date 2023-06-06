@@ -28,10 +28,10 @@ export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useL
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${category.title} ${dayjs(published).format("YYYY-MM-DD")}`}
+          {`${category?.title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
           <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
-            {authors.map((author) => author.split(" ").at(-1))?.join(", ")}
+            {authors?.map((author) => author.split(" ").at(-1))?.join(", ")}
           </div>
       </CardFooter>
     </Card>
