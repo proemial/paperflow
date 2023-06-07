@@ -1,8 +1,20 @@
-import { SummarisedPaper } from "data/db/ingestion-models";
+import { LatestIds, SummarisedPaper } from "data/db/ingestion-models";
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import Link from "next/link";
+import { IngestionCache } from "data/db/ingestion-cache";
 
-export function CardList({ data }: { data?: SummarisedPaper[] }) {
+export const revalidate = 5;
+
+function getMultipleRandom(arr, num) {
+  const shuffled = [...arr].sort(() => 0.5 - Math.random());
+
+  return shuffled.slice(0, num);
+}
+
+export async function CardList({ latestIds }: { latestIds?: LatestIds }) {
+  const randomIds = getMultipleRandom(latestIds.ids, 20);
+  const data = await IngestionCache.papers.byIds(randomIds);
+
   console.log(data);
   
   return (
@@ -14,7 +26,7 @@ export function CardList({ data }: { data?: SummarisedPaper[] }) {
       </div>
       {data && (
         <div className="flex items-end justify-end">
-          <Link href="">Load more</Link>
+          <Link href="" className="italic px-4 text-zinc-500">Load more</Link>
         </div>
       )}
     </div>

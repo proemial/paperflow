@@ -15,7 +15,7 @@ export default async function ReaderPage({
 }: {
   params: { id: string };
 }) {
-  const data = await IngestionCache.paperById(params.id);
+  const data = await IngestionCache.papers.byId(params.id);
 
   return (
     <div className="lg:flex">

@@ -8,7 +8,7 @@ export async function RelatedResearch({
   id: string;
   category: { key: string; title: string; category: string };
 }) {
-  const related = await IngestionCache.relatedById(id);
+  const related = await IngestionCache.related.byId(id);
 
   return (
     <div className="flex flex-col gap-2">

@@ -1,72 +1,177 @@
 import { DateMetrics } from "utils/date";
 import { redis } from "../adapters/redis/rest-client";
 import { LatestIds, SummarisedPaper } from "./ingestion-models";
+import { ArxivPaper, arxivCategories } from "../adapters/arxiv/arxiv.models";
+import dayjs from "dayjs";
+import { RevisionedPaper } from "./paper-dao";
+
+enum IngestionCacheKey {
+  Summary = 'ingestion:status:summarised:latest',
+  Paper = 'ingestion:paper:summarised',
+  Related = 'ingestion:paper:related',
+};
+
+const ttl = {ex: 60 * 60 * 24 * 5};
 
 export const IngestionCache = {
-  latestIds: async () => {
-    const begin = DateMetrics.now();
+  latestIds: {
+    get: async () => {
+      const begin = DateMetrics.now();
+  
+      try {
+        return await redis.ingestion.json.get(IngestionCacheKey.Summary) as LatestIds;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.latestIds.get`);
+      }
+    },
 
-    try {
-      return await redis.ingestion.json.get('ingestion:status:summarised:latest') as LatestIds;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getLatestFromRedis`);
-    }
-  },
-
-  papersByIds: async (ids: string[]) => {
-    const begin = DateMetrics.now();
-
-    try {
-      const pipeline = redis.ingestion.pipeline();
-      ids.forEach(id => {
-        pipeline.get(`ingestion:paper:summarised:${id}`);
-      })
+    update: async (date: string, ids: string[]) => {
+      get: async () => {
+        const begin = DateMetrics.now();
     
-      return await pipeline.exec() as Array<SummarisedPaper>;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdsFromRedis`);
-    }
+        try {
+          await redis.ingestion.json.set(IngestionCacheKey.Summary, "$", {
+            date,
+            ids,
+          });
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.latestIds.update`);
+        }
+      }
+    },
   },
 
-  paperById: async (id: string) => {
-    const begin = DateMetrics.now();
+  papers: {
+    byIds: async (ids: string[]) => {
+      const begin = DateMetrics.now();
+  
+      try {
+        const pipeline = redis.ingestion.pipeline();
+        ids.forEach(id => {
+          pipeline.get(`ingestion:paper:summarised:${id}`);
+        })
+      
+        return await pipeline.exec() as Array<SummarisedPaper>;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.papers.byIds`);
+      }
+    },
 
-    try {
-      return await redis.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdFromRedis`);
-    }
+    byId: async (id: string) => {
+      const begin = DateMetrics.now();
+  
+      try {
+        return await redis.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.papers.byId`);
+      }
+    },
+
+    update: async (paper: ArxivPaper) => {
+      get: async () => {
+        const begin = DateMetrics.now();
+    
+        try {
+          const { id, link, published, title, authors, category, abstract } = paper.parsed;
+          const {summary, lastUpdated} = paper;
+          const ingestionDate = dayjs(lastUpdated).format("YYYY-MM-DD");
+        
+          console.log(`set[${IngestionCacheKey.Paper}:${paper.parsed.id}] `);
+          await redis.ingestion.set(
+            `${IngestionCacheKey.Paper}:${paper.parsed.id}`, 
+            JSON.stringify({
+              ingestionDate, id, published, title, summary, authors, abstract,
+              category: arxivCategories.find((arxivCategory) => arxivCategory.key === category),
+              link: link.source,
+            }), 
+            ttl,
+          );
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.papers.update`);
+        }
+      }
+    },
   },
 
-  relatedById: async (id: string) => {
-    const begin = DateMetrics.now();
+  related: {
+    byId: async (id: string) => {
+      const begin = DateMetrics.now();
+  
+      try {
+        return await redis.ingestion.get(`${IngestionCacheKey.Related}:${id}`) as Array<{
+          id: string,
+          published: string,
+          title: string,
+          summary: string,
+          authors: string[],
+          category: {key: string, title: string, category: string},
+          link: string,
+          ingestionDate: string,
+          abstract: string,
+        }>;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.related.byId`);
+      }
+    },
 
-    try {
-      return await redis.ingestion.get(`ingestion:paper:related:${id}`) as Array<{
-        id: string,
-        published: string,
-        title: string,
-        summary: string,
-        authors: string[],
-        category: {key: string, title: string, category: string},
-        link: string,
-        ingestionDate: string,
-        abstract: string,
-      }>;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] IngestionDao.getByIdFromRedis`);
-    }
-  },
+    update: async (id: string, related: RevisionedPaper[]) => {
+      get: async () => {
+        const begin = DateMetrics.now();
+    
+        try {
+          console.log(`set[${IngestionCacheKey.Related}:${id}] `);
+          await redis.ingestion.set(
+            `${IngestionCacheKey.Related}:${id}`, 
+            JSON.stringify(related?.map((revisionedPaper, i) => {
+              const paper = revisionedPaper.revisions.at(-1);
+
+              if(!paper)
+                return undefined;
+
+              const { id, link, published, title, authors, category, abstract } = paper.parsed;
+              const {summary, lastUpdated} = paper;
+              const ingestionDate = dayjs(lastUpdated).format("YYYY-MM-DD");
+
+              return {
+                id: paper.parsed.id,
+                published: `${published}`,
+                title,
+                summary: paper.summary,
+                authors,
+                category: arxivCategories.find((arxivCategory) => arxivCategory.key === category),
+                link: paper.parsed.link.source,
+                ingestionDate: `${revisionedPaper.lastUpdated}`,
+                abstract,
+              };
+            })), 
+            ttl,
+          );
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] IngestionCache.related.update`);
+        }
+      }
+    },
+  }
+
 };
