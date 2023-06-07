@@ -49,11 +49,8 @@ function CompactCard({
   return (
     <Card className="max-sm:w-full">
       <CardHeader className="p-3">
-        <CardTitle>
-          <CardLink id={id} title={title} link={useLink && link} />
-        </CardTitle>
         <CardDescription>
-          {sanitize(summary).sanitized}
+          <CardLink id={id} title={sanitize(summary).sanitized} className="hover:underline" />
         </CardDescription>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-end pb-3">

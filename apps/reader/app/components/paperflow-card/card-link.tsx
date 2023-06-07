@@ -7,10 +7,12 @@ export function CardLink({
   id,
   title,
   link,
+  className,
 }: {
   id: string;
   title: string;
   link?: string;
+  className?: string;
 }) {
   const url = link ? link : `/read/${id}`;
 
@@ -22,7 +24,7 @@ export function CardLink({
   };
 
   return (
-    <Link href={url} onClick={handleClick} className="underline">
+    <Link href={url} onClick={handleClick} className={className || 'underline'}>
       {title}
     </Link>
   );
