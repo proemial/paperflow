@@ -26,7 +26,7 @@ export async function CardList({ latestIds }: { latestIds?: LatestIds }) {
       </div>
       {data && (
         <div className="flex items-end justify-end">
-          <Link href="" className="italic px-4 text-zinc-500">Load more</Link>
+          <Link href="" className="italic px-4">Load more</Link>
         </div>
       )}
     </div>

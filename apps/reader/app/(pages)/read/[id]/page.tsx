@@ -23,12 +23,12 @@ export default async function ReaderPage({
         <div className="m-2 lg:m-4">
           {data && <PaperflowCard {...data} useLink />}
         </div>
-        <div className="border-t border-zinc-300 max-lg:hidden p-4 mt-4">
+        <div className="border-t max-lg:hidden p-4 mt-4">
           {data?.abstract}
         </div>
       </div>
       <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
-        <div className="flex justify-between border-zinc-300 max-md:border-y lg:border-b p-4">
+        <div className="flex justify-between max-md:border-y lg:border-b p-4">
           <div>Stats</div>
           <div className="flex gap-3">
             <div>💬 12</div>
