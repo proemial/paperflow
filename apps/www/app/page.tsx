@@ -1,4 +1,3 @@
-import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -7,13 +6,12 @@ export default function Home() {
       </div>
 
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2">
-        <Image
+        <img
           className="relative"
           src="/logo.png"
           alt="Paperflow Logo"
           width={582}
           height={252}
-          priority
         />
       </div>
 
