@@ -1,4 +1,4 @@
-import { IngestionState } from "data/db/ingestion-dao";
+import { IngestionState } from "data/db/ingestion-models";
 import { PapersDao, RevisionedPaper } from "data/db/paper-dao";
 import Link from "next/link";
 

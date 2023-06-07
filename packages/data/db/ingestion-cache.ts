@@ -22,7 +22,7 @@ export const IngestionCache = {
     try {
       const pipeline = redis.ingestion.pipeline();
       ids.forEach(id => {
-        pipeline.json.get(`ingestion:paper:summarised:${id}`);
+        pipeline.get(`ingestion:paper:summarised:${id}`);
       })
     
       return await pipeline.exec() as Array<SummarisedPaper>;
@@ -38,7 +38,7 @@ export const IngestionCache = {
     const begin = DateMetrics.now();
 
     try {
-      return await redis.ingestion.json.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
+      return await redis.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
     } catch (error) {
       console.error(error);
       throw error;

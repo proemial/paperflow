@@ -1,5 +1,6 @@
 import { fetchUpdatedIds } from "data/adapters/arxiv/arxiv-oao";
-import { IngestionDao, IngestionState } from "data/db/ingestion-dao";
+import { IngestionDao } from "data/db/ingestion-dao";
+import { IngestionState } from "data/db/ingestion-models";
 import { DateMetrics } from "utils/date";
 import { log } from "console";
 import dayjs from "dayjs";

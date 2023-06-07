@@ -3,6 +3,8 @@ import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import Link from "next/link";
 
 export function CardList({ data }: { data?: SummarisedPaper[] }) {
+  console.log(data);
+  
   return (
     <div className="flex flex-col gap-1 m-2">
       <div className="max-sm:flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 flex-1">
