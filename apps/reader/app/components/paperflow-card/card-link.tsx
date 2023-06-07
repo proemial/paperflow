@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link";
+import { Analytics } from "../utils/AnalyticsClient";
 
 export function CardLink({
   id,
@@ -11,8 +14,15 @@ export function CardLink({
 }) {
   const url = link ? link : `/read/${id}`;
 
+  const handleClick = () => {
+    if(link)
+      Analytics.track('go:arxiv', { path: link });
+    else
+      Analytics.track('go:reader', { path: id });
+  };
+
   return (
-    <Link href={url} className="underline">
+    <Link href={url} onClick={handleClick} className="underline">
       {title}
     </Link>
   );
