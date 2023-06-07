@@ -1,4 +1,4 @@
-import { Diversity2, Update } from '@mui/icons-material';
+import { Update, Edit } from '@mui/icons-material';
 import { Tooltip } from '@mui/joy';
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import List from '@mui/joy/List';
@@ -49,15 +49,6 @@ export default function FirstSidebar() {
       <List sx={{ '--ListItem-radius': '8px', '--List-gap': '12px' }}>
         <ListItem>
           <ListItemButton>
-            <Tooltip title="GPT playground">
-              <Link href="/prompt">
-                <Diversity2 />
-              </Link>
-            </Tooltip>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemButton>
             <Tooltip title="Ingestion history">
               <Link href="/">
                 <Update />
@@ -65,15 +56,15 @@ export default function FirstSidebar() {
             </Tooltip>
           </ListItemButton>
         </ListItem>
-        {/* <ListItem>
+        <ListItem>
           <ListItemButton>
-            <Tooltip title="Old playground">
-              <Link href="/old-playground">
-                <Science />
+            <Tooltip title="GPT playground">
+              <Link href="/prompt">
+                <Edit />
               </Link>
             </Tooltip>
           </ListItemButton>
-        </ListItem> */}
+        </ListItem>
       </List>
     </Sheet>
   );
