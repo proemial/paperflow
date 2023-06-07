@@ -53,11 +53,6 @@ function CompactCard({
           <CardLink id={id} title={sanitize(summary).sanitized} className="hover:underline" />
         </CardDescription>
       </CardHeader>
-      <CardFooter className="flex flex-col justify-start items-end pb-3">
-        <CardDescription>
-          {` ${dayjs(published).format("YYYY-MM-DD")}`}
-        </CardDescription>
-      </CardFooter>
     </Card>
   );
 }
