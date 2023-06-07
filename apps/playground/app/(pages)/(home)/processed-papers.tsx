@@ -2,7 +2,7 @@
 import { PromptOutputCard } from "@/components/PromptOutputCard";
 import { Chip, Sheet, Stack, styled } from "@mui/joy";
 import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
-import { Categorised } from "./page";
+import { Categorised } from "./main";
 
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor:

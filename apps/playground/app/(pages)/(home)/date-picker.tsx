@@ -32,7 +32,7 @@ export function IngestionDatePicker({ date }: { date?: string }) {
   ExampleCustomInput.displayName = "ExampleCustomInput";
 
   const handleCustomInputClick = (dateSelected: Date) => {
-    router.push(`/ingestion/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
+    router.push(`/on/${dayjs(dateSelected).format("YYYY-MM-DD")}`);
   };
 
   return (

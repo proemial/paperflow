@@ -2,7 +2,7 @@
 import { AccordionContent, AccordionHeader } from "@/components/JoyAccordion";
 import { List } from "@mui/joy";
 import * as Accordion from "@radix-ui/react-accordion";
-import { Categorised } from "./page";
+import { Categorised } from "./main";
 
 export function UnprocessedPapers({ cats }: { cats: Categorised }) {
   return (<>

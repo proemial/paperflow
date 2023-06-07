@@ -21,8 +21,8 @@ export type Categorised = {
   };
 }
 
-export default function IngestionPage({ params }: { params: { args: string[] } }) {
-  const latestIngestionDate = useLatestIngestionDate(params.args && params.args[0]);
+export default function Main({ args }: { args?: string }) {
+  const latestIngestionDate = useLatestIngestionDate(args);
   const ingestionData = useIngestionData(latestIngestionDate);
   const categories = useCategories(ingestionData);
   const ingestionCandidateCount = useIngestionCandidateCount(latestIngestionDate);
@@ -61,7 +61,7 @@ function Content({ data, cats, count }: { data?: FetchResult, cats: Categorised,
   </>);
 }
 
-function useLatestIngestionDate(inputDate: string) {
+function useLatestIngestionDate(inputDate?: string) {
   const [date, setDate] = React.useState<string>();
 
   React.useEffect(() => {

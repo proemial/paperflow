@@ -50,7 +50,7 @@ export default function FirstSidebar() {
         <ListItem>
           <ListItemButton>
             <Tooltip title="GPT playground">
-              <Link href="/">
+              <Link href="/prompt">
                 <Diversity2 />
               </Link>
             </Tooltip>
@@ -59,7 +59,7 @@ export default function FirstSidebar() {
         <ListItem>
           <ListItemButton>
             <Tooltip title="Ingestion history">
-              <Link href="/ingestion">
+              <Link href="/">
                 <Update />
               </Link>
             </Tooltip>
