@@ -20,6 +20,7 @@ export function AnalyticsClient() {
       posthog.capture("path", { property: pathname });
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
       console.log("[AnalyticsClient] path:", pathname);
+      Analytics.track(`view:${pathname === '/' ? 'home' : 'reader'}`, { path: pathname });
     }
   }, [initialized, pathname]);
 
