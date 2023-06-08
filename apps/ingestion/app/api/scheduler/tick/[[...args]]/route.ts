@@ -12,14 +12,16 @@ import { normalizeError } from "utils/error";
 export const revalidate = 1;
 
 export async function GET(request: Request, { params }: { params: { args: string[] } }) {
-  const response = await run(params.args);
+  // const response = await run(params.args);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 export async function POST(request: Request, { params }: { params: { args: string[] } }) {
-  const response = await run(params.args);
+  // const response = await run(params.args);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 
 async function run(args: string[]) {

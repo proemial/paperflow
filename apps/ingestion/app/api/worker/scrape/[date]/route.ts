@@ -8,14 +8,16 @@ import { IngestionDao } from 'data/db/ingestion-dao';
 export const revalidate = 1;
 
 export async function GET(request: Request, { params }: { params: { date: string } }) {
-  const response = await run(params.date);
+  // const response = await run(params.date);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 export async function POST(request: Request, { params }: { params: { date: string } }) {
-  const response = await run(params.date);
+  // const response = await run(params.date);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 
 async function run(date: string) {
