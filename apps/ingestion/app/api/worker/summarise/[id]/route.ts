@@ -10,14 +10,16 @@ import { Md5 } from "ts-md5";
 export const revalidate = 1;
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
-  const response = await run(params.id);
+  // const response = await run(params.id);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 export async function POST(request: Request, { params }: { params: { id: string } }) {
-  const response = await run(params.id);
+  // const response = await run(params.id);
 
-  return NextResponse.json(response);
+  // return NextResponse.json(response);
+  return NextResponse.json({});
 }
 
 async function run(id: string) {
