@@ -40,7 +40,7 @@ async function run(args: string[]) {
     result = '[ERROR]' + normalizeError(e).message;
     return new NextResponse(normalizeError(e).message, { status: 500 });
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/arxiv-ids`);
-    await IngestionLogger.log(date, `[arxiv-ids][${DateMetrics.elapsed(begin)}] ${result}`);
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/arxiv-oai`);
+    await IngestionLogger.log(date, `[arxiv-oai][${DateMetrics.elapsed(begin)}] ${result}`);
   }
 }
