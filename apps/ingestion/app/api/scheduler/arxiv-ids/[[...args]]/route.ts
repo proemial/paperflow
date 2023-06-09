@@ -21,11 +21,11 @@ async function run(args: string[]) {
   const begin = DateMetrics.now();
   let result = '';
 
-  try {
-    const date = args
-      ? dayjs().format(args[0])
-      : dayjs().subtract(1, 'day').format("YYYY-MM-DD");
+  const date = args
+    ? dayjs().format(args[0])
+    : dayjs().subtract(1, 'day').format("YYYY-MM-DD");
 
+  try {
     const oaiPapers = await fetchUpdatedPapers(date);
     const pipeline = await PipelineDao.get(date);
 
@@ -42,6 +42,6 @@ async function run(args: string[]) {
     return new NextResponse(normalizeError(e).message, { status: 500 });
   } finally {
     console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/arxiv-ids`);
-    await IngestionLogger.log(`[arxiv-ids][${DateMetrics.elapsed(begin)}] ${result}`);
+    await IngestionLogger.log(date, `[arxiv-ids][${DateMetrics.elapsed(begin)}] ${result}`);
   }
 }
