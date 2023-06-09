@@ -7,6 +7,7 @@ export const Env = {
       uri: process.env.MONGO_CONNECT_STRING,
     },
     redis: {
+      // Upstash
       ingestion: {
         uri: process.env.REDIS_INGESTION_URL as string,
         token: process.env.REDIS_INGESTION_TOKEN as string,
@@ -18,6 +19,20 @@ export const Env = {
       modelOutput: {
         uri: process.env.REDIS_MODEL_OUTPUT_URL as string,
         token: process.env.REDIS_MODEL_OUTPUT_TOKEN as string,
+      },
+
+      ingestionLog: {
+        uri: process.env.REDIS_INGESTION_LOG_URL as string,
+        token: process.env.REDIS_INGESTION_LOG_TOKEN as string,
+      },
+      papers: {
+        uri: process.env.REDIS_PAPERS_URL as string,
+        token: process.env.REDIS_PAPERS_TOKEN as string,
+      },
+      // Redis Enterprise
+      pipeline: {
+        uri: process.env.REDIS_PIPELINE_URL as string,
+        password: process.env.REDIS_PIPELINE_PASSWORD as string,
       },
     },
     qstash: {
