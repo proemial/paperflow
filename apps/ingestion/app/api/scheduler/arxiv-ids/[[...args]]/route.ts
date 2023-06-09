@@ -1,12 +1,11 @@
-import { PapersDao } from "data/db/papers-dao";
-import { log } from "console";
 import { fetchUpdatedPapers } from "data/adapters/arxiv/arxiv-oai";
+import { IngestionLogger } from "data/db/ingestion-log";
+import { PapersDao } from "data/db/papers-dao";
 import { PipelineDao } from "data/db/pipeline-dao";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import { DateMetrics } from "utils/date";
 import { normalizeError } from "utils/error";
-import {IngestionLogger} from "data/db/ingestion-log"
 
 export const revalidate = 1;
 
