@@ -1,5 +1,5 @@
-import { IngestionCache } from "data/db/ingestion-cache";
-import { PapersDao } from "data/db/paper-dao";
+import { IngestionCache } from "data/storage/v1/ingestion-cache";
+import { PapersDao } from "data/storage/v1/paper-dao";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import { DateFactory } from "utils/date";

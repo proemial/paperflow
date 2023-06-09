@@ -1,5 +1,5 @@
-import { IngestionLogger } from "data/db/ingestion-log";
-import { PipelineDao } from "data/db/pipeline-dao";
+import { IngestionLogger } from "data/storage/ingestion-log";
+import { PipelineDao } from "data/storage/pipeline";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
 import { DateMetrics } from "utils/date";

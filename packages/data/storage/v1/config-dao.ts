@@ -1,6 +1,6 @@
-import { db } from "../adapters/mongo/mongo-client";
+import { db } from "../../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
-import { GptPrompt } from "../adapters/openai/openai";
+import { GptPrompt } from "../../adapters/openai/openai";
 
 export type PromptTemplate = {
   hash: string,

@@ -1,8 +1,8 @@
-import { db } from "../adapters/mongo/mongo-client";
+import { db } from "../../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
 import { AnyBulkWriteOperation } from "mongodb";
-import { ArxivPaper } from "../adapters/arxiv/arxiv.models";
-import { ConfigDao } from "../db/config-dao";
+import { ArxivPaper } from "../../adapters/arxiv/arxiv.models";
+import { ConfigDao } from "./config-dao";
 
 export type PaperStatus = "initial" | "summarised";
 

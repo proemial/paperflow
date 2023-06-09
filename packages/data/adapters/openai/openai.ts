@@ -1,4 +1,4 @@
-import { PromptTemplate } from "../../db/config-dao";
+import { PromptTemplate } from "../../storage/v1/config-dao";
 import { DateMetrics } from "utils/date";
 import { ChatCompletionRequestMessageRoleEnum, Configuration, CreateCompletionResponseUsage, OpenAIApi } from "openai";
 import { Env } from "../env";

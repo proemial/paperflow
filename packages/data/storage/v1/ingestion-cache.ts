@@ -1,7 +1,7 @@
 import { DateMetrics } from "utils/date";
-import { UpStash } from "../adapters/redis/upstash-client";
+import { UpStash } from "../../adapters/redis/upstash-client";
 import { LatestIds, SummarisedPaper } from "./ingestion-models";
-import { ArxivPaper, arxivCategories } from "../adapters/arxiv/arxiv.models";
+import { ArxivPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
 import dayjs from "dayjs";
 import { RevisionedPaper } from "./paper-dao";
 

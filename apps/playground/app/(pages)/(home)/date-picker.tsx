@@ -1,5 +1,5 @@
 import { DateRange } from "@mui/icons-material";
-import { IngestionCounts } from "data/db/ingestion-models";
+import { IngestionCounts } from "data/storage/v1/ingestion-models";
 import { useRouter } from "next/navigation";
 import React from "react";
 import dayjs from 'dayjs';

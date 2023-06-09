@@ -1,7 +1,7 @@
 import { gptPrompt } from "data/adapters/openai/openai";
-import { PapersDao } from "data/db/paper-dao";
-import { ConfigDao } from "data/db/config-dao";
-import { SummariesDao } from "data/db/summaries-dao";
+import { PapersDao } from "data/storage/v1/paper-dao";
+import { ConfigDao } from "data/storage/v1/config-dao";
+import { SummariesDao } from "data/storage/v1/summaries-dao";
 import { DateMetrics } from "utils/date";
 import { log } from "console";
 import { NextResponse } from "next/server";

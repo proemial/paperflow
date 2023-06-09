@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { logError, logMetric, now } from "utils/metrics";
-import { PapersDao } from 'data/db/paper-dao';
-import { IngestionDao } from 'data/db/ingestion-dao';
+import { PapersDao } from 'data/storage/v1/paper-dao';
+import { IngestionDao } from 'data/storage/v1/ingestion-dao';
 
 export async function GET(request: Request, { params }: { params: { args: string[] } }) {
   if (params.args.length < 3)

@@ -1,8 +1,8 @@
 "use client";
 import { CircularProgress } from "@mui/joy";
 import { ArxivPaper } from "data/adapters/arxiv/arxiv.models";
-import { IngestionState } from "data/db/ingestion-models";
-import { RevisionedPaper, WithId } from "data/db/paper-dao";
+import { IngestionState } from "data/storage/v1/ingestion-models";
+import { RevisionedPaper, WithId } from "data/storage/v1/paper-dao";
 import dayjs from 'dayjs';
 import * as React from "react";
 import { IngestionDatePicker } from "./date-picker";

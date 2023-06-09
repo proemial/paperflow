@@ -1,5 +1,5 @@
-import { ArxivPaper, arxivCategories } from "../adapters/arxiv/arxiv.models";
-import { UpStash } from "../adapters/redis/upstash-client";
+import { ArxivPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
+import { UpStash } from "../../adapters/redis/upstash-client";
 import dayjs from "dayjs";
 
 export const SummariesDao = {
