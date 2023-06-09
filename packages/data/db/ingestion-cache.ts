@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { QStash } from "../adapters/redis/qstash-client";
+import { UpStash } from "../adapters/redis/upstash-client";
 import { LatestIds, SummarisedPaper } from "./ingestion-models";
 import { ArxivPaper, arxivCategories } from "../adapters/arxiv/arxiv.models";
 import dayjs from "dayjs";
@@ -19,7 +19,7 @@ export const IngestionCache = {
       const begin = DateMetrics.now();
   
       try {
-        return await QStash.ingestion.json.get(IngestionCacheKey.Summary) as LatestIds;
+        return await UpStash.ingestion.json.get(IngestionCacheKey.Summary) as LatestIds;
       } catch (error) {
         console.error(error);
         throw error;
@@ -33,7 +33,7 @@ export const IngestionCache = {
         const begin = DateMetrics.now();
     
         try {
-          await QStash.ingestion.json.set(IngestionCacheKey.Summary, "$", {
+          await UpStash.ingestion.json.set(IngestionCacheKey.Summary, "$", {
             date,
             ids,
           });
@@ -52,7 +52,7 @@ export const IngestionCache = {
       const begin = DateMetrics.now();
   
       try {
-        const pipeline = QStash.ingestion.pipeline();
+        const pipeline = UpStash.ingestion.pipeline();
         ids.forEach(id => {
           pipeline.get(`ingestion:paper:summarised:${id}`);
         })
@@ -70,7 +70,7 @@ export const IngestionCache = {
       const begin = DateMetrics.now();
   
       try {
-        return await QStash.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
+        return await UpStash.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
       } catch (error) {
         console.error(error);
         throw error;
@@ -89,7 +89,7 @@ export const IngestionCache = {
           const ingestionDate = dayjs(lastUpdated).format("YYYY-MM-DD");
         
           console.log(`set[${IngestionCacheKey.Paper}:${paper.parsed.id}] `);
-          await QStash.ingestion.set(
+          await UpStash.ingestion.set(
             `${IngestionCacheKey.Paper}:${paper.parsed.id}`, 
             JSON.stringify({
               ingestionDate, id, published, title, summary, authors, abstract,
@@ -113,7 +113,7 @@ export const IngestionCache = {
       const begin = DateMetrics.now();
   
       try {
-        return await QStash.ingestion.get(`${IngestionCacheKey.Related}:${id}`) as Array<{
+        return await UpStash.ingestion.get(`${IngestionCacheKey.Related}:${id}`) as Array<{
           id: string,
           published: string,
           title: string,
@@ -138,7 +138,7 @@ export const IngestionCache = {
     
         try {
           console.log(`set[${IngestionCacheKey.Related}:${id}] `);
-          await QStash.ingestion.set(
+          await UpStash.ingestion.set(
             `${IngestionCacheKey.Related}:${id}`, 
             JSON.stringify(related?.map((revisionedPaper, i) => {
               const paper = revisionedPaper.revisions.at(-1);

@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { QStash } from "../adapters/redis/qstash-client";
+import { UpStash } from "../adapters/redis/upstash-client";
 import {ArXivPaper} from "../adapters/arxiv/arxiv-oai"
 
 enum PapersDaoKey {
@@ -14,7 +14,7 @@ export const PapersDao = {
       return;
 
     try {
-      const pipeline = QStash.papers.pipeline();
+      const pipeline = UpStash.papers.pipeline();
       papers.forEach(paper => {
         pipeline.set(`${paper.id}:${PapersDaoKey.Oai}`, paper);
       })

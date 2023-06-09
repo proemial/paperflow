@@ -7,7 +7,7 @@ if (!ingestion || !prompts || !modelOutput || !papers || !ingestionLog) {
   throw new Error("[redis-client] Please fix your environment variables");
 }
 
-export const QStash = {
+export const UpStash = {
   ingestion: new Redis({
     url: ingestion.uri,
     token: ingestion.token
