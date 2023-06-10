@@ -15,24 +15,11 @@ export const Redis = {
   pipeline: {
     get: async (date: string) => {
       const begin = DateMetrics.now();
-
       const client = await connect();
-      try {
-        return await client.json.GET(`pipeline:${date}`);
-      } catch (e) {
-        console.error(e);
-      } finally {
-        await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
-      }
-    }, 
 
-    set: async (date: string, pipeline: Pipeline) => {
-      const begin = DateMetrics.now();
-
-      const client = await connect();
       try {
-        return await client.json.SET(`pipeline:${date}`, '$', pipeline);
+        return await client.json.GET(`pipeline:${date}`) as Pipeline;
+
       } catch (e) {
         console.error(e);
       } finally {
@@ -41,16 +28,31 @@ export const Redis = {
       }
     },
 
-    pushActions: async (date: string, stage: Stages, actions: ScrapeArxivWorker[]) => {
+    set: async (date: string, pipeline: Pipeline) => {
       const begin = DateMetrics.now();
+      const client = await connect();
 
+      try {
+        await client.json.SET(`pipeline:${date}`, '$', pipeline);
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+      }
+    },
+
+    pushActions: async (date: string, stage: PipelineStage, actions: ArxivAtomWorker[]) => {
+      const begin = DateMetrics.now();
       const client = await connect();
       try {
         const batch = client.multi();
         actions.forEach(action => {
           batch.json.ARRAPPEND(`pipeline:${date}`, `$.stages.${stage}`, action);
         })
-        return await batch.execAsPipeline();
+        await batch.execAsPipeline();
+
       } catch (e) {
         console.error(e);
       } finally {
@@ -96,17 +98,24 @@ async function closeConnetion(client: any) {
   }
 }
 
-export enum Stages {
-  scrapeArxiv = 'scrapeArxiv',
-}
+export type PipelineConfig = {
+  stages: {
+    [name: string]: string[]
+  }
+};
 
 export type Pipeline = {
   stages: {
-      scrapeArxiv: ScrapeArxivWorker[]
+    arxivAtom: ArxivAtomWorker[]
   }
 }
 
-export type ScrapeArxivWorker = {
+export enum PipelineStage {
+  arxivOai = 'arxivOai',
+  arxivAtom = 'arxivAtom',
+}
+
+export type ArxivAtomWorker = {
   id: string,
   status: WorkerStatus,
 };
