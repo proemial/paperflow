@@ -24,7 +24,7 @@ async function run(params: { args: string[] }) {
   const date = dateFromParams(params);
 
   try {
-    const config = (await ConfigDao.get()).stages.arxivOai;
+    const config = (await ConfigDao.getPipelineConfig()).stages.arxivOai;
     const papers = await fetchUpdatedPapers(date, config);
 
     const newPapers = await pushPaperUpdates(date, papers);

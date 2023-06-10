@@ -32,7 +32,7 @@ async function run(params: { args: string[] }) {
       return NextResponse.json({result});
     await PipelineDao.updateStatus(date, PipelineStage.arxivAtom, index, 'running');
 
-    const config = (await ConfigDao.get()).stages.arxivAtom;
+    const config = (await ConfigDao.getPipelineConfig()).stages.arxivAtom;
 
     const ids = pipeline.stages.arxivAtom[index].ids.split(',');
     const papers = await fetchUpdatedArXivAtomPapers(ids, config);

@@ -1,6 +1,7 @@
 import { createClient } from 'redis';
 import { Env } from "../env";
 import { DateMetrics } from 'utils/date';
+import { ChatCompletionRequestMessageRoleEnum } from 'openai';
 
 const pipelineEnv = Env.connectors.redis.pipeline;
 const configEnv = Env.connectors.redis.config;
@@ -11,22 +12,23 @@ if (!pipelineEnv || !configEnv) {
 
 export const Redis = {
   config: {
-    get: async () => {
+    get: async (key: string) => {
       const begin = DateMetrics.now();
       console.log('configEnv', configEnv);
 
       const client = await connect(configEnv);
 
       try {
-        return await client.json.GET('ingestion') as PipelineConfig;
+        return await client.json.GET(key);
       } catch (e) {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+       console.log(`[${DateMetrics.elapsed(begin)}] config.get`);
       }
     },
   },
+
   pipeline: {
     get: async (date: string) => {
       const begin = DateMetrics.now();
@@ -174,3 +176,20 @@ export type PipelineConfig = {
 export type PipelineStageConfig = {
   [key: string]: string | number,
 }
+
+export type PromptConfig = {
+  [size: string]: PromptTemplate
+}
+
+export type PromptTemplate = {
+  hash: string,
+  args: {
+    model: string,
+    messages: Array<GptPrompt>,
+  }
+}
+
+export type GptPrompt = {
+  role: ChatCompletionRequestMessageRoleEnum,
+  content: string,
+};

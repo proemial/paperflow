@@ -34,8 +34,10 @@ export async function gptPrompt(title: string, abstract: string, template: Promp
       model: template.args.model,
       messages: createPrompt(title, abstract, template.args.messages),
     });
+    console.log('completion.data', completion.data);
 
-    return { ...completion.data, text: completion.data.choices[0].message?.content } as WithTextAndUsage;
+
+    return { text: completion.data.choices[0].message?.content, usage: completion.data.usage } as WithTextAndUsage;
   } catch (e) {
     console.error(key, DateMetrics.elapsed(begin), e);
     throw e;

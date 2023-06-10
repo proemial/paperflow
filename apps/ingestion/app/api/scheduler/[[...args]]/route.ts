@@ -25,7 +25,7 @@ async function run(params: { args: string[] }) {
   console.log('date', date);
 
   try {
-    const config = await ConfigDao.get();
+    const config = await ConfigDao.getPipelineConfig();
     const pipeline = await PipelineDao.get(date);
 
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
