@@ -4,25 +4,34 @@ import { NextResponse } from "next/server";
 import { DateMetrics } from "utils/date";
 import { normalizeError } from "utils/error";
 import { dateFromParams } from "@/app/api/utils";
+import { ConfigDao } from "data/storage/config";
+import { QStash } from "data/adapters/qstash/qstash-client"
 
 export const revalidate = 1;
 
-export async function GET(request: Request, { params }: { params: { date: string } }) {
+export async function GET(request: Request, { params }: { params: { args: string[] } }) {
   return await run(params);
 }
-export async function POST(request: Request, { params }: { params: { date: string } }) {
+export async function POST(request: Request, { params }: { params: { args: string[] } }) {
   return await run(params);
 }
 
-async function run(params: { date: string }) {
+async function run(params: { args: string[] }) {
   const begin = DateMetrics.now();
   let result = '';
 
   const date = dateFromParams(params);
 
   try {
-    // const config = await ConfigDao.get();
     const pipeline = await PipelineDao.get(date);
+
+    const notRunning = pipeline.stages.arxivAtom.filter(worker => worker.status !== 'running');
+    if(notRunning) {
+      const config = (await ConfigDao.get()).stages;
+
+      // QStash.publish()
+      // schedule in QStash
+    }
 
     result = `workers: `;
     return NextResponse.json({result});

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Analytics } from "../utils/AnalyticsClient";
-import { CSSProperties } from "react";
 
 export function CardLink({
   id,

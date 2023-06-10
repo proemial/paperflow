@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { Pipeline, Redis, PipelineStage } from "../adapters/redis/redis-client";
+import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker } from "../adapters/redis/redis-client";
 
 export const PipelineDao = {
     get: async (date: string) => {
@@ -12,6 +12,7 @@ export const PipelineDao = {
             const newPipeline = {
                 stages: {
                     arxivAtom: [],
+                    gptSummary: [],
                 }
             };
             await Redis.pipeline.set(date, newPipeline);
@@ -28,16 +29,29 @@ export const PipelineDao = {
         }
     },
 
-    pushArxivIds: async (date: string, ids: string[]) => {
+    pushArxivIds: async (date: string, ids: string) => {
         const begin = DateMetrics.now();
 
         try {
-            await Redis.pipeline.pushActions(date, PipelineStage.arxivAtom, ids.map(id => ({id, status: 'idle'})))
+            await Redis.pipeline.pushActions(date, PipelineStage.arxivAtom, [{ids, status: 'idle'}]);
         } catch (error) {
           console.error(error);
           throw error;
         } finally {
             console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushArxivIds`);
         }
-    }
+    },
+
+    pushGptSummary: async (date: string, payloads: GptSummaryPayload[]) => {
+        const begin = DateMetrics.now();
+
+        try {
+            await Redis.pipeline.pushActions(date, PipelineStage.gptSummary, payloads.map(payload => ({payload, status: 'idle'})));
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+            console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushArxivIds`);
+        }
+    },
 };

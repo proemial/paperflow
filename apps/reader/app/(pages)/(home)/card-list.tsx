@@ -1,7 +1,7 @@
-import { LatestIds, SummarisedPaper } from "data/db/ingestion-models";
+import { LatestIds, SummarisedPaper } from "data/storage/v1/ingestion-models";
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
 import Link from "next/link";
-import { IngestionCache } from "data/db/ingestion-cache";
+import { IngestionCache } from "data/storage/v1/ingestion-cache";
 
 export const revalidate = 5;
 
@@ -16,7 +16,7 @@ export async function CardList({ latestIds }: { latestIds?: LatestIds }) {
   const data = await IngestionCache.papers.byIds(randomIds);
 
   console.log(data);
-  
+
   return (
     <div className="flex flex-col gap-1 m-2">
       <div className="max-sm:flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-2 flex-1">

@@ -5,14 +5,14 @@ import {
   CardHeader,
   CardTitle,
 } from "app/components/shadcn-ui/Card";
-import { SummarisedPaper } from "data/db/ingestion-models";
+import { SummarisedPaper } from "data/storage/v1/ingestion-models";
 import dayjs from "dayjs";
 import { CardLink } from "./card-link";
 import { sanitize } from "./hashtags";
 
 export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
   const { id, published, title, summary, authors, category, link, compact, useLink } = props;
-  
+
   if(compact)
     return <CompactCard {...props} />
 

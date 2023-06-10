@@ -2,20 +2,35 @@ import { createClient } from 'redis';
 import { Env } from "../env";
 import { DateMetrics } from 'utils/date';
 
-// JSON.SET 2023-06-08:pipeline "$.stages.scrape-arxiv[?(@.id=='2305.06356')].status" '"crazy"'
-// JSON.ARRAPPEND pipeline:2023-06-08 $.stages.scrapeArxiv '{"id": "2305.06354", "status": "idle"}'
+const pipelineEnv = Env.connectors.redis.pipeline;
+const configEnv = Env.connectors.redis.config;
 
-const env = Env.connectors.redis.pipeline;
-
-if (!env) {
+if (!pipelineEnv || !configEnv) {
   throw new Error("[redis-client] Please fix your environment variables");
 }
 
 export const Redis = {
+  config: {
+    get: async () => {
+      const begin = DateMetrics.now();
+      console.log('configEnv', configEnv);
+
+      const client = await connect(configEnv);
+
+      try {
+        return await client.json.GET('ingestion') as PipelineConfig;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+      }
+    },
+  },
   pipeline: {
     get: async (date: string) => {
       const begin = DateMetrics.now();
-      const client = await connect();
+      const client = await connect(pipelineEnv);
 
       try {
         return await client.json.GET(`pipeline:${date}`) as Pipeline;
@@ -30,7 +45,7 @@ export const Redis = {
 
     set: async (date: string, pipeline: Pipeline) => {
       const begin = DateMetrics.now();
-      const client = await connect();
+      const client = await connect(pipelineEnv);
 
       try {
         await client.json.SET(`pipeline:${date}`, '$', pipeline);
@@ -43,9 +58,9 @@ export const Redis = {
       }
     },
 
-    pushActions: async (date: string, stage: PipelineStage, actions: ArxivAtomWorker[]) => {
+    pushActions: async (date: string, stage: PipelineStage, actions: ArxivAtomWorker[] | GptSummaryWorker[]) => {
       const begin = DateMetrics.now();
-      const client = await connect();
+      const client = await connect(pipelineEnv);
       try {
         const batch = client.multi();
         actions.forEach(action => {
@@ -63,7 +78,7 @@ export const Redis = {
   },
 };
 
-async function connect() {
+async function connect(env: {uri: string, password: string, port: number}) {
   const begin = DateMetrics.now();
 
   try {
@@ -71,7 +86,7 @@ async function connect() {
       password: env.password,
       socket: {
           host: env.uri,
-          port: 19573
+          port: env.port
       }
     });
     await client.connect();
@@ -98,26 +113,43 @@ async function closeConnetion(client: any) {
   }
 }
 
-export type PipelineConfig = {
-  stages: {
-    [name: string]: string[]
-  }
-};
-
-export type Pipeline = {
-  stages: {
-    arxivAtom: ArxivAtomWorker[]
-  }
-}
-
 export enum PipelineStage {
   arxivOai = 'arxivOai',
   arxivAtom = 'arxivAtom',
+  gptSummary = 'gptSummary',
+  relatedPapers = 'relatedPapers',
+}
+
+export type Pipeline = {
+  stages: {
+    arxivAtom: ArxivAtomWorker[],
+    gptSummary: GptSummaryWorker[],
+  }
 }
 
 export type ArxivAtomWorker = {
-  id: string,
+  ids: string, // comma separated to support the redis ui
   status: WorkerStatus,
 };
 
+export type GptSummaryWorker = {
+  payload: GptSummaryPayload,
+  status: WorkerStatus,
+};
+
+export type GptSummaryPayload = {
+  id: string,
+  size: 'sm';// | 'md' | 'lg',
+};
+
 export type WorkerStatus = 'idle' | 'running' | 'compelete' | 'error'
+
+export type PipelineConfig = {
+  stages: {
+    [name: string]: PipelineStageConfig,
+  }
+};
+
+export type PipelineStageConfig = {
+  [key: string]: string | number,
+}

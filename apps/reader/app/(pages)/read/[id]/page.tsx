@@ -1,5 +1,5 @@
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
-import { IngestionCache } from "data/db/ingestion-cache";
+import { IngestionCache } from "data/storage/v1/ingestion-cache";
 import {
   Accordion,
   AccordionContent,

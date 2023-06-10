@@ -1,4 +1,4 @@
-import { IngestionCache } from "@/../../packages/data/db/ingestion-cache";
+import { IngestionCache } from "data/storage/v1/ingestion-cache";
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
 
 export async function RelatedResearch({

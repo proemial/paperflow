@@ -33,6 +33,12 @@ export const Env = {
       pipeline: {
         uri: process.env.REDIS_PIPELINE_URL as string,
         password: process.env.REDIS_PIPELINE_PASSWORD as string,
+        port: Number(process.env.REDIS_PIPELINE_PORT as string),
+      },
+      config: {
+        uri: process.env.REDIS_CONFIG_URL as string,
+        password: process.env.REDIS_CONFIG_PASSWORD as string,
+        port: Number(process.env.REDIS_CONFIG_PORT as string),
       },
     },
     qstash: {

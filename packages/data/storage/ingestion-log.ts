@@ -3,8 +3,10 @@ import { UpStash } from "../adapters/redis/upstash-client";
 
 export const IngestionLogger = {
     log: async (date: string, msg: string) => {
+      console.log(msg);
+
       await UpStash.ingestionLog.append(
-        date, 
+        date,
         `[${dayjs().format("DD.MM.YYYY HH:mm:ss")}] ${msg} \n`
       )
     },

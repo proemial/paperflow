@@ -1,4 +1,4 @@
-import { IngestionCache } from "data/db/ingestion-cache";
+import { IngestionCache } from "data/storage/v1/ingestion-cache";
 import { CardList } from "./card-list";
 
 export const revalidate = 60;

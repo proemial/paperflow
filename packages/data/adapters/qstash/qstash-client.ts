@@ -1,5 +1,6 @@
 import { Client, PublishJsonRequest } from "@upstash/qstash";
 import { Env } from "../env";
+import { PipelineStage } from "../redis/redis-client";
 
 if (!Env.connectors.qstash) {
   throw new Error("[qstash-client] Please fix your environment variables");
@@ -31,9 +32,10 @@ type PublishResponse<PublishRequest> = PublishRequest extends { cron: string }
 export enum Workers {
   scraper = "https://ingestion.paperflow.ai/api/worker/scrape",
   summariser = "https://ingestion.paperflow.ai/api/worker/summarise",
+  arxivAtom = "https://ingestion.paperflow.ai/api/workers/arxivAtom"
 }
 
-export const qstash = {
+export const QStash = {
   client,
 
   publishJSON: async <R extends PublishJsonRequest = PublishJsonRequest>(req: R): Promise<PublishResponse<R>> => {
@@ -45,5 +47,12 @@ export const qstash = {
       url: !args ? url : `${url}/${args}`,
       body,
     });
-  }
+  },
+
+  schedule: async (date: string, stage: PipelineStage, index: 0) => {
+    return await publishJSON({
+      url: `${Workers.arxivAtom}/${date}/${stage}/${index}`,
+      body: '',
+    });
+  },
 };

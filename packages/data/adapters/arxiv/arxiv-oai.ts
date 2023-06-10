@@ -1,6 +1,7 @@
 import { XMLParser } from "fast-xml-parser";
 import { fetchData, } from "../fetch";
 import dayjs from "dayjs";
+import { PipelineStageConfig } from "../redis/redis-client";
 
 // Docs
 // https://www.openarchives.org/OAI/openarchivesprotocol.html
@@ -28,7 +29,7 @@ export async function fetchUpdatedIds(date: string) {
   return parseListIdentifiers(text);
 }
 
-export async function fetchUpdatedPapers(date: string) {
+export async function fetchUpdatedPapers(date: string, config: PipelineStageConfig) {
   const to = dayjs(date).add(1, 'day').format("YYYY-MM-DD");
 
   let result = [] as ArXivPaper[];
@@ -49,8 +50,9 @@ export async function fetchUpdatedPapers(date: string) {
     result = [...result, ...data.records.map(record => record.metadata)];
     token = data.resumptionToken.token;
 
-    console.log('sleeping for 2.5s ...');
-    await delay(2500);
+    const sleep = config.sleep as number || 2500;
+    console.log(`sleeping for ${sleep}ms ...`);
+    await delay(sleep);
   }
 
   const filtered = result.filter(paper => dayjs(paper.version.date).format("YYYY-MM-DD") === date);
