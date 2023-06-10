@@ -32,40 +32,42 @@ async function run(params: { args: string[] }) {
     const {payload, status} = pipeline.stages.gptSummary[index];
     const {id, size} = payload;
 
-    if(status === 'completed')
-      return NextResponse.json({result: "allready completed"});
+    if(status === 'completed') {
+      result = 'allready completed'
+      return NextResponse.json({result});
+    }
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'running');
 
     // Get paper
     const paper = await PapersDao.getArXivOaiPaper(id);
     if (!paper) {
-      return NextResponse.json({ error: 'paper not found' }, { status: 404 });
+      result = 'paper not found'
+      return NextResponse.json({result}, { status: 404 });
     }
 
     // Get prompt template
     const promptTemplates = await ConfigDao.getPromptConfig();
     if (!promptTemplates) {
-      return NextResponse.json({ error: 'prompt not found' }, { status: 404 });
+      result = 'prompt not found'
+      return NextResponse.json({result}, { status: 404 });
     }
 
     // Check if summarisation is already done
     const cachedSummary = await PapersDao.getGptSummary(id, size);
     if (cachedSummary) {
-      console.log('Returning cached summary');
+      result = 'cached summary'
       return NextResponse.json({ summary: cachedSummary });
     }
 
     // Run summarisation
     const summary = await gptPrompt(paper.title, paper.abstract, promptTemplates.sm);
-    console.log('summary', summary);
-
     if (summary.text) {
       // Update DB
       await PapersDao.pushGptSummary(id, size, summary);
     }
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'completed');
 
-    result = `id: ${id}, size: ${size}, summary: ${summary.text}, usage: ${summary.usage}`;
+    result = `id: ${id}, size: ${size}, summary: ${summary.text?.split(' ').length}, usage: ${summary.usage?.total_tokens}`;
 
     return NextResponse.json({result});
   } catch (e) {
