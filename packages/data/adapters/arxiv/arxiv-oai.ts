@@ -32,7 +32,7 @@ export async function fetchUpdatedIds(date: string) {
 export async function fetchUpdatedPapers(date: string, config: PipelineStageConfig) {
   const to = dayjs(date).add(1, 'day').format("YYYY-MM-DD");
 
-  let result = [] as ArXivPaper[];
+  let result = [] as ArXivOaiPaper[];
 
   let token: string | undefined = '';
   while(token !== undefined) {
@@ -75,7 +75,7 @@ function parseListIdentifiers(text: string) {
       parsed = [parsed];
     }
 
-    return (parsed as Array<ArxivHeader>)
+    return (parsed as Array<ArxivOaiHeader>)
       .map(item => item.identifier.substring(item.identifier.lastIndexOf(':') + 1)) // extract id's
       .sort()
       .reverse();
@@ -105,7 +105,7 @@ function parseListRecords(text: string) {
     let raw = parser
       .parse(text)['OAI-PMH']['ListRecords'] as RawArXivResponse;
 
-      const arXivResponse: ArXivResponse = {
+      const arXivResponse: ArXivOaiResponse = {
         resumptionToken: {
           token: raw?.resumptionToken["#text"],
           cursor: Number(raw?.resumptionToken["@_cursor"] || '-1'),
@@ -149,7 +149,7 @@ function parseListRecords(text: string) {
   }
 }
 
-function toArxivVersion(rawVersion?: RawArXivVersion | RawArXivVersion[]): ArXivVersion {
+function toArxivVersion(rawVersion?: RawArXivVersion | RawArXivVersion[]): ArXivOaiVersion {
   if(!rawVersion || Array.isArray(rawVersion) && rawVersion.length < 1) {
     return {
       date: dayjs(0).toDate(),
@@ -162,35 +162,35 @@ function toArxivVersion(rawVersion?: RawArXivVersion | RawArXivVersion[]): ArXiv
     date: dayjs(version.date).toDate(),
     size: version.size,
     version: version["@_version"],
-  })).sort((a, b) => dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1).at(-1) as ArXivVersion;
+  })).sort((a, b) => dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1).at(-1) as ArXivOaiVersion;
 }
 
-type ArXivResponse = {
-  records: ArXivRecord[],
-  resumptionToken: ArXivResumptionToken,
+type ArXivOaiResponse = {
+  records: ArXivOaiRecord[],
+  resumptionToken: ArXivOaiResumptionToken,
 }
 
-type ArXivResumptionToken = {
+type ArXivOaiResumptionToken = {
   token: string,
   cursor: number,
   completeListSize: number,
 };
 
-type ArXivRecord = {
-  header: ArxivHeader
-  metadata: ArXivPaper,
+type ArXivOaiRecord = {
+  header: ArxivOaiHeader
+  metadata: ArXivOaiPaper,
 };
 
-type ArxivHeader = {
+type ArxivOaiHeader = {
   identifier: string,
   datestamp: string,
   setSpec: string[]
 };
 
-export type ArXivPaper = {
+export type ArXivOaiPaper = {
   id: string,
   submitter: string,
-  version: ArXivVersion,
+  version: ArXivOaiVersion,
   title: string,
   authors: string[],
   categories: string[],
@@ -202,7 +202,7 @@ export type ArXivPaper = {
   mscClass?: string,
 }
 
-type ArXivVersion = {
+type ArXivOaiVersion = {
   date: Date,
   size: string,
   version: string,

@@ -1,4 +1,4 @@
-import { ArxivPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
+import { ArXivAtomPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
 import { UpStash } from "../../adapters/redis/upstash-client";
 import dayjs from "dayjs";
 
@@ -7,7 +7,7 @@ export const SummariesDao = {
     return await UpStash.ingestion.get(`summary:${paperHash}:${promptHash}`);
   },
 
-  set: async (paper: ArxivPaper, promptHash: string, summary: string) => {
+  set: async (paper: ArXivAtomPaper, promptHash: string, summary: string) => {
     await UpStash.ingestion.set(`summary:${paper.parsed.hash}:${promptHash}`, summary);
 
     // New cache format

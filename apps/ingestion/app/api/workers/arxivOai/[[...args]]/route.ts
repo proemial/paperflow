@@ -1,6 +1,6 @@
 import { ConfigDao } from "data/storage/config";
 import { dateFromParams } from "@/app/api/utils";
-import { ArXivPaper, fetchUpdatedPapers } from "data/adapters/arxiv/arxiv-oai";
+import { ArXivOaiPaper, fetchUpdatedPapers } from "data/adapters/arxiv/arxiv-oai";
 import { IngestionLogger } from "data/storage/ingestion-log";
 import { PapersDao } from "data/storage/papers";
 import { PipelineDao } from "data/storage/pipeline";
@@ -43,7 +43,7 @@ async function run(params: { args: string[] }) {
   }
 }
 
-async function pushPaperUpdates(date: string, papers: ArXivPaper[]) {
+async function pushPaperUpdates(date: string, papers: ArXivOaiPaper[]) {
   const pipeline = await PipelineDao.get(date);
 
   const nestedIds = pipeline.stages.arxivAtom?.map(action => action.ids.split(','));
@@ -52,14 +52,14 @@ async function pushPaperUpdates(date: string, papers: ArXivPaper[]) {
   const newPapers = papers.filter(paper => !pipelineIds.find(id => id === paper.id));
 
   if(newPapers?.length > 0) {
-    await PapersDao.push(newPapers);
+    await PapersDao.pushArXivOaiPapers(newPapers);
     await PipelineDao.pushArxivIds(date, newPapers.map(paper => paper.id).join(','));
   }
 
   return newPapers.length;
 }
 
-async function pushGptUpdates(date: string, papers: ArXivPaper[]) {
+async function pushGptUpdates(date: string, papers: ArXivOaiPaper[]) {
   const pipeline = await PipelineDao.get(date);
 
   const pipelineIds = pipeline.stages.gptSummary?.map(action => action.payload.id);

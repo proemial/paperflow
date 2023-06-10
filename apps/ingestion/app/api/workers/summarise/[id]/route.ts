@@ -9,6 +9,8 @@ import { Md5 } from "ts-md5";
 
 export const revalidate = 1;
 
+// 'https://ingestion.paperflow.ai/api/workers/gptSummary/2023-06-08/0'
+
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   // const response = await run(params.id);
 
@@ -27,7 +29,7 @@ async function run(id: string) {
   log('[summarise>>', id);
 
   try {
-    // Fetch paper 
+    // Fetch paper
     const paper = await PapersDao.getByIdAndStatus(id, 'initial');
     if (!paper) {
       return NextResponse.json({ error: 'paper not found' }, { status: 404 });

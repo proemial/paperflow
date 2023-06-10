@@ -1,7 +1,7 @@
 import { db } from "../../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
 import { AnyBulkWriteOperation } from "mongodb";
-import { ArxivPaper } from "../../adapters/arxiv/arxiv.models";
+import { ArXivAtomPaper } from "../../adapters/arxiv/arxiv.models";
 import { ConfigDao } from "./config-dao";
 
 export type PaperStatus = "initial" | "summarised";
@@ -10,7 +10,7 @@ export type RevisionedPaper = {
   id: string,
   status: PaperStatus,
   lastUpdated: Date,
-  revisions: ArxivPaper[],
+  revisions: ArXivAtomPaper[],
 };
 
 export type WithId = {
@@ -18,7 +18,7 @@ export type WithId = {
 };
 
 export const PapersDao = {
-  upsert: async (paper: ArxivPaper) => {
+  upsert: async (paper: ArXivAtomPaper) => {
     const mongo = await db('papers');
     const begin = DateMetrics.now();
 
@@ -41,7 +41,7 @@ export const PapersDao = {
     }
   },
 
-  upsertMany: async (papers: ArxivPaper[]) => {
+  upsertMany: async (papers: ArXivAtomPaper[]) => {
     const mongo = await db('papers');
     const begin = DateMetrics.now();
 
@@ -218,7 +218,7 @@ export const PapersDao = {
 
     const filter = {
       id: {$ne: id},
-      status: 'summarised', 
+      status: 'summarised',
       "revisions.parsed.category": category
     };
 
@@ -238,10 +238,10 @@ export const PapersDao = {
     const mongo = await db('papers');
     const begin = DateMetrics.now();
 
-    
-    const filter = before 
+
+    const filter = before
       ? {status: "summarised", $and: [
-        {"revisions.parsed.published": {$gt: after}}, 
+        {"revisions.parsed.published": {$gt: after}},
         {"revisions.parsed.published": {$lt: before}}
       ]}
       : { status: "summarised", 'revisions.parsed.updated': { $gt: after }}

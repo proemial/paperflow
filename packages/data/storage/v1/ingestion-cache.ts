@@ -1,7 +1,7 @@
 import { DateMetrics } from "utils/date";
 import { UpStash } from "../../adapters/redis/upstash-client";
 import { LatestIds, SummarisedPaper } from "./ingestion-models";
-import { ArxivPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
+import { ArXivAtomPaper, arxivCategories } from "../../adapters/arxiv/arxiv.models";
 import dayjs from "dayjs";
 import { RevisionedPaper } from "./paper-dao";
 
@@ -17,7 +17,7 @@ export const IngestionCache = {
   latestIds: {
     get: async () => {
       const begin = DateMetrics.now();
-  
+
       try {
         return await UpStash.ingestion.json.get(IngestionCacheKey.Summary) as LatestIds;
       } catch (error) {
@@ -31,7 +31,7 @@ export const IngestionCache = {
     update: async (date: string, ids: string[]) => {
       get: async () => {
         const begin = DateMetrics.now();
-    
+
         try {
           await UpStash.ingestion.json.set(IngestionCacheKey.Summary, "$", {
             date,
@@ -50,13 +50,13 @@ export const IngestionCache = {
   papers: {
     byIds: async (ids: string[]) => {
       const begin = DateMetrics.now();
-  
+
       try {
         const pipeline = UpStash.ingestion.pipeline();
         ids.forEach(id => {
           pipeline.get(`ingestion:paper:summarised:${id}`);
         })
-      
+
         return await pipeline.exec() as Array<SummarisedPaper>;
       } catch (error) {
         console.error(error);
@@ -68,7 +68,7 @@ export const IngestionCache = {
 
     byId: async (id: string) => {
       const begin = DateMetrics.now();
-  
+
       try {
         return await UpStash.ingestion.get(`ingestion:paper:summarised:${id}`) as SummarisedPaper;
       } catch (error) {
@@ -79,23 +79,23 @@ export const IngestionCache = {
       }
     },
 
-    update: async (paper: ArxivPaper) => {
+    update: async (paper: ArXivAtomPaper) => {
       get: async () => {
         const begin = DateMetrics.now();
-    
+
         try {
           const { id, link, published, title, authors, category, abstract } = paper.parsed;
           const {summary, lastUpdated} = paper;
           const ingestionDate = dayjs(lastUpdated).format("YYYY-MM-DD");
-        
+
           console.log(`set[${IngestionCacheKey.Paper}:${paper.parsed.id}] `);
           await UpStash.ingestion.set(
-            `${IngestionCacheKey.Paper}:${paper.parsed.id}`, 
+            `${IngestionCacheKey.Paper}:${paper.parsed.id}`,
             JSON.stringify({
               ingestionDate, id, published, title, summary, authors, abstract,
               category: arxivCategories.find((arxivCategory) => arxivCategory.key === category),
               link: link.source,
-            }), 
+            }),
             ttl,
           );
         } catch (error) {
@@ -111,7 +111,7 @@ export const IngestionCache = {
   related: {
     byId: async (id: string) => {
       const begin = DateMetrics.now();
-  
+
       try {
         return await UpStash.ingestion.get(`${IngestionCacheKey.Related}:${id}`) as Array<{
           id: string,
@@ -135,11 +135,11 @@ export const IngestionCache = {
     update: async (id: string, related: RevisionedPaper[]) => {
       get: async () => {
         const begin = DateMetrics.now();
-    
+
         try {
           console.log(`set[${IngestionCacheKey.Related}:${id}] `);
           await UpStash.ingestion.set(
-            `${IngestionCacheKey.Related}:${id}`, 
+            `${IngestionCacheKey.Related}:${id}`,
             JSON.stringify(related?.map((revisionedPaper, i) => {
               const paper = revisionedPaper.revisions.at(-1);
 
@@ -161,7 +161,7 @@ export const IngestionCache = {
                 ingestionDate: `${revisionedPaper.lastUpdated}`,
                 abstract,
               };
-            })), 
+            })),
             ttl,
           );
         } catch (error) {

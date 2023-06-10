@@ -1,59 +1,40 @@
-import dayjs from "dayjs";
 import { XMLParser } from "fast-xml-parser";
+import { Md5 } from "ts-md5";
 import { splitIntoBuckets } from "utils/array";
 import { DateMetrics } from "utils/date";
 import { fetchData, } from "../fetch";
-import { ArxivPaper, RawArxivPaper, extractId } from "./arxiv.models";
-import { Md5 } from "ts-md5";
+import { PipelineStageConfig } from "../redis/redis-client";
+import { ArXivAtomPaper, RawArxivPaper, extractId } from "./arxiv.models";
 
 const papersByIds = (ids: string) => `https://export.arxiv.org/api/query?id_list=${ids}&max_results=50`;
 
-export async function fetchUpdatedItems(ids: string[], since: dayjs.Dayjs, maxCount?: number) {
-  const hits: Array<ArxivPaper> = [];
-  const misses: Array<ArxivPaper> = [];
+export async function fetchUpdatedArXivAtomPapers(ids: string[], config: PipelineStageConfig) {
+  const hits: Array<ArXivAtomPaper> = [];
 
-  const buckets = splitIntoBuckets(ids, 50);
+  const buckets = splitIntoBuckets(ids, config.bucketSize as number);
 
   let count = 0;
   while (count++ < buckets.length) {
-    const result = await fetchByIds(buckets[count - 1].join(','));
-
-    for (const item of result) {
-      if (isRecent(item, since))
-        hits.push(item);
-      else
-        misses.push(item);
-
-      if (maxCount && hits.length >= maxCount)
-        return buildOutput(hits, misses);
-    }
-
-    await sleep(100);
+    hits.push(
+      ...await fetchByIds(buckets[count - 1].join(','))
+    );
+    await sleep(config.sleep as number);
   }
 
-  return buildOutput(hits, misses);
+  return hits;
 }
 
 async function fetchByIds(ids: string) {
   const result = await fetchData(papersByIds(ids));
   const data = (await result.text()).replaceAll('\n', '');
-  const json = await parseArxiv(data);
+  const json = await parseArXivAtom(data);
 
   return json;
 }
 
-const buildOutput = (hits: ArxivPaper[], misses: ArxivPaper[]) => {
-  return {
-    hits: hits.sort(comparator),
-    misses,
-  }
-};
-
-const comparator = (a: ArxivPaper, b: ArxivPaper) => (b.parsed.updated as Date).getTime() - (a.parsed.updated as Date).getTime();
-const isRecent = (item: ArxivPaper, since: dayjs.Dayjs) => (item.parsed.updated as Date).getTime() >= since.valueOf();
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function parseArxiv(data: string) {
+export async function parseArXivAtom(data: string) {
   const begin = DateMetrics.now();
   try {
     const parser = new XMLParser({
@@ -87,7 +68,7 @@ export async function parseArxiv(data: string) {
             hash: Md5.hashStr(entry.summary),
           },
           raw: entry,
-        } as ArxivPaper;
+        } as ArXivAtomPaper;
       } catch (e) {
         console.error('entry', entry.category, e);
         throw e;

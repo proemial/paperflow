@@ -163,7 +163,7 @@ export type GptSummaryPayload = {
   size: 'sm';// | 'md' | 'lg',
 };
 
-export type WorkerStatus = 'idle' | 'scheduled' | 'running' | 'compelete' | 'error'
+export type WorkerStatus = 'idle' | 'scheduled' | 'running' | 'completed' | 'error'
 
 export type PipelineConfig = {
   stages: {

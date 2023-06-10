@@ -86,7 +86,7 @@ export type RawArxivPaper = {
   category: WithTerm | Array<WithTerm>,
 }
 
-export type ArxivPaper = {
+export type ArXivAtomPaper = {
   parsed: {
     id: string,
     updated: Date,
