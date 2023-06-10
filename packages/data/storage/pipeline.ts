@@ -1,8 +1,8 @@
 import { DateMetrics } from "utils/date";
-import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker, WorkerStatus } from "../adapters/redis/redis-client";
+import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker, WorkerStatus, UpdateIndex } from "../adapters/redis/redis-client";
 
 export const PipelineDao = {
-    get: async (date: string) => {
+    getPipeline: async (date: string) => {
         const begin = DateMetrics.now();
 
         try {
@@ -17,6 +17,7 @@ export const PipelineDao = {
                 }
             };
             await Redis.pipeline.set(date, newPipeline);
+            await Redis.pipeline.createIndex(date);
 
             return newPipeline;
           }
@@ -26,7 +27,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.get`);
+          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getPipeline`);
         }
     },
 
@@ -67,5 +68,31 @@ export const PipelineDao = {
       } finally {
           console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.updateStatus`);
       }
+    },
+
+    getIndex: async (date: string) => {
+        const begin = DateMetrics.now();
+
+        try {
+          return await Redis.pipeline.getIndex(date) as UpdateIndex;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIndex`);
+        }
+    },
+
+    pushToIndex: async (date: string, category: string, id: string) => {
+        const begin = DateMetrics.now();
+
+        try {
+            await Redis.pipeline.pushToIndex(date, category, id);
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+            console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushToIndex`);
+        }
     },
 };

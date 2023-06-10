@@ -28,7 +28,7 @@ async function run(params: { args: string[] }) {
   const {date, index} = dateAndIndexFromParams(params);
 
   try {
-    const pipeline = await PipelineDao.get(date);
+    const pipeline = await PipelineDao.getPipeline(date);
     const {payload, status} = pipeline.stages.gptSummary[index];
     const {id, size} = payload;
 
@@ -64,6 +64,7 @@ async function run(params: { args: string[] }) {
     if (summary.text) {
       // Update DB
       await PapersDao.pushGptSummary(id, size, summary);
+      await PipelineDao.pushToIndex(date, paper.categories[0], paper.id);
     }
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'completed');
 

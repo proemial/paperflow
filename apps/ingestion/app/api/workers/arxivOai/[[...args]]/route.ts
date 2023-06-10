@@ -44,7 +44,7 @@ async function run(params: { args: string[] }) {
 }
 
 async function pushPaperUpdates(date: string, papers: ArXivOaiPaper[]) {
-  const pipeline = await PipelineDao.get(date);
+  const pipeline = await PipelineDao.getPipeline(date);
 
   const nestedIds = pipeline.stages.arxivAtom?.map(action => action.ids.split(','));
   const pipelineIds = nestedIds.reduce((acc, val) => acc.concat(val), []);
@@ -60,7 +60,7 @@ async function pushPaperUpdates(date: string, papers: ArXivOaiPaper[]) {
 }
 
 async function pushGptUpdates(date: string, papers: ArXivOaiPaper[]) {
-  const pipeline = await PipelineDao.get(date);
+  const pipeline = await PipelineDao.getPipeline(date);
 
   const pipelineIds = pipeline.stages.gptSummary?.map(action => action.payload.id);
   console.log(pipelineIds);

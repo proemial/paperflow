@@ -93,6 +93,48 @@ export const Redis = {
        console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
       }
     },
+
+    createIndex: async (date: string) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+      try {
+        await client.json.SET(`index:${date}`, "$", []);
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.createIndex`);
+      }
+    },
+
+    getIndex: async (date: string) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+
+      try {
+        return await client.json.GET(`index:${date}`);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.getIndex`);
+      }
+    },
+
+    pushToIndex: async (date: string, category: string, id: string) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+      try {
+        await client.json.ARRAPPEND(`index:${date}`, "$", {id, category});
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushActions`);
+      }
+    },
   },
 };
 
@@ -130,6 +172,11 @@ async function closeConnetion(client: any) {
     console.log(`[${DateMetrics.elapsed(begin)}] redis.close`);
   }
 }
+
+export type UpdateIndex = Array<{
+  category: string,
+  id: string,
+}>;
 
 export enum PipelineStage {
   arxivOai = 'arxivOai',

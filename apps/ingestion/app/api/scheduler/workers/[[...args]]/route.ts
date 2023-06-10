@@ -1,6 +1,4 @@
-import { fetchUpdatedPapers } from "data/adapters/arxiv/arxiv-oai";
 import { IngestionLogger } from "data/storage/ingestion-log";
-import { PapersDao } from "data/storage/papers";
 import { PipelineDao } from "data/storage/pipeline";
 import dayjs from "dayjs";
 import { NextResponse } from "next/server";
@@ -25,22 +23,17 @@ async function run(args: string[]) {
     : dayjs().subtract(1, 'day').format("YYYY-MM-DD");
 
   try {
-    const oaiPapers = await fetchUpdatedPapers(date);
+    // const config = await ConfigDao.get();
     const pipeline = await PipelineDao.getPipeline(date);
 
-    const newPapers = oaiPapers.filter(paper => !pipeline.stages.scrapeArxiv.find(action => action.id === paper.id));
-
-    await PapersDao.pushArXivOaiPapers(newPapers);
-    await PipelineDao.pushArxivIds(date, newPapers.map(paper => paper.id));
-
-    result = `allPapers: ${oaiPapers.length}, newPapers: ${newPapers.length}`;
+    result = `workers: `;
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
     result = '[ERROR]' + normalizeError(e).message;
     return new NextResponse(normalizeError(e).message, { status: 500 });
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/arxiv-oai`);
-    await IngestionLogger.log(date, `[arxiv-oai][${DateMetrics.elapsed(begin)}] ${result}`);
+    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/workers`);
+    await IngestionLogger.log(date, `[workers][${DateMetrics.elapsed(begin)}] ${result}`);
   }
 }

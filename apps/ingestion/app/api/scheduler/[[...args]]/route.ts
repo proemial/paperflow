@@ -26,7 +26,7 @@ async function run(params: { args: string[] }) {
 
   try {
     const config = await ConfigDao.getPipelineConfig();
-    const pipeline = await PipelineDao.get(date);
+    const pipeline = await PipelineDao.getPipeline(date);
 
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
     const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
