@@ -6,6 +6,7 @@ import { normalizeError } from "utils/error";
 import { dateFromParams } from "@/app/api/utils";
 import { ConfigDao } from "data/storage/config";
 import { QStash } from "data/adapters/qstash/qstash-client"
+import { ArxivAtomWorker, GptSummaryWorker, PipelineStage, PipelineStageConfig } from "data/adapters/redis/redis-client";
 
 export const revalidate = 1;
 
@@ -21,26 +22,52 @@ async function run(params: { args: string[] }) {
   let result = '';
 
   const date = dateFromParams(params);
+  console.log('date', date);
 
   try {
+    const config = await ConfigDao.get();
     const pipeline = await PipelineDao.get(date);
 
-    const notRunning = pipeline.stages.arxivAtom.filter(worker => worker.status !== 'running');
-    if(notRunning) {
-      const config = (await ConfigDao.get()).stages;
+    const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
+    const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
 
-      // QStash.publish()
-      // schedule in QStash
-    }
-
-    result = `workers: `;
+    result = `scheduledArxivAtomWorkers: ${scheduledArxivAtomWorkers}, scheduledGptSummaryWorkers: ${scheduledGptSummaryWorkers.length}`;
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
     result = '[ERROR]' + normalizeError(e).message;
     return new NextResponse(normalizeError(e).message, { status: 500 });
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] /api/scheduler/workers`);
-    await IngestionLogger.log(date, `[workers][${DateMetrics.elapsed(begin)}] ${result}`);
+    await IngestionLogger.log(date, `[scheduler][${DateMetrics.elapsed(begin)}] ${result}`);
   }
+}
+
+async function scheduleArxivAtomWorker(date: string, actions: ArxivAtomWorker[]) {
+  const idleWorkerIndex = actions.findIndex(worker => worker.status === 'idle');
+  if(idleWorkerIndex > -1) {
+    await QStash.schedule(date, PipelineStage.arxivAtom, [idleWorkerIndex]);
+  }
+  console.log('idleWorkerIndex', idleWorkerIndex);
+
+  return idleWorkerIndex > -1 ? 1 : 0;
+}
+
+async function scheduleGptSummaryWorkers(date: string, actions: GptSummaryWorker[], config: PipelineStageConfig) {
+  const actionsWithIndex = actions.map((action, index) => ({...action, index}))
+  const idleWorkers = actionsWithIndex.filter(action => action.status === 'idle');
+
+  if(idleWorkers?.length > 0) {
+    const running = actionsWithIndex.filter(worker => worker.status === 'running' || worker.status === 'scheduled');
+    const freeSlots = (config.concurrency as number) - running.length;
+
+    if(freeSlots > 0){
+      const workerIndices = idleWorkers.slice(0, freeSlots).map(worker => worker.index);
+
+      await QStash.schedule(date, PipelineStage.gptSummary, workerIndices);
+
+      return workerIndices;
+    }
+  }
+
+  return [];
 }

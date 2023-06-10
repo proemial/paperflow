@@ -75,6 +75,22 @@ export const Redis = {
        console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushActions`);
       }
     },
+
+    updateStatus: async (date: string, stage: PipelineStage, index: number, status: WorkerStatus) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+
+      try {
+        // JSON.SET 2023-06-08:pipeline "$.stages.scrape-arxiv[?(@.id=='2305.06356')].status" '"crazy"'
+        await client.json.SET(`pipeline:${date}`, `$.stages.${stage}[${index}].status`, status);
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+      }
+    },
   },
 };
 
@@ -122,10 +138,15 @@ export enum PipelineStage {
 
 export type Pipeline = {
   stages: {
+    arxivOai: ArxivAtomWorker[],
     arxivAtom: ArxivAtomWorker[],
     gptSummary: GptSummaryWorker[],
   }
 }
+
+export type ArxivAoiWorker = {
+  status: WorkerStatus,
+};
 
 export type ArxivAtomWorker = {
   ids: string, // comma separated to support the redis ui
@@ -142,7 +163,7 @@ export type GptSummaryPayload = {
   size: 'sm';// | 'md' | 'lg',
 };
 
-export type WorkerStatus = 'idle' | 'running' | 'compelete' | 'error'
+export type WorkerStatus = 'idle' | 'scheduled' | 'running' | 'compelete' | 'error'
 
 export type PipelineConfig = {
   stages: {

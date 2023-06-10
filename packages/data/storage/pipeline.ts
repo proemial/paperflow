@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker } from "../adapters/redis/redis-client";
+import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker, WorkerStatus } from "../adapters/redis/redis-client";
 
 export const PipelineDao = {
     get: async (date: string) => {
@@ -11,8 +11,9 @@ export const PipelineDao = {
           if(!pipelineFromDb) {
             const newPipeline = {
                 stages: {
-                    arxivAtom: [],
-                    gptSummary: [],
+                  arxivOai: [],
+                  arxivAtom: [],
+                  gptSummary: [],
                 }
             };
             await Redis.pipeline.set(date, newPipeline);
@@ -53,5 +54,18 @@ export const PipelineDao = {
         } finally {
             console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushArxivIds`);
         }
+    },
+
+    updateStatus: async (date: string, stage: PipelineStage, index: number, status: WorkerStatus) => {
+      const begin = DateMetrics.now();
+
+      try {
+          await Redis.pipeline.updateStatus(date, stage, index, status);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.updateStatus`);
+      }
     },
 };

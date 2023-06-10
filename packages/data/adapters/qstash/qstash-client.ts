@@ -1,6 +1,7 @@
 import { Client, PublishJsonRequest } from "@upstash/qstash";
 import { Env } from "../env";
 import { PipelineStage } from "../redis/redis-client";
+import { PipelineDao } from "../../storage/pipeline";
 
 if (!Env.connectors.qstash) {
   throw new Error("[qstash-client] Please fix your environment variables");
@@ -29,11 +30,7 @@ type PublishResponse<PublishRequest> = PublishRequest extends { cron: string }
   ? { scheduleId: string }
   : { messageId: string };
 
-export enum Workers {
-  scraper = "https://ingestion.paperflow.ai/api/worker/scrape",
-  summariser = "https://ingestion.paperflow.ai/api/worker/summarise",
-  arxivAtom = "https://ingestion.paperflow.ai/api/workers/arxivAtom"
-}
+const baseUrl = 'https://ingestion.paperflow.ai/api/workers';
 
 export const QStash = {
   client,
@@ -42,17 +39,13 @@ export const QStash = {
     return await publishJSON(req);
   },
 
-  publish: async (url: Workers, body: any, args?: string) => {
-    return await publishJSON({
-      url: !args ? url : `${url}/${args}`,
-      body,
-    });
-  },
-
-  schedule: async (date: string, stage: PipelineStage, index: 0) => {
-    return await publishJSON({
-      url: `${Workers.arxivAtom}/${date}/${stage}/${index}`,
-      body: '',
-    });
+  schedule: async (date: string, stage: PipelineStage, indices: number[]) => {
+    for (let index = 0; index < indices.length; index++) {
+      await publishJSON({
+        url: `${baseUrl}/${stage}/${date}/${indices[index]}`,
+        body: '',
+      });
+      await PipelineDao.updateStatus(date, stage, indices[index], 'scheduled');
+    }
   },
 };
