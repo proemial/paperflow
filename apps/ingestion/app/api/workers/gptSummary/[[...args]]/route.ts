@@ -32,7 +32,7 @@ async function run(params: { args: string[] }) {
     const {payload, status} = pipeline.stages.gptSummary[index];
     const {id, size} = payload;
 
-    if(status !== 'scheduled')
+    if(status === 'completed')
       return NextResponse.json({result: "allready completed"});
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'running');
 

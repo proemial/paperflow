@@ -28,8 +28,8 @@ async function run(params: { args: string[] }) {
 
   try {
     const pipeline = await PipelineDao.get(date);
-    if(pipeline.stages.arxivAtom[index].status !== 'scheduled')
-      return NextResponse.json({result});
+    if(pipeline.stages.arxivAtom[index].status === 'completed')
+        return NextResponse.json({result: "allready completed"});
     await PipelineDao.updateStatus(date, PipelineStage.arxivAtom, index, 'running');
 
     const config = (await ConfigDao.getPipelineConfig()).stages.arxivAtom;
