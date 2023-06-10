@@ -2,9 +2,21 @@ import { XMLParser } from "fast-xml-parser";
 import { fetchData, } from "../fetch";
 import dayjs from "dayjs";
 
+// Docs
+// https://www.openarchives.org/OAI/openarchivesprotocol.html
+
+// ListIdentifiers example:
+// https://export.arxiv.org/oai2?verb=ListIdentifiers&from=2023-06-07&until=2023-06-08&metadataPrefix=arXivRaw
+
+// ListRecords example (with continuation)
+// https://export.arxiv.org/oai2?verb=ListRecords&from=2023-06-07&until=2023-06-08&metadataPrefix=arXivRaw
+// https://export.arxiv.org/oai2?verb=ListRecords&resumptionToken=6625893|1001
+
+// GetRecord example
+// https://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:1306.1917&metadataPrefix=oai_dc
+
 const idsByTypeAndDate = (type: string, from: string, to: string) => `https://export.arxiv.org/oai2?verb=${type}&from=${from}&until=${to}&metadataPrefix=arXivRaw`;
 const idsByTypeAndToken = (type: string, token: string) => `https://export.arxiv.org/oai2?verb=${type}&resumptionToken=${token}`;
-
 
 export async function fetchUpdatedIds(date: string) {
   const result = await fetchData(idsByTypeAndDate('ListIdentifiers', date, date));
@@ -24,7 +36,7 @@ export async function fetchUpdatedPapers(date: string) {
   let token: string | undefined = '';
   while(token !== undefined) {
     const response = await fetchData(
-      token 
+      token
         ? idsByTypeAndToken('ListRecords', token)
         : idsByTypeAndDate('ListRecords', date, to)
     );
@@ -32,7 +44,7 @@ export async function fetchUpdatedPapers(date: string) {
 
     if(response.status !== 200)
       throw new Error(text);
-  
+
     const data = parseListRecords(text);
     result = [...result, ...data.records.map(record => record.metadata)];
     token = data.resumptionToken.token;
@@ -43,7 +55,7 @@ export async function fetchUpdatedPapers(date: string) {
 
   const filtered = result.filter(paper => dayjs(paper.version.date).format("YYYY-MM-DD") === date);
   console.log('result', {unfiltered: result.length, filtered: filtered.length});
-  
+
   return filtered;
 }
 
@@ -99,8 +111,8 @@ function parseListRecords(text: string) {
         },
         records: (raw?.record || []).map(record => ({
           header: {
-            identifier: record?.header?.identifier, 
-            datestamp: record?.header?.datestamp, 
+            identifier: record?.header?.identifier,
+            datestamp: record?.header?.datestamp,
             setSpec: Array.isArray(record?.header?.setSpec || []) ? record?.header?.setSpec as string[] : [record?.header?.setSpec as string]
           },
           metadata: {
@@ -121,8 +133,8 @@ function parseListRecords(text: string) {
       }
       console.log('parsed count', arXivResponse.records.length);
       console.log('arXivResponse.resumptionToken', arXivResponse.resumptionToken);
-      
-      
+
+
     return arXivResponse;
   } catch (error) {
     console.error(error);
@@ -167,10 +179,10 @@ type ArXivRecord = {
   metadata: ArXivPaper,
 };
 
-type ArxivHeader = { 
-  identifier: string, 
-  datestamp: string, 
-  setSpec: string[] 
+type ArxivHeader = {
+  identifier: string,
+  datestamp: string,
+  setSpec: string[]
 };
 
 export type ArXivPaper = {
@@ -211,10 +223,10 @@ type RawArXivRecord = {
   },
 };
 
-type RawArxivHeader = { 
-  identifier: string, 
-  datestamp: string, 
-  setSpec: string | Array<string> 
+type RawArxivHeader = {
+  identifier: string,
+  datestamp: string,
+  setSpec: string | Array<string>
 };
 
 type RawArXivPaper = {
