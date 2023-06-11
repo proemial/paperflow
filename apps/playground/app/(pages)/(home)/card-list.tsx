@@ -7,11 +7,11 @@ export function PromptOutputCardList({ids}: {ids: string[]}) {
     const papers = usePapers(ids)
     return (
         <>
+            {!papers &&
+              <CircularProgress variant="solid" />
+            }
             {ids.map((id, i) => (
               <div key={i}>
-                {!papers[id] &&
-                    <CircularProgress variant="solid" />
-                }
                 {papers[id] &&
                     <PromptOutputCard
                         arxivOutput={{ ...papers[id].parsed, contentSnippet: papers[id].parsed.abstract, link: papers[id].parsed.link.source }}

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
     })
 
     const summaries = await PapersDao.getGptSummaries(ids);
-    console.log('summaries', summaries);
+    // console.log('summaries', summaries);
 
     papers.forEach(paper => {
       indexedPapers[paper.parsed.id as string].summary = summaries.find(summary => summary.id)?.text;

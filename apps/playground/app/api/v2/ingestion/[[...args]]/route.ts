@@ -23,11 +23,10 @@ export async function GET(request: Request, { params }: { params: { args: string
   let result = '';
 
   const inputDate = dateFromParams(params);
-  console.log('date', inputDate);
 
   try {
     const dates = await PipelineDao.getIngestionIndex();
-    const date = inputDate ? dates.find(d => d === inputDate) : dates.at(-1) as string;
+    const date = inputDate ? dates.find(d => d === inputDate) : dates.sort().at(-1) as string;
     const index: {[key: string]: string[]} = {};
 
     if(date) {
