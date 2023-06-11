@@ -14,6 +14,7 @@ export function PromptOutputCardList({ids}: {ids: string[]}) {
               <div key={i}>
                 {papers[id] &&
                     <PromptOutputCard
+                        id={id}
                         arxivOutput={{ ...papers[id].parsed, contentSnippet: papers[id].parsed.abstract, link: papers[id].parsed.link.source }}
                         modelOutputString={papers[id].summary}
                   />
