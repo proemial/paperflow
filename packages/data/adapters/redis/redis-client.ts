@@ -14,8 +14,6 @@ export const Redis = {
   config: {
     get: async (key: string) => {
       const begin = DateMetrics.now();
-      console.log('configEnv', configEnv);
-
       const client = await connect(configEnv);
 
       try {
