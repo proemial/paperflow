@@ -2,7 +2,7 @@ import { DateMetrics } from "utils/date";
 import { UpStash } from "../adapters/redis/upstash-client";
 import {ArXivOaiPaper} from "../adapters/arxiv/arxiv-oai"
 import { ArXivAtomPaper } from "../adapters/arxiv/arxiv.models"
-import { WithTextAndUsage } from "@/adapters/openai/openai";
+import { WithTextAndUsage } from "../adapters/openai/openai";
 
 enum PapersDaoKey {
   Oai = 'arxiv:oai',

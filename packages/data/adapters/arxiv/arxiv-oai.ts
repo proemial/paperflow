@@ -2,6 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import { fetchData, } from "../fetch";
 import dayjs from "dayjs";
 import { PipelineStageConfig } from "../redis/redis-client";
+import {ArXivError} from "./arxiv-error";
 
 // Docs
 // https://www.openarchives.org/OAI/openarchivesprotocol.html

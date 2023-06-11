@@ -1,4 +1,4 @@
-class ArXivError extends Error {
+export class ArXivError extends Error {
     private status: number = 500;
 
     constructor(message: string) {

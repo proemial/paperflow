@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     console.log('summaries', summaries);
 
     papers.forEach(paper => {
-      indexedPapers[paper.parsed.id as string].summary = summaries.find(summary => summary.id).text;
+      indexedPapers[paper.parsed.id as string].summary = summaries.find(summary => summary.id)?.text;
     })
 
     result = `ids: ${ids.length}, papers: ${papers.length}`;
