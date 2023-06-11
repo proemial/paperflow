@@ -19,10 +19,12 @@ export default function Main({ args }: { args?: string }) {
             <IngestionDatePicker date={data?.date} dates={data?.dates} />
           </h1>
         }
-        {!data?.index &&
-          <CircularProgress variant="solid" />
-        }
         <ProcessedPapers index={data?.index || {}} />
+        {!data?.index &&
+          <div style={{display: 'flex', justifyContent: 'center', width: '100%', marginTop: '30vh'}}>
+            <CircularProgress variant="solid" />
+          </div>
+        }
       </div>
     </div>
   );

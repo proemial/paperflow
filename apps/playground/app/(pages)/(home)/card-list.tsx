@@ -4,11 +4,14 @@ import { CircularProgress } from "@mui/joy";
 import React from "react";
 
 export function PromptOutputCardList({ids}: {ids: string[]}) {
-    const papers = usePapers(ids)
+    const papers = usePapers(ids);
+
     return (
         <>
-            {!papers &&
-              <CircularProgress variant="solid" />
+            {!Object.keys(papers)?.length &&
+              <div style={{marginLeft: 64}}>
+                <CircularProgress variant="solid" />
+              </div>
             }
             {ids.map((id, i) => (
               <div key={i}>
