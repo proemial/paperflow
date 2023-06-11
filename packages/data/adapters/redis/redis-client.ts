@@ -235,7 +235,7 @@ export type PipelineConfig = {
 };
 
 export type PipelineStageConfig = {
-  [key: string]: string | number,
+  [key: string]: string | number | string[],
 }
 
 export type PromptConfig = {
