@@ -114,7 +114,6 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
     });
 
     const openaiResponseJson: WithTextAndUsage = await openaiResponse.json();
-    console.log('openaiResponse', openaiResponseJson);
     return openaiResponseJson;
   } catch (e) {
     logError(key, begin, e);

@@ -5,7 +5,8 @@ export const revalidate = 60;
 
 export default async function HomePage() {
   const index = await PipelineDao.getIngestionIndex();
-  const latestIds = (await PipelineDao.getIndex(index.at(-1))).map(entry => entry.id);
+  const latestIds = (await PipelineDao.getIndex(index.at(-1))).filter(entry => entry.category.startsWith('cs.'))
+                                                              .map(entry => entry.id);
 
   return (
     <>

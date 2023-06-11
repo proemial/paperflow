@@ -1,8 +1,9 @@
 "use client";
 import { IngestionIndexEntries } from "@/app/api/v2/ingestion/[[...args]]/route";
-import { Chip, Sheet, Stack, styled } from "@mui/joy";
-import { ArXivCategory, arXivCategory } from "data/adapters/arxiv/arxiv.models";
+import { Button, Chip, Sheet, Stack, styled } from "@mui/joy";
+import { ArXivCategory, arXivCategory, arxivCategories } from "data/adapters/arxiv/arxiv.models";
 import { PromptOutputCardList } from "./card-list";
+import { useState } from "react";
 
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor:
@@ -14,11 +15,16 @@ const Item = styled(Sheet)(({ theme }) => ({
   color: theme.vars.palette.text.secondary,
 }));
 
+const linkStyle = {background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontSize: 'inherit', fontFamily: 'inherit', color: 'inherit'};
+
 export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
+  const [filter, setFilter] = useState<string>();
   if(!index)
     return <></>;
 
-  const categories = Object.keys(index).map(key => arXivCategory(key)).sort((a: ArXivCategory, b: ArXivCategory) => {
+  const categories = Object.keys(index)
+                           .map(key => arXivCategory(key))
+                           .sort((a: ArXivCategory, b: ArXivCategory) => {
     if (a.category === b.category) {
        return a.title > b.title ? 1 : -1;
     }
@@ -28,12 +34,24 @@ export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
   const counts = Object.keys(index).map(key => index[key].length);
   const count = (counts?.length ? counts : [0]).reduce((a, b) => a + b);
 
+  const categoryNames = categories.map(cat => cat.category);
+  const mainCategories = arxivCategories.filter(cat => cat.category === cat.title).filter(cat => categoryNames.includes(cat.category));
+
   return (<>
     <div>
       {count} papers in {Object.keys(index).length} categories scraped
+      <div>
+        {mainCategories.map((cat, i) => <span key={i}>
+          [<button
+            type="button"
+            onClick={() => setFilter(filter === cat.key ? undefined : cat.key)} style={{...linkStyle, fontWeight: cat.key === filter ? 'bold' : 'normal'}}>
+              {cat.category}
+          </button>]
+        </span>)}
+      </div>
     </div>
     <Stack spacing={2}>
-      {categories.map((category, i) => (
+      {categories.filter(category => !filter || category.key.startsWith(filter)).map((category, i) => (
         <Item key={i}>
           <h2 style={{ padding: 8, marginBottom: 8, marginTop: 0 }}>
             <Chip variant="soft">
