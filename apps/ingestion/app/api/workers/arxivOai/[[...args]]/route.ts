@@ -27,16 +27,18 @@ async function run(params: { args: string[] }) {
     const config = (await ConfigDao.getPipelineConfig()).stages.arxivOai;
     const papers = await fetchUpdatedPapers(date, config);
 
-    const newPapers = await pushPaperUpdates(date, papers);
-    const newSummaries = await pushGptUpdates(date, papers);
+    if(papers.length > 0) {
+      const newPapers = await pushPaperUpdates(date, papers);
+      const newSummaries = await pushGptUpdates(date, papers);
 
-    result = `allPapers: ${papers.length}, newPapers: ${newPapers}, newSummaries: ${newSummaries}`;
+      result = `allPapers: ${papers.length}, newPapers: ${newPapers}, newSummaries: ${newSummaries}`;
+    }
 
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
     result = '[ERROR]' + normalizeError(e).message;
-    return new NextResponse(normalizeError(e).message, { status: 500 });
+    return new NextResponse(normalizeError(e).message, { status: (e as any)?.hasOwnProperty('status') ? (e as any)?.status: 500 });
   } finally {
     const msg = `[arxivOai][${DateMetrics.elapsed(begin)}] ${result}`;
     await IngestionLogger.log(date, `[arxivOai][${DateMetrics.elapsed(begin)}] ${result}`);

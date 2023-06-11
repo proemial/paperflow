@@ -44,15 +44,17 @@ export async function fetchUpdatedPapers(date: string, config: PipelineStageConf
     const text = await response.text();
 
     if(response.status !== 200)
-      throw new Error(text);
+      throw ArXivError.withStatus(text, response.status);
 
     const data = parseListRecords(text);
     result = [...result, ...data.records.map(record => record.metadata)];
-    token = data.resumptionToken.token;
+    token = data.resumptionToken?.token;
 
-    const sleep = config.sleep as number || 2500;
-    console.log(`sleeping for ${sleep}ms ...`);
-    await delay(sleep);
+    if(token) {
+      const sleep = config.sleep as number || 2500;
+      console.log(`sleeping for ${sleep}ms ...`);
+      await delay(sleep);
+    }
   }
 
   const filtered = result.filter(paper => dayjs(paper.version.date).format("YYYY-MM-DD") === date);
@@ -105,33 +107,37 @@ function parseListRecords(text: string) {
     let raw = parser
       .parse(text)['OAI-PMH']['ListRecords'] as RawArXivResponse;
 
+    const toResponse = (record: RawArXivRecord) => ({
+      header: {
+        identifier: record?.header?.identifier,
+        datestamp: record?.header?.datestamp,
+        setSpec: Array.isArray(record?.header?.setSpec || []) ? record?.header?.setSpec as string[] : [record?.header?.setSpec as string]
+      },
+      metadata: {
+        id: `${record?.metadata?.arXivRaw?.id}`,
+        submitter: record?.metadata?.arXivRaw?.submitter,
+        version: toArxivVersion(record?.metadata?.arXivRaw?.version),
+        title: record?.metadata?.arXivRaw?.title,
+        authors: (record?.metadata?.arXivRaw?.authors || '').split(','),
+        categories: (record?.metadata?.arXivRaw?.categories || '').split(' '),
+        comments: record?.metadata?.arXivRaw?.comments,
+        abstract: record?.metadata?.arXivRaw?.abstract,
+        doi: record?.metadata?.arXivRaw?.doi,
+        license: record?.metadata?.arXivRaw?.license,
+        journalRef: record?.metadata?.arXivRaw?.["journal-ref"],
+        mscClass: record?.metadata?.arXivRaw?.["msc-class"],
+      }
+    });
+
       const arXivResponse: ArXivOaiResponse = {
-        resumptionToken: {
-          token: raw?.resumptionToken["#text"],
-          cursor: Number(raw?.resumptionToken["@_cursor"] || '-1'),
-          completeListSize: Number(raw?.resumptionToken["@_completeListSize"] || '-1'),
-        },
-        records: (raw?.record || []).map(record => ({
-          header: {
-            identifier: record?.header?.identifier,
-            datestamp: record?.header?.datestamp,
-            setSpec: Array.isArray(record?.header?.setSpec || []) ? record?.header?.setSpec as string[] : [record?.header?.setSpec as string]
-          },
-          metadata: {
-            id: `${record?.metadata?.arXivRaw?.id}`,
-            submitter: record?.metadata?.arXivRaw?.submitter,
-            version: toArxivVersion(record?.metadata?.arXivRaw?.version),
-            title: record?.metadata?.arXivRaw?.title,
-            authors: (record?.metadata?.arXivRaw?.authors || '').split(','),
-            categories: (record?.metadata?.arXivRaw?.categories || '').split(' '),
-            comments: record?.metadata?.arXivRaw?.comments,
-            abstract: record?.metadata?.arXivRaw?.abstract,
-            doi: record?.metadata?.arXivRaw?.doi,
-            license: record?.metadata?.arXivRaw?.license,
-            journalRef: record?.metadata?.arXivRaw?.["journal-ref"],
-            mscClass: record?.metadata?.arXivRaw?.["msc-class"],
+        resumptionToken: raw?.resumptionToken
+          ? {
+            token: raw?.resumptionToken["#text"],
+            cursor: Number(raw?.resumptionToken["@_cursor"] || '-1'),
+            completeListSize: Number(raw?.resumptionToken["@_completeListSize"] || '-1'),
           }
-        }))
+          : undefined,
+        records: !Array.isArray(raw?.record) ? [toResponse(raw.record)] : raw?.record.map(toResponse)
       }
       console.log('parsed count', arXivResponse.records.length);
       console.log('arXivResponse.resumptionToken', arXivResponse.resumptionToken);
@@ -167,7 +173,7 @@ function toArxivVersion(rawVersion?: RawArXivVersion | RawArXivVersion[]): ArXiv
 
 type ArXivOaiResponse = {
   records: ArXivOaiRecord[],
-  resumptionToken: ArXivOaiResumptionToken,
+  resumptionToken?: ArXivOaiResumptionToken,
 }
 
 type ArXivOaiResumptionToken = {
@@ -209,7 +215,7 @@ type ArXivOaiVersion = {
 }
 
 type RawArXivResponse = {
-  record: RawArXivRecord[],
+  record: RawArXivRecord | RawArXivRecord[],
   resumptionToken: {
     '#text': string,
     '@_cursor': number,
