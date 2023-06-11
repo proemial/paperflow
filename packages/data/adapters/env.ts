@@ -42,10 +42,7 @@ export const Env = {
       },
     },
     qstash: {
-      url: process.env.QSTASH_URL,
-      token: process.env.QSTASH_TOKEN as string,
-      currentSigningKey: process.env.QSTASH_CURRENT_SIGNING_KEY,
-      nextSigningKey: process.env.QSTASH_NEXT_SIGNING_KEY,
+      token: process.env.QSTASH_TOKEN2 as string,
     },
     openai: {
       apiKey: process.env.OPENAI_API_KEY2,

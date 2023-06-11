@@ -12,18 +12,24 @@ const client = new Client({
 });
 
 const publishJSON = async <R extends PublishJsonRequest = PublishJsonRequest>(req: R): Promise<PublishResponse<R>> => {
-  if (Env.isDev) {
-    console.log('[DEV] qstash.publishJSON', req);
-    // @ts-ignore
-    return Promise.resolve({
-      messageId: 'fake-message-id'
-    });
-  };
+  // if (Env.isDev) {
+  //   console.log('[DEV] qstash.publishJSON', req);
+  //   // @ts-ignore
+  //   return Promise.resolve({
+  //     messageId: 'fake-message-id'
+  //   });
+  // };
 
-  const res = await client.publishJSON(req);
+  try {
+    const res = await client.publishJSON(req);
+    console.log('[qstash]', res);
 
-  console.log('[qstash]', res);
-  return res;
+    return res;
+  } catch(e) {
+    console.log('QStash error!');
+    throw e;
+  }
+
 }
 
 type PublishResponse<PublishRequest> = PublishRequest extends { cron: string }
