@@ -2,6 +2,7 @@ import { createClient } from 'redis';
 import { Env } from "../env";
 import { DateMetrics } from 'utils/date';
 import { ChatCompletionRequestMessageRoleEnum } from 'openai';
+import { SAddCommand } from '@upstash/redis/types/pkg/commands/sadd';
 
 const pipelineEnv = Env.connectors.redis.pipeline;
 const configEnv = Env.connectors.redis.config;
@@ -125,12 +126,27 @@ export const Redis = {
       const client = await connect(pipelineEnv);
       try {
         await client.json.ARRAPPEND(`${date}:index`, "$", {id, category});
+        await client.SADD('index', `${date}:index`)
 
       } catch (e) {
         console.error(e);
       } finally {
         await closeConnetion(client);
        console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushToIndex`);
+      }
+    },
+
+    getIngestionIndex: async () => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+
+      try {
+        return await client.SMEMBERS(`index`);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.getIndex`);
       }
     },
   },

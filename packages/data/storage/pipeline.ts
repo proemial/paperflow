@@ -95,4 +95,17 @@ export const PipelineDao = {
             console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushToIndex`);
         }
     },
+
+    getIngestionIndex: async (date: string) => {
+        const begin = DateMetrics.now();
+
+        try {
+          return await Redis.pipeline.getIngestionIndex() as string[];
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIndex`);
+        }
+    },
 };
