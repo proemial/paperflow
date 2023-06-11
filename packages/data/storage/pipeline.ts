@@ -96,7 +96,7 @@ export const PipelineDao = {
         }
     },
 
-    getIngestionIndex: async (date: string) => {
+    getIngestionIndex: async () => {
         const begin = DateMetrics.now();
 
         try {

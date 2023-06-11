@@ -84,6 +84,7 @@ export const PapersDao = {
 
     try {
       return await UpStash.papers.get(`${id}:${PapersDaoKey.Gpt}:${size}`) as WithTextAndUsage;
+
     } catch (error) {
       console.error(error);
       throw error;

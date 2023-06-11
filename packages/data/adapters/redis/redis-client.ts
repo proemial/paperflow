@@ -126,7 +126,7 @@ export const Redis = {
       const client = await connect(pipelineEnv);
       try {
         await client.json.ARRAPPEND(`${date}:index`, "$", {id, category});
-        await client.SADD('index', `${date}:index`)
+        await client.SADD('index', `${date}`)
 
       } catch (e) {
         console.error(e);
