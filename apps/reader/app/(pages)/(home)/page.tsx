@@ -1,10 +1,11 @@
-import { IngestionCache } from "data/storage/v1/ingestion-cache";
+import { PipelineDao } from "data/storage/pipeline";
 import { CardList } from "./card-list";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const latestIds = await IngestionCache.latestIds.get();
+  const index = await PipelineDao.getIngestionIndex();
+  const latestIds = (await PipelineDao.getIndex(index.at(-1))).map(entry => entry.id);
 
   return (
     <>

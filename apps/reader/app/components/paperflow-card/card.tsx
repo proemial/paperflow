@@ -1,34 +1,36 @@
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "app/components/shadcn-ui/Card";
-import { SummarisedPaper } from "data/storage/v1/ingestion-models";
+import { ArXivAtomPaper, arXivCategory } from "data/adapters/arxiv/arxiv.models";
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "app/components/shadcn-ui/Card";
+import { PapersDao } from "data/storage/papers";
 import dayjs from "dayjs";
 import { CardLink } from "./card-link";
 import { sanitize } from "./hashtags";
 
-export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useLink?: boolean }) {
-  const { id, published, title, summary, authors, category, link, compact, useLink } = props;
+export async function PaperflowCard(props: {id: string} & { compact?: boolean; useLink?: boolean }) {
+  const { id, compact, useLink } = props;
+
+  const paper = await PapersDao.getArXivAtomPaper(id);
+  const {published, title, authors, category, link} = paper.parsed
 
   if(compact)
-    return <CompactCard {...props} />
+    return (
+      <>
+        {/* @ts-expect-error Server Component */}
+        <CompactCard id={id} />
+      </>
+    )
 
   return (
     <Card className="max-sm:w-full">
       <CardHeader>
         <CardTitle>
-          <CardLink id={id} title={title} link={useLink && link} />
+          <CardLink id={id} title={title} link={useLink && link.source} />
         </CardTitle>
-        <CardDescription>
-          {sanitize(summary).sanitized}
-        </CardDescription>
+        {/* @ts-expect-error Server Component */}
+        <GptSummary id={id} />
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${category?.title} ${dayjs(published).format("YYYY-MM-DD")}`}
+          {`${arXivCategory(category).title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
           <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
             {authors?.map((author) => author.split(" ").at(-1))?.join(", ")}
@@ -38,21 +40,26 @@ export function PaperflowCard(props: SummarisedPaper & { compact?: boolean; useL
   );
 }
 
-function CompactCard({
-  id,
-  published,
-  title,
-  summary,
-  link,
-  useLink,
-}: SummarisedPaper & { useLink?: boolean }) {
+async function CompactCard({id}: {id: string}) {
+  const {text} = await PapersDao.getGptSummary(id, 'sm');
+
   return (
     <Card className="max-sm:w-full">
       <CardHeader className="p-3">
         <CardDescription>
-          <CardLink id={id} title={sanitize(summary).sanitized} className="hover:underline" />
+          <CardLink id={id} title={sanitize(text).sanitized} className="hover:underline" />
         </CardDescription>
       </CardHeader>
     </Card>
   );
+}
+
+async function GptSummary({id}: {id: string}) {
+  const {text} = await PapersDao.getGptSummary(id, 'sm');
+
+  return (
+    <CardDescription>
+      {sanitize(text).sanitized}
+    </CardDescription>
+  )
 }

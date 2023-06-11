@@ -1,11 +1,6 @@
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
-import { IngestionCache } from "data/storage/v1/ingestion-cache";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/app/components/shadcn-ui/Accordion";
+import { PapersDao } from "data/storage/papers";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/shadcn-ui/Accordion";
 import { RelatedResearch } from "./related";
 import Spinner from "@/app/components/spinner";
 import { Suspense } from "react";
@@ -15,16 +10,17 @@ export default async function ReaderPage({
 }: {
   params: { id: string };
 }) {
-  const data = await IngestionCache.papers.byId(params.id);
+  const paper = await PapersDao.getArXivAtomPaper(params.id);
 
   return (
     <div className="lg:flex">
       <div className="flex-1">
         <div className="m-2 lg:m-4">
-          {data && <PaperflowCard {...data} useLink />}
+          {/* @ts-expect-error Server Component */}
+          <PaperflowCard id={params.id} useLink />
         </div>
         <div className="border-t max-lg:hidden p-4 mt-4">
-          {data?.abstract}
+          {paper?.parsed.abstract}
         </div>
       </div>
       <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
@@ -41,7 +37,7 @@ export default async function ReaderPage({
           <Accordion type="single" collapsible defaultValue="related">
             <AccordionItem value="summary" className="px-4 py2 lg:hidden">
               <AccordionTrigger>Summary</AccordionTrigger>
-              <AccordionContent>{data?.abstract}</AccordionContent>
+              <AccordionContent>{paper?.parsed.abstract}</AccordionContent>
             </AccordionItem>
             <AccordionItem value="qa" className="px-4 py2">
               <AccordionTrigger>Ask a question</AccordionTrigger>
@@ -51,11 +47,9 @@ export default async function ReaderPage({
               <AccordionTrigger>Related research</AccordionTrigger>
               <AccordionContent>
                 <Suspense fallback={<Spinner />}>
-                  {data && (<>
-                    {/* @ts-expect-error Server Component */}
-                    <RelatedResearch id={data.id} category={data.category} />
-                  </>)}
-                  </Suspense>
+                  {/* @ts-expect-error Server Component */}
+                  <RelatedResearch id={params.id} category={paper?.parsed.category} />
+                </Suspense>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
