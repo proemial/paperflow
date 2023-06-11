@@ -68,12 +68,12 @@ async function run(params: { args: string[] }) {
     }
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'completed');
 
-    result = `id: ${id}, size: ${size}, summary: ${summary.text?.split(' ').length}, usage: ${summary.usage?.total_tokens}`;
+    result = `[DONE][${date}/${index}] id: ${id}, size: ${size}, summary: ${summary.text?.split(' ').length}, usage: ${summary.usage?.total_tokens}`;
 
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
-    result = '[ERROR]' + normalizeError(e).message;
+    result = `[ERROR][${date}/${index}]` + normalizeError(e).message;
     await PipelineDao.updateStatus(date, PipelineStage.gptSummary, index, 'error');
 
     return new NextResponse(normalizeError(e).message, { status: 500 });
