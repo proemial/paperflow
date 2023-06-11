@@ -8,21 +8,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./styles.css"
 
-export function IngestionDatePicker({ date }: { date?: string }) {
+export function IngestionDatePicker({ date, dates }: { date?: string, dates?: string[] }) {
   const router = useRouter();
   const [highlightDates, setHighlightDates] = React.useState<{ [key: string]: Date[] }[]>([]);
 
   React.useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/db/ingestion/get-counts/x`);
-      const json: IngestionCounts[] = await res.json();
-
-      setHighlightDates([
-        { "react-datepicker__day--highlighted-custom-1": json.filter(d => d.count > 0).map(d => dayjs(d.date, "YYYY-MM-DD").toDate()) },
-        { "react-datepicker__day--highlighted-custom-2": json.filter(d => d.count === 0).map(d => dayjs(d.date, "YYYY-MM-DD").toDate()) }
-      ]);
+      if(dates) {
+        setHighlightDates([
+          { "react-datepicker__day--highlighted-custom-1": dates.map(d => dayjs(d, "YYYY-MM-DD").toDate()) },
+          // { "react-datepicker__day--highlighted-custom-2": json.filter(d => d.count === 0).map(d => dayjs(d.date, "YYYY-MM-DD").toDate()) }
+        ]);
+      }
     })();
-  }, [setHighlightDates]);
+  }, [dates, setHighlightDates]);
 
   const ExampleCustomInput = React.forwardRef<HTMLButtonElement, { value?: any, onClick?: any }>(({ onClick }, ref) => (
     <button className="example-custom-input" onClick={onClick} ref={ref}>

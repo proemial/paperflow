@@ -58,6 +58,24 @@ export const PapersDao = {
     }
   },
 
+  getArXivAtomPapers: async (ids: string[]) => {
+    const begin = DateMetrics.now();
+
+    try {
+      const pipeline = UpStash.papers.pipeline();
+      ids.forEach(id => {
+        pipeline.get(`${id}:${PapersDaoKey.Atom}`);
+      })
+
+      return await pipeline.exec() as ArXivAtomPaper[];
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getArXivAtomPapers`);
+    }
+  },
+
   pushArXivAtomPapers: async (papers: ArXivAtomPaper[]) => {
     const begin = DateMetrics.now();
 
@@ -97,12 +115,30 @@ export const PapersDao = {
     const begin = DateMetrics.now();
 
     try {
-      await UpStash.papers.set(`${id}:${PapersDaoKey.Gpt}:${size}`, summary);
+      await UpStash.papers.set(`${id}:${PapersDaoKey.Gpt}:${size}`, {...summary, id});
     } catch (error) {
       console.error(error);
       throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.pushArXivAtomPapers`);
+    }
+  },
+
+  getGptSummaries: async (ids: string[]) => {
+    const begin = DateMetrics.now();
+
+    try {
+      const pipeline = UpStash.papers.pipeline();
+      ids.forEach(id => {
+        pipeline.get(`${id}:${PapersDaoKey.Gpt}:sm`);
+      })
+
+      return await pipeline.exec() as Array<{id: string} & WithTextAndUsage>;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getGptSummaries`);
     }
   },
 

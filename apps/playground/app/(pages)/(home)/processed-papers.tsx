@@ -1,8 +1,8 @@
 "use client";
-import { PromptOutputCard } from "@/components/PromptOutputCard";
+import { IngestionIndexEntries } from "@/app/api/v2/ingestion/[[...args]]/route";
 import { Chip, Sheet, Stack, styled } from "@mui/joy";
-import { arxivCategories } from "data/adapters/arxiv/arxiv.models";
-import { Categorised } from "./main";
+import { ArXivCategory, arXivCategory } from "data/adapters/arxiv/arxiv.models";
+import { PromptOutputCardList } from "./card-list";
 
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor:
@@ -14,28 +14,31 @@ const Item = styled(Sheet)(({ theme }) => ({
   color: theme.vars.palette.text.secondary,
 }));
 
-export function ProcessedPapers({ cats }: { cats: Categorised }) {
+export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
+  if(!index)
+    return <></>;
+
+  const categories = Object.keys(index).map(key => arXivCategory(key)).sort((a: ArXivCategory, b: ArXivCategory) => {
+    if (a.category === b.category) {
+       return a.title > b.title ? 1 : -1;
+    }
+    return a.category > b.category ? 1 : -1;
+  });
+
   return (<>
     <Stack spacing={2}>
-      {Object.keys(cats).filter((catKey) => cats[catKey].processed.length > 0).sort().map((catKey, i) => (
+      {categories.map((category, i) => (
         <Item key={i}>
           <h2 style={{ padding: 8, marginBottom: 8, marginTop: 0 }}>
             <Chip variant="soft">
-              {arxivCategories.find(c => c.key === catKey)?.category}
+              {category.category}
             </Chip>
             <span style={{ marginLeft: 6 }}>
-              {arxivCategories.find(c => c.key === catKey)?.title}
+              {category.title}
             </span>
           </h2>
           <div style={{ display: 'flex', gap: 8, overflow: 'scroll' }}>
-            {cats[catKey].processed.map((paper, i) => (
-              <div key={i}>
-                <PromptOutputCard
-                  arxivOutput={{ ...paper.parsed, contentSnippet: paper.parsed.abstract, link: paper.parsed.link.source }}
-                  modelOutputString={paper.summary}
-                />
-              </div>
-            ))}
+            <PromptOutputCardList ids={index[category.key]} />
           </div>
         </Item>
       ))}

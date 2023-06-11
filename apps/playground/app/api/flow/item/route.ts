@@ -24,7 +24,6 @@ export async function POST(request: Request) {
   const host = request.headers.get('origin');
 
   const promptData: Payload = await request.json();
-  console.log('item/route promptData', promptData);
 
   let tokensFound = false;
   const messages = promptData.messages.map(message => {

@@ -1,4 +1,4 @@
-export function arXivCategory(key?: string) {
+export function arXivCategory(key: string): ArXivCategory {
   return arxivCategories.find(entry => entry.key === key) || {key, title: "", category: ""};
 }
 
@@ -192,6 +192,12 @@ export const arxivCategories = [
 
 type WithName = { name: string };
 type WithTerm = { term: string };
+
+export type ArXivCategory = {
+  key: string,
+  title: string,
+  category: string,
+}
 
 export type RawArxivPaper = {
   id: string,
