@@ -1,17 +1,9 @@
 "use client";
 import { IngestionIndex } from "@/app/api/v2/ingestion/[[...args]]/route";
 import { CircularProgress } from "@mui/joy";
-import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import React from "react";
 import { IngestionDatePicker } from "./date-picker";
 import { ProcessedPapers } from "./processed-papers";
-
-export type Categorised = {
-  [key: string]: {
-    processed: ArXivAtomPaper[],
-    unprocessed: ArXivAtomPaper[],
-  };
-}
 
 export default function Main({ args }: { args?: string }) {
   const data = useIngestionIndex(args);

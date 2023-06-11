@@ -25,7 +25,13 @@ export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
     return a.category > b.category ? 1 : -1;
   });
 
+  const counts = Object.keys(index).map(key => index[key].length);
+  const count = (counts?.length ? counts : [0]).reduce((a, b) => a + b);
+
   return (<>
+    <div>
+      {count} papers in {Object.keys(index).length} categories scraped
+    </div>
     <Stack spacing={2}>
       {categories.map((category, i) => (
         <Item key={i}>
