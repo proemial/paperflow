@@ -33,7 +33,7 @@ export const Redis = {
       const client = await connect(pipelineEnv);
 
       try {
-        return await client.json.GET(`pipeline:${date}`) as Pipeline;
+        return await client.json.GET(`${date}:pipeline`) as Pipeline;
 
       } catch (e) {
         console.error(e);
@@ -48,7 +48,7 @@ export const Redis = {
       const client = await connect(pipelineEnv);
 
       try {
-        await client.json.SET(`pipeline:${date}`, '$', pipeline);
+        await client.json.SET(`${date}:pipeline`, '$', pipeline);
 
       } catch (e) {
         console.error(e);
@@ -64,7 +64,7 @@ export const Redis = {
       try {
         const batch = client.multi();
         actions.forEach(action => {
-          batch.json.ARRAPPEND(`pipeline:${date}`, `$.stages.${stage}`, action);
+          batch.json.ARRAPPEND(`${date}:pipeline`, `$.stages.${stage}`, action);
         })
         await batch.execAsPipeline();
 
@@ -82,7 +82,7 @@ export const Redis = {
 
       try {
         // JSON.SET 2023-06-08:pipeline "$.stages.scrape-arxiv[?(@.id=='2305.06356')].status" '"crazy"'
-        await client.json.SET(`pipeline:${date}`, `$.stages.${stage}[${index}].status`, status);
+        await client.json.SET(`${date}:pipeline`, `$.stages.${stage}[${index}].status`, status);
 
       } catch (e) {
         console.error(e);
@@ -96,7 +96,7 @@ export const Redis = {
       const begin = DateMetrics.now();
       const client = await connect(pipelineEnv);
       try {
-        await client.json.SET(`index:${date}`, "$", []);
+        await client.json.SET(`${date}:index`, "$", []);
 
       } catch (e) {
         console.error(e);
@@ -111,7 +111,7 @@ export const Redis = {
       const client = await connect(pipelineEnv);
 
       try {
-        return await client.json.GET(`index:${date}`);
+        return await client.json.GET(`${date}:index`);
       } catch (e) {
         console.error(e);
       } finally {
@@ -124,13 +124,13 @@ export const Redis = {
       const begin = DateMetrics.now();
       const client = await connect(pipelineEnv);
       try {
-        await client.json.ARRAPPEND(`index:${date}`, "$", {id, category});
+        await client.json.ARRAPPEND(`${date}:index`, "$", {id, category});
 
       } catch (e) {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushActions`);
+       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushToIndex`);
       }
     },
   },
