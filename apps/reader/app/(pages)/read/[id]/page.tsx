@@ -20,8 +20,10 @@ export default async function ReaderPage({
           <PaperflowCard id={params.id} useLink />
         </div>
         <div className="border-t max-lg:hidden p-4 mt-4">
-          {/* @ts-expect-error Server Component */}
-          <GptAbstract id={params.id} abstract={paper?.parsed.abstract} />
+          <Suspense fallback={<Spinner />}>
+            {/* @ts-expect-error Server Component */}
+            <GptAbstract id={params.id} abstract={paper?.parsed.abstract} />
+          </Suspense>
         </div>
       </div>
       <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
@@ -39,8 +41,10 @@ export default async function ReaderPage({
             <AccordionItem value="summary" className="px-4 py2 lg:hidden">
               <AccordionTrigger>Summary</AccordionTrigger>
               <AccordionContent>
-                {/* @ts-expect-error Server Component */}
-                <GptAbstract id={params.id} abstract={paper?.parsed.abstract} />
+                <Suspense fallback={<Spinner />}>
+                  {/* @ts-expect-error Server Component */}
+                  <GptAbstract id={params.id} abstract={paper?.parsed.abstract} />
+                </Suspense>
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="qa" className="px-4 py2">
@@ -50,10 +54,8 @@ export default async function ReaderPage({
             <AccordionItem value="related" className="px-4 py2">
               <AccordionTrigger>Related research</AccordionTrigger>
               <AccordionContent>
-                <Suspense fallback={<Spinner />}>
-                  {/* @ts-expect-error Server Component */}
-                  <RelatedResearch id={params.id} category={paper?.parsed.category} />
-                </Suspense>
+                {/* @ts-expect-error Server Component */}
+                <RelatedResearch id={params.id} category={paper?.parsed.category} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -1,7 +1,9 @@
-import { ArXivAtomPaper, arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "app/components/shadcn-ui/Card";
+import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import { PapersDao } from "data/storage/papers";
 import dayjs from "dayjs";
+import { Suspense } from 'react';
+import Spinner from "../spinner";
 import { CardLink } from "./card-link";
 import { sanitize } from "./hashtags";
 
@@ -9,7 +11,7 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
   const { id, compact, useLink } = props;
 
   const paper = await PapersDao.getArXivAtomPaper(id);
-  const {published, title, authors, category, link} = paper.parsed
+  const {published, title, authors, category, link} = paper?.parsed
 
   if(compact)
     return (
@@ -23,14 +25,16 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
     <Card className="max-sm:w-full">
       <CardHeader>
         <CardTitle>
-          <CardLink id={id} title={title} link={useLink && link.source} />
+          <CardLink id={id} title={title} link={useLink && link?.source} />
         </CardTitle>
-        {/* @ts-expect-error Server Component */}
-        <GptSummary id={id} />
+        <Suspense fallback={<Spinner />}>
+          {/* @ts-expect-error Server Component */}
+          <GptSummary id={id} />
+        </Suspense>
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${arXivCategory(category).title} ${dayjs(published).format("YYYY-MM-DD")}`}
+          {`${arXivCategory(category)?.title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
           <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
             {authors?.map((author) => author.split(" ").at(-1))?.join(", ")}

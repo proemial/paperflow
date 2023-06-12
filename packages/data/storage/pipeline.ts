@@ -105,7 +105,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIndex`);
+          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIngestionIndex`);
         }
     },
 };
