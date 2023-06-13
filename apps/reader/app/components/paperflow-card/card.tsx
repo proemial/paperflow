@@ -36,9 +36,19 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
         <CardDescription>
           {`${arXivCategory(category)?.title} ${dayjs(published).format("YYYY-MM-DD")}`}
         </CardDescription>
-          <div className="w-full text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
+        <div className="flex w-full">
+          <div className="flex-1 text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
             {authors?.map((author) => author.split(" ").at(-1))?.join(", ")}
           </div>
+          <div className="whitespace-nowrap text-sm text-blue-400">
+            {useLink &&
+              <>
+                [<a href={`https://arxiv.org/abs/${id}`} target="_blank" className="underline">arXiv</a>][
+                <a href={`https://arxiv.org/pdf/${id}`} target="_blank" className="underline">pdf</a>]
+              </>
+            }
+          </div>
+        </div>
       </CardFooter>
     </Card>
   );
