@@ -1,9 +1,10 @@
 import { PaperflowCard } from "@/app/components/paperflow-card/card";
-import { PapersDao } from "data/storage/papers";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/shadcn-ui/Accordion";
-import { RelatedResearch } from "./related";
+import { ShareButton } from "@/app/components/share-button";
 import Spinner from "@/app/components/spinner";
+import { PapersDao } from "data/storage/papers";
 import { Suspense } from "react";
+import { RelatedResearch } from "./related";
 
 export default async function ReaderPage({
   params,
@@ -28,7 +29,7 @@ export default async function ReaderPage({
       </div>
       <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
         <div className="flex justify-between max-md:border-y lg:border-b p-4">
-          <div>Stats</div>
+          <ShareButton className="p-2 h-[24px] hover:border border-2" />
           <div className="flex gap-3">
             <div>💬 12</div>
             <div>♺ 38</div>
