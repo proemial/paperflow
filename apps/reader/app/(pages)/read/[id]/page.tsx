@@ -29,7 +29,7 @@ export default async function ReaderPage({
       </div>
       <div className="max-md:mt-2 lg:border-l lg:h-[100dvh] lg:w-full lg:max-w-[420px]">
         <div className="flex justify-between max-md:border-y lg:border-b p-4">
-          <ShareButton className="p-2 h-[24px] hover:border border-2" />
+          <ShareButton className="p-2 h-[24px] hover:border border" />
           <div className="flex gap-3">
             <div>💬 12</div>
             <div>♺ 38</div>
