@@ -31,7 +31,7 @@ async function run(params: { args: string[] }) {
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
     const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
 
-    result = `scheduledArxivAtomWorkers: ${scheduledArxivAtomWorkers}, scheduledGptSummaryWorkers: ${scheduledGptSummaryWorkers.length}`;
+    result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}`;
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);

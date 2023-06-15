@@ -27,11 +27,12 @@ async function run(params: { args: string[] }) {
     const config = (await ConfigDao.getPipelineConfig()).stages.arxivOai;
     const papers = await fetchUpdatedPapers(date, config);
 
+    result = `allPapers: ${papers?.length}`;
     if(papers.length > 0) {
       const newPapers = await pushPaperUpdates(date, papers);
       const newSummaries = await pushGptUpdates(date, papers);
 
-      result = `allPapers: ${papers.length}, newPapers: ${newPapers}, newSummaries: ${newSummaries}`;
+      result += `, newPapers: ${newPapers}, newSummaries: ${newSummaries}`;
     }
 
     return NextResponse.json({result});
