@@ -100,7 +100,9 @@ export const PipelineDao = {
         const begin = DateMetrics.now();
 
         try {
-          return await Redis.pipeline.getIngestionIndex() as string[];
+          return (
+            await Redis.pipeline.getIngestionIndex() as string[]
+          ).sort();
         } catch (error) {
           console.error(error);
           throw error;
