@@ -3,10 +3,8 @@ import { PromptOutputCard } from "@/components/PromptOutputCard";
 import { CircularProgress } from "@mui/joy";
 import React from "react";
 
-export function PromptOutputCardList({ids}: {ids: string[]}) {
+export function PromptOutputCardList({ids, novel}: {ids: string[], novel: boolean}) {
     const papers = usePapers(ids);
-    console.log('papers', papers);
-
 
     return (
         <>
@@ -15,17 +13,19 @@ export function PromptOutputCardList({ids}: {ids: string[]}) {
                 <CircularProgress variant="solid" />
               </div>
             }
-            {ids.reverse().map((id, i) => (
-              <div key={i}>
-                {papers[id] &&
+            {ids.map((id, i) => (
+              <>
+                {papers[id] && (!novel || papers[id].age < 1) &&
+                  <div key={i}>
                     <PromptOutputCard
                         id={id}
                         arxivOutput={{ ...papers[id].parsed, contentSnippet: papers[id].parsed.abstract, link: papers[id].parsed.link.source }}
                         modelOutputString={papers[id].summary}
                         age={papers[id].age}
                   />
+                  </div>
                 }
-              </div>
+              </>
             ))}
         </>
     )

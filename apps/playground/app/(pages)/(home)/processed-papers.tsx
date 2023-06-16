@@ -19,6 +19,8 @@ const linkStyle = {background: 'none', border: 'none', textDecoration: 'underlin
 
 export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
   const [filter, setFilter] = useState<string>();
+  const [novel, setNovel] = useState(true);
+
   if(!index)
     return <></>;
 
@@ -41,6 +43,11 @@ export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
     <div>
       {count} papers in {Object.keys(index).length} categories scraped
       <div>
+        [<button
+            type="button"
+            onClick={() => setNovel(!novel)} style={{...linkStyle, fontWeight: novel ? 'bold' : 'normal'}}>
+              Novel only
+        </button>]
         {mainCategories.map((cat, i) => <span key={i}>
           [<button
             type="button"
@@ -62,7 +69,7 @@ export function ProcessedPapers({ index }: { index: IngestionIndexEntries }) {
             </span>
           </h2>
           <div style={{ display: 'flex', gap: 8, overflow: 'scroll' }}>
-            <PromptOutputCardList ids={index[category.key]} />
+            <PromptOutputCardList ids={index[category.key]} novel={novel} />
           </div>
         </Item>
       ))}
