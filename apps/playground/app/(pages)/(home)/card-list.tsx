@@ -5,6 +5,8 @@ import React from "react";
 
 export function PromptOutputCardList({ids}: {ids: string[]}) {
     const papers = usePapers(ids);
+    console.log('papers', papers);
+
 
     return (
         <>
@@ -13,13 +15,14 @@ export function PromptOutputCardList({ids}: {ids: string[]}) {
                 <CircularProgress variant="solid" />
               </div>
             }
-            {ids.map((id, i) => (
+            {ids.reverse().map((id, i) => (
               <div key={i}>
                 {papers[id] &&
                     <PromptOutputCard
                         id={id}
                         arxivOutput={{ ...papers[id].parsed, contentSnippet: papers[id].parsed.abstract, link: papers[id].parsed.link.source }}
                         modelOutputString={papers[id].summary}
+                        age={papers[id].age}
                   />
                 }
               </div>
@@ -29,7 +32,7 @@ export function PromptOutputCardList({ids}: {ids: string[]}) {
 }
 
 function usePapers(ids: string[]) {
-    const [ingestionIndex, setIngestionIndex] = React.useState<{[key: string]: ArXivAtomPaper}>({});
+    const [ingestionIndex, setIngestionIndex] = React.useState<{[key: string]: ArXivAtomPaper & {age: number}}>({});
 
     React.useEffect(() => {
       (async () => {

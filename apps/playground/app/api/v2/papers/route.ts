@@ -3,6 +3,7 @@ import { PapersDao } from '@/../../packages/data/storage/papers';
 import { NextResponse } from "next/server";
 import { DateMetrics } from 'utils/date';
 import { normalizeError } from 'utils/error';
+import dayjs from "dayjs";
 
 export async function POST(request: Request) {
   const begin = DateMetrics.now();
@@ -12,10 +13,13 @@ export async function POST(request: Request) {
     console.log('Extracting ids from request');
     const ids = await request.json();
 
-    const indexedPapers = {} as {[key: string]: ArXivAtomPaper};
+    const indexedPapers = {} as {[id: string]: ArXivAtomPaper & {age: number}};
     const papers = await PapersDao.getArXivAtomPapers(ids);
     papers.forEach(paper => {
-      indexedPapers[paper.parsed.id as string] = paper;
+      indexedPapers[paper.parsed.id as string] = {
+        ...paper,
+        age: Math.round((dayjs(paper.raw.updated).unix() - dayjs(paper.raw.published).unix()) / (60*60*24))
+      };
     })
 
     const summaries = await PapersDao.getGptSummaries(ids);

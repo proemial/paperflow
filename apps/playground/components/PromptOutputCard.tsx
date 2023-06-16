@@ -11,11 +11,20 @@ import Typography from "@mui/joy/Typography";
 import * as Accordion from "@radix-ui/react-accordion";
 import React from "react";
 
-export function PromptOutputCard({ id, arxivOutput, modelOutput, modelOutputString }: { id?: string, arxivOutput: ParsedArxivItem, modelOutput?: WithTextAndUsage, modelOutputString?: string }) {
+type Props = {
+  id?: string,
+  arxivOutput: ParsedArxivItem,
+  modelOutput?: WithTextAndUsage,
+  modelOutputString?: string,
+  age?: number,
+};
+
+export function PromptOutputCard({ id, arxivOutput, modelOutput, modelOutputString, age }: Props) {
   return (
     <Card variant="outlined" sx={{ maxWidth: 320 }}>
       <Typography level="h2" sx={{ fontSize: 'sm' }}>
         <Link href={id ? `https://reader.paperflow.ai/read/${id}` : arxivOutput.link} target="_blank" color="neutral">{arxivOutput.title}</Link>
+        <Box sx={{ fontSize: 'xs', color: 'grey'}}>{age ? `Published ${age} days ago` : ''}</Box>
       </Typography>
       <Typography level="h2" sx={{ fontSize: 'xs', color: 'grey', mt: 1 }}>
         <div
