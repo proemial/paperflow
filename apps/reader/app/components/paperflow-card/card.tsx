@@ -11,7 +11,7 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
   const { id, compact, useLink } = props;
 
   const paper = await PapersDao.getArXivAtomPaper(id);
-  const {published, title, authors, category, link} = paper?.parsed
+  const {title, authors, category, link} = paper?.parsed
 
   if(compact)
     return (
@@ -34,7 +34,7 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${arXivCategory(category)?.title} ${dayjs(published).format("YYYY-MM-DD")}`}
+          {`${arXivCategory(category)?.title} ${dayjs(paper.raw.published).format("YYYY-MM-DD")}`}
         </CardDescription>
         <div className="flex w-full">
           <div className="flex-1 text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
