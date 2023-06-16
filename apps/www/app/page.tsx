@@ -10,12 +10,12 @@ export default function Home() {
           className="relative"
           src="/logo.png"
           alt="Paperflow Logo"
-          width={582}
-          height={252}
+          width={502}
+          height={521}
         />
       </div>
 
-      
+
       <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
       </div>
     </main>
