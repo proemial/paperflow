@@ -55,7 +55,7 @@ export async function parseArXivAtom(data: string) {
           parsed: {
             id: extractId(entry.id),
             updated: new Date(entry.updated as string),
-            published: new Date(entry.updated as string),
+            published: new Date(entry.published as string),
             category: entry.primary_category.term,
             categories: Array.isArray(entry.category) ? entry.category?.map((category: any) => category.term) : [entry.category.term],
             authors: Array.isArray(entry.author) ? entry.author.map((author: any) => author.name) : [entry.author.name],
