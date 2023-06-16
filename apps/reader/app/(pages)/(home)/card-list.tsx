@@ -23,11 +23,6 @@ export function CardList({ latestIds }: { latestIds?: string[] }) {
             <PaperflowCard id={id} />
           </Suspense>))}
       </div>
-      {randomIds && (
-        <div className="flex items-end justify-end">
-          <Link href="" className="italic px-4">Load more</Link>
-        </div>
-      )}
     </div>
   );
 }
