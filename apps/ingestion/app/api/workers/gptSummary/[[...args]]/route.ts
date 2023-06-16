@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 import { DateMetrics } from "utils/date";
 import { normalizeError } from "utils/error";
 import { dateAndIndexFromParams } from "../../../utils";
-import { Md5 } from "ts-md5";
 import { gptPrompt } from "data/adapters/openai/openai";
 
 export const revalidate = 1;
@@ -29,8 +28,7 @@ async function run(params: { args: string[] }) {
 
   try {
     const pipeline = await PipelineDao.getPipeline(date);
-    const {payload, status} = pipeline.stages.gptSummary[index];
-    const {id} = payload;
+    const {id, status} = pipeline.stages.gptSummary[index];
 
     if(status === 'completed') {
       result = 'allready completed'
