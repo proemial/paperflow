@@ -33,7 +33,7 @@ export default function PaperChat() {
       </div>
       <form onSubmit={handleSubmit}>
         <input
-          className="w-full max-w-md bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2"
+          className="w-full max-w-md bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2 text-base"
           value={input}
           placeholder="Ask a question..."
           onChange={handleInputChange}
