@@ -1,6 +1,7 @@
 "use client";
 
 import { useChat } from "ai/react";
+import Image from "next/image";
 import React from "react";
 
 export default function PaperChat() {
@@ -48,7 +49,11 @@ function Persona({ role }: { role: "system" | "user" | "assistant" }) {
       {role === "user" ? (
         "👤 "
       ) : (
-        <img src="/favicon-16x16.png" className="inline mr-1" />
+        <Image
+          src="/favicon-16x16.png"
+          className="inline mr-1"
+          alt="Assistant avatar"
+        />
       )}
     </span>
   );
