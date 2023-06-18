@@ -19,6 +19,10 @@ export default function PaperChat() {
         ref={ref}
         className="whitespace-pre-wrap overflow-scroll h-40 rounded border p-2 flex flex-col gap-2"
       >
+        <div>
+          <Persona role={"assistant"} />
+          How may I help you?
+        </div>
         {messages?.map((message, i) => (
           <div key={i}>
             <Persona role={message.role} />
@@ -30,7 +34,7 @@ export default function PaperChat() {
         <input
           className="w-full max-w-md bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2"
           value={input}
-          placeholder="Say something..."
+          placeholder="Ask a question..."
           onChange={handleInputChange}
         />
       </form>
