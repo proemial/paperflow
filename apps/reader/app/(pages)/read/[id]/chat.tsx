@@ -53,6 +53,8 @@ function Persona({ role }: { role: "system" | "user" | "assistant" }) {
           src="/favicon-16x16.png"
           className="inline mr-1"
           alt="Assistant avatar"
+          height={16}
+          width={16}
         />
       )}
     </span>
