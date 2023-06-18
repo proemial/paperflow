@@ -28,7 +28,8 @@ async function run(params: { args: string[] }) {
 
   try {
     const pipeline = await PipelineDao.getPipeline(date);
-    const {id, status} = pipeline.stages.gptSummary[index];
+    const {payload, status} = pipeline.stages.gptSummary[index];
+    const {id} = payload;
 
     if(status === 'completed') {
       result = 'allready completed'
