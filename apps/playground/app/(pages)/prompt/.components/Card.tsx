@@ -1,16 +1,16 @@
-"use client";
-import { ParsedArxivItem } from "@/app/api/flow/prompt/route";
-import { WithTextAndUsage } from "@/app/api/openai/gpt3/route";
-import { PromptOutputCard } from "@/components/PromptOutputCard";
-import { gptInputState } from "@/state/promptInputState";
-import { logError, logMetric, now } from "utils/metrics";
-import { ChatCompletionRequestMessageRoleEnum } from "openai";
-import * as React from "react";
-import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { Md5 } from "ts-md5";
+'use client';
+import { ParsedArxivItem } from '@/app/api/flow/prompt/route';
+import { WithTextAndUsage } from '@/app/api/openai/gpt3/route';
+import { PromptOutputCard } from '@/components/PromptOutputCard';
+import { gptInputState } from '@/state/promptInputState';
+import { logError, logMetric, now } from 'utils/metrics';
+import { ChatCompletionRequestMessageRoleEnum } from 'openai';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import { Md5 } from 'ts-md5';
 
-export function Card({ hash, item }: { hash: string, item: ParsedArxivItem }) {
+export function Card({ hash, item }: { hash: string; item: ParsedArxivItem }) {
   const { title, authors, contentSnippet, link } = item;
   const promptInput = useRecoilValue(gptInputState(hash));
   const [result, setResult] = React.useState<WithTextAndUsage>();
@@ -21,7 +21,13 @@ export function Card({ hash, item }: { hash: string, item: ParsedArxivItem }) {
     setResult(undefined);
 
     (async () => {
-      const promptData: Payload = { ...promptInput, category: promptInput.category.key, hash: hash, contentSnippet, title };
+      const promptData: Payload = {
+        ...promptInput,
+        category: promptInput.category.key,
+        hash: hash,
+        contentSnippet,
+        title,
+      };
       console.log('item/route promptData', promptData);
 
       const pHash = Md5.hashStr(JSON.stringify(promptData));
@@ -41,23 +47,21 @@ export function Card({ hash, item }: { hash: string, item: ParsedArxivItem }) {
     })();
   }, [promptInput, item]);
 
-
-  return (
-    <PromptOutputCard modelOutput={result} arxivOutput={item} />
-  );
+  return <PromptOutputCard modelOutput={result} arxivOutput={item} />;
 }
 
 type Payload = {
-  hash: string,
-  title: string,
-  contentSnippet: string,
-  category: string,
-  count: number,
+  hash: string;
+  title: string;
+  contentSnippet: string;
+  category: string;
+  count: number;
+  gpt4: boolean;
   messages: Array<{
-    role: ChatCompletionRequestMessageRoleEnum,
-    content: string,
-  }>,
-}
+    role: ChatCompletionRequestMessageRoleEnum;
+    content: string;
+  }>;
+};
 
 async function getFromRedis(hash: string) {
   const url = `/api/redis/model-outputs/${hash}`;
@@ -84,7 +88,7 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
 
   try {
     let tokensFound = false;
-    const messages = promptData.messages.map(message => {
+    const messages = promptData.messages.map((message) => {
       if (message.content.includes('$t') || message.content.includes('$a')) {
         tokensFound = true;
         return {
@@ -100,10 +104,13 @@ async function getFromOpenAI(hash: string, promptData: Payload) {
       const lastMessage = messages[messages.length - 1];
       messages[messages.length - 1] = {
         ...lastMessage,
-        content: lastMessage.content + ` ${promptData.title} ${promptData.contentSnippet}`,
+        content:
+          lastMessage.content +
+          ` ${promptData.title} ${promptData.contentSnippet}`,
       };
     }
     const promptDataWithArxivData = {
+      gpt4: promptData.gpt4,
       messages,
     };
     console.log('item/route promptDataWithArxivData', promptDataWithArxivData);

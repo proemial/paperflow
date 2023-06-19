@@ -10,6 +10,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 type Prompt = {
+  gpt4: boolean,
   messages: Array<{
     role: ChatCompletionRequestMessageRoleEnum,
     content: string,
@@ -31,13 +32,13 @@ export async function POST(request: Request) {
   return NextResponse.json(completion);
 }
 
-async function gptPrompt({ messages }: Prompt) {
+async function gptPrompt({ messages, gpt4 }: Prompt) {
   const key = `OpenAI[${messages.length}]`;
   const begin = now();
 
   try {
     const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
+      model: gpt4 ? 'gpt-4' : 'gpt-3.5-turbo',
       messages,
     });
 

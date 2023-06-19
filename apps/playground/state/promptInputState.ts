@@ -8,6 +8,7 @@ export type GptInput = {
     category: string,
   },
   count: number,
+  gpt4: boolean,
   messages: Array<{
     role: ChatCompletionRequestMessageRoleEnum,
     content: string,
