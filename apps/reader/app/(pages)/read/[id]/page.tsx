@@ -60,7 +60,10 @@ export default async function ReaderPage({
             <AccordionItem value="qa" className="px-4 py2">
               <AccordionTrigger>Ask a question</AccordionTrigger>
               <AccordionContent>
-                <PaperChat />
+                <PaperChat
+                  title={paper?.parsed.title}
+                  abstract={paper?.parsed.abstract}
+                />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="related" className="px-4 py2">

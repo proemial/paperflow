@@ -4,8 +4,10 @@ import { useChat } from "ai/react";
 import Image from "next/image";
 import React from "react";
 
-export default function PaperChat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+export default function PaperChat(body: { title: string; abstract: string }) {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    body,
+  });
 
   const ref = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
