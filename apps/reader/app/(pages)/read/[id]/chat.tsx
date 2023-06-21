@@ -24,7 +24,7 @@ export default function PaperChat(body: { title: string; abstract: string }) {
       >
         <div>
           <Persona role={"assistant"} />
-          How may I help you?
+          Ask me a question about this paper
         </div>
         {messages?.map((message, i) => (
           <div key={i}>
@@ -37,7 +37,7 @@ export default function PaperChat(body: { title: string; abstract: string }) {
         <input
           className="w-full max-w-md bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2 text-base"
           value={input}
-          placeholder="Ask a question..."
+          placeholder="Ask question..."
           onChange={handleInputChange}
         />
       </form>
