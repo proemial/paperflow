@@ -1,5 +1,6 @@
 import { DateMetrics } from "utils/date";
 import { PipelineConfig, Redis, PromptConfig } from "../adapters/redis/redis-client";
+import { Log } from "utils/log";
 
 export const ConfigDao = {
     getPipelineConfig: async () => {
@@ -11,7 +12,7 @@ export const ConfigDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] ConfigDao.getPipelineConfig`);
+          Log.metrics(begin, `ConfigDao.getPipelineConfig`);
         }
     },
 
@@ -24,7 +25,7 @@ export const ConfigDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] ConfigDao.getPromptConfig`);
+          Log.metrics(begin, `ConfigDao.getPromptConfig`);
         }
     },
 };

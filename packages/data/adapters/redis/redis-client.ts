@@ -3,6 +3,7 @@ import { Env } from "../env";
 import { DateMetrics } from 'utils/date';
 import { ChatCompletionRequestMessageRoleEnum } from 'openai';
 import { SAddCommand } from '@upstash/redis/types/pkg/commands/sadd';
+import { Log } from 'utils/log';
 
 const pipelineEnv = Env.connectors.redis.pipeline;
 const configEnv = Env.connectors.redis.config;
@@ -40,7 +41,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+        Log.metrics(begin, `pipeline.get`);
       }
     },
 
@@ -55,7 +56,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+        Log.metrics(begin, `pipeline.get`);
       }
     },
 
@@ -73,7 +74,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushActions`);
+        Log.metrics(begin, `pipeline.pushActions`);
       }
     },
 
@@ -89,7 +90,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.get`);
+        Log.metrics(begin, `pipeline.get`);
       }
     },
 
@@ -103,7 +104,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.createIndex`);
+        Log.metrics(begin, `pipeline.createIndex`);
       }
     },
 
@@ -117,7 +118,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.getIndex`);
+        Log.metrics(begin, `pipeline.getIndex`);
       }
     },
 
@@ -132,7 +133,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.pushToIndex`);
+        Log.metrics(begin, `pipeline.pushToIndex`);
       }
     },
 
@@ -146,7 +147,7 @@ export const Redis = {
         console.error(e);
       } finally {
         await closeConnetion(client);
-       console.log(`[${DateMetrics.elapsed(begin)}] pipeline.getIndex`);
+        Log.metrics(begin, `pipeline.getIndex`);
       }
     },
   },
@@ -170,7 +171,7 @@ async function connect(env: {uri: string, password: string, port: number}) {
     console.error(e);
     throw e;
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] redis.connect`);
+    Log.metrics(begin, `redis.connect`);
   }
 }
 
@@ -183,7 +184,7 @@ async function closeConnetion(client: any) {
     console.error(e);
     throw e;
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] redis.close`);
+    Log.metrics(begin, `redis.close`);
   }
 }
 

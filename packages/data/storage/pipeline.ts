@@ -1,5 +1,6 @@
 import { DateMetrics } from "utils/date";
 import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker, WorkerStatus, UpdateIndex } from "../adapters/redis/redis-client";
+import { Log } from "utils/log";
 
 export const PipelineDao = {
     getPipeline: async (date: string) => {
@@ -27,7 +28,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getPipeline`);
+          Log.metrics(begin, `PipelineDao.getPipeline`);
         }
     },
 
@@ -40,7 +41,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-            console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushArxivIds`);
+          Log.metrics(begin, `PipelineDao.pushArxivIds`);
         }
     },
 
@@ -53,7 +54,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-            console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushArxivIds`);
+          Log.metrics(begin, `PipelineDao.pushArxivIds`);
         }
     },
 
@@ -66,7 +67,7 @@ export const PipelineDao = {
         console.error(error);
         throw error;
       } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.updateStatus`);
+        Log.metrics(begin, `PipelineDao.updateStatus`);
       }
     },
 
@@ -79,7 +80,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIndex`);
+          Log.metrics(begin, `PipelineDao.getIndex`);
         }
     },
 
@@ -92,7 +93,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-            console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.pushToIndex`);
+          Log.metrics(begin, `PipelineDao.pushToIndex`);
         }
     },
 
@@ -107,7 +108,7 @@ export const PipelineDao = {
           console.error(error);
           throw error;
         } finally {
-          console.log(`[${DateMetrics.elapsed(begin)}] PipelineDao.getIngestionIndex`);
+          Log.metrics(begin, `PipelineDao.getIngestionIndex`);
         }
     },
 };

@@ -3,6 +3,7 @@ import { UpStash } from "../adapters/redis/upstash-client";
 import {ArXivOaiPaper} from "../adapters/arxiv/arxiv-oai"
 import { ArXivAtomPaper } from "../adapters/arxiv/arxiv.models"
 import { WithTextAndUsage } from "../adapters/openai/openai";
+import {Log} from "utils/log";
 
 enum PapersDaoKey {
   Oai = 'arxiv:oai',
@@ -20,7 +21,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getArXivOaiPaper`);
+      Log.metrics(begin, `PapersDao.getArXivOaiPaper`);
     }
   },
 
@@ -41,7 +42,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.pushArXivOaiPapers`);
+      Log.metrics(begin, `PapersDao.pushArXivOaiPapers`);
     }
   },
 
@@ -54,7 +55,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getArXivAtomPaper`);
+      Log.metrics(begin, `PapersDao.getArXivAtomPaper`);
     }
   },
 
@@ -72,7 +73,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getArXivAtomPapers`);
+      Log.metrics(begin, `PapersDao.getArXivAtomPapers`);
     }
   },
 
@@ -93,7 +94,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.pushArXivAtomPapers`);
+      Log.metrics(begin, `PapersDao.pushArXivAtomPapers`);
     }
   },
 
@@ -107,7 +108,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getGptSummary`);
+      Log.metrics(begin, `PapersDao.getGptSummary`);
     }
   },
 
@@ -120,7 +121,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.pushArXivAtomPapers`);
+      Log.metrics(begin, `PapersDao.pushArXivAtomPapers`);
     }
   },
 
@@ -138,7 +139,7 @@ export const PapersDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] PapersDao.getGptSummaries`);
+      Log.metrics(begin, `PapersDao.getGptSummaries`);
     }
   },
 
