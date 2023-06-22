@@ -12,7 +12,6 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages, title, abstract } = await req.json();
 
-  console.log('messages', messages);
   const moddedMessages = [
     {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}`},
     ...messages,
@@ -23,10 +22,8 @@ export async function POST(req: Request) {
     if(!lastMessage.content.startsWith('!!'))
       lastMessage.content = `In a single sentence, ${lastMessage.content}`;
     else
-      lastMessage.content = lastMessage.content.substring(2);
+      lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
   }
-  console.log('moddedMessages', moddedMessages);
-
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
