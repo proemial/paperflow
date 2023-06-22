@@ -12,14 +12,27 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages, title, abstract } = await req.json();
 
+  console.log('messages', messages);
+  const moddedMessages = [
+    {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}`},
+    ...messages,
+  ];
+
+  const lastMessage = moddedMessages.at(-1);
+  if(lastMessage.role === 'user') {
+    if(!lastMessage.content.startsWith('!!'))
+      lastMessage.content = `In a single sentence, ${lastMessage.content}`;
+    else
+      lastMessage.content = lastMessage.content.substring(2);
+  }
+  console.log('moddedMessages', moddedMessages);
+
+
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     stream: true,
-    messages: [
-      {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}`},
-      ...messages
-    ],
+    messages: moddedMessages,
   });
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);
