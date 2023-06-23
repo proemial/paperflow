@@ -3,6 +3,7 @@
 import { useChat } from "ai/react";
 import Image from "next/image";
 import React from "react";
+import logo from "../../../components/logo.png";
 
 export default function PaperChat(body: { title: string; abstract: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -52,7 +53,7 @@ function Persona({ role }: { role: "system" | "user" | "assistant" }) {
         "👤 "
       ) : (
         <Image
-          src="/favicon-16x16.png"
+          src={logo}
           className="inline mr-1"
           alt="Assistant avatar"
           height={16}
