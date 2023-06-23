@@ -17,10 +17,10 @@ export default function PaperChat(body: { title: string; abstract: string }) {
   }, [messages]);
 
   return (
-    <div className="mx-auto w-full h-full max-w-md flex flex-col stretch">
+    <div className="w-full h-full flex flex-col">
       <div
         ref={ref}
-        className="whitespace-pre-wrap overflow-scroll h-40 rounded border p-2 flex flex-col gap-2"
+        className="whitespace-pre-wrap overflow-scroll h-40 rounded border p-2 flex flex-col gap-2 w-full"
       >
         <div>
           <Persona role={"assistant"} />
@@ -35,7 +35,7 @@ export default function PaperChat(body: { title: string; abstract: string }) {
       </div>
       <form onSubmit={handleSubmit}>
         <input
-          className="w-full max-w-md bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2 text-base"
+          className="w-full bottom-0 border border-gray-300 rounded shadow-md p-2 mt-2 text-base"
           value={input}
           placeholder="Ask question..."
           onChange={handleInputChange}
