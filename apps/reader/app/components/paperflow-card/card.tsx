@@ -1,25 +1,33 @@
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "app/components/shadcn-ui/Card";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "app/components/shadcn-ui/Card";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import { PapersDao } from "data/storage/papers";
 import dayjs from "dayjs";
-import { Suspense } from 'react';
+import { Suspense } from "react";
 import Spinner from "../spinner";
 import { CardLink } from "./card-link";
 import { sanitize } from "./hashtags";
 
-export async function PaperflowCard(props: {id: string} & { compact?: boolean; useLink?: boolean }) {
+export async function PaperflowCard(
+  props: { id: string } & { compact?: boolean; useLink?: boolean }
+) {
   const { id, compact, useLink } = props;
 
   const paper = await PapersDao.getArXivAtomPaper(id);
-  const {title, authors, category, link} = paper?.parsed
+  const { title, authors, category, link } = paper?.parsed;
 
-  if(compact)
+  if (compact)
     return (
       <>
         {/* @ts-expect-error Server Component */}
         <CompactCard id={id} />
       </>
-    )
+    );
 
   return (
     <Card className="max-sm:w-full">
@@ -34,19 +42,39 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
       </CardHeader>
       <CardFooter className="flex flex-col justify-start items-start">
         <CardDescription>
-          {`${arXivCategory(category)?.title} ${dayjs(paper.raw.published).format("YYYY-MM-DD")}`}
+          {`${arXivCategory(category)?.title} ${dayjs(
+            paper.raw.published
+          ).format("YYYY-MM-DD")}`}
         </CardDescription>
         <div className="flex w-full">
-          <div className="flex-1 text-ellipsis whitespace-nowrap overflow-hidden" style={{maxWidth: '60dvw'}}>
+          <div
+            className="flex-1 text-ellipsis whitespace-nowrap overflow-hidden"
+            style={{ maxWidth: "60dvw" }}
+          >
             {authors?.map((author) => author.split(" ").at(-1))?.join(", ")}
           </div>
-          <div className="whitespace-nowrap text-sm text-blue-400">
-            {useLink &&
+          <div className="whitespace-nowrap text-sm text-blue-400 flex items-center ml-1">
+            {useLink && (
               <>
-                [<a href={`https://arxiv.org/abs/${id}`} target="_blank" className="underline">arXiv</a>][
-                <a href={`https://arxiv.org/pdf/${id}`} target="_blank" className="underline">pdf</a>]
+                [
+                <a
+                  href={`https://arxiv.org/abs/${id}`}
+                  target="_blank"
+                  className="underline"
+                >
+                  arXiv
+                </a>
+                ][
+                <a
+                  href={`https://arxiv.org/pdf/${id}`}
+                  target="_blank"
+                  className="underline"
+                >
+                  pdf
+                </a>
+                ]
               </>
-            }
+            )}
           </div>
         </div>
       </CardFooter>
@@ -54,26 +82,26 @@ export async function PaperflowCard(props: {id: string} & { compact?: boolean; u
   );
 }
 
-async function CompactCard({id}: {id: string}) {
-  const {text} = await PapersDao.getGptSummary(id, 'sm');
+async function CompactCard({ id }: { id: string }) {
+  const { text } = await PapersDao.getGptSummary(id, "sm");
 
   return (
     <Card className="max-sm:w-full">
       <CardHeader className="p-3">
         <CardDescription>
-          <CardLink id={id} title={sanitize(text).sanitized} className="hover:underline" />
+          <CardLink
+            id={id}
+            title={sanitize(text).sanitized}
+            className="hover:underline"
+          />
         </CardDescription>
       </CardHeader>
     </Card>
   );
 }
 
-async function GptSummary({id}: {id: string}) {
-  const {text} = await PapersDao.getGptSummary(id, 'sm');
+async function GptSummary({ id }: { id: string }) {
+  const { text } = await PapersDao.getGptSummary(id, "sm");
 
-  return (
-    <CardDescription>
-      {sanitize(text).sanitized}
-    </CardDescription>
-  )
+  return <CardDescription>{sanitize(text).sanitized}</CardDescription>;
 }
