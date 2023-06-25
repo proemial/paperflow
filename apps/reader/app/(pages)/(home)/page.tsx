@@ -42,5 +42,12 @@ export default async function HomePage() {
     .sort()
     .reverse();
 
-  return <CardList latestIds={latestIds.slice(0, latestIds.length / 4)} />;
+  return (
+    <CardList
+      latestIds={latestIds.slice(
+        0,
+        latestIds.length > 20 ? latestIds.length / 4 : latestIds.length - 1
+      )}
+    />
+  );
 }
