@@ -13,12 +13,25 @@ export default async function HomePage() {
 
     if (!index) return [];
 
-    if (!category)
-      return index?.filter((entry) => entry.category.startsWith("cs."));
+    if (!category || category.value === "*") return index;
 
-    if (category.value === "*") return index;
+    if (category.value !== "physics")
+      return index?.filter((entry) =>
+        entry.category.startsWith(category.value)
+      );
 
-    return index?.filter((entry) => entry.category.startsWith(category.value));
+    return index?.filter((entry) => {
+      return (
+        entry.category.startsWith(category.value) ||
+        entry.category.startsWith("astro") ||
+        entry.category.startsWith("cond-mat") ||
+        entry.category.startsWith("hep") ||
+        entry.category.startsWith("gr-qc") ||
+        entry.category.startsWith("nlin") ||
+        entry.category.startsWith("nucl") ||
+        entry.category.startsWith("quant")
+      );
+    });
   };
 
   const ingestionIndex = await PipelineDao.getIngestionIndex();
