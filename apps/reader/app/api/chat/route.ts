@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai-edge';
-import { Message, OpenAIStream, StreamingTextResponse } from 'ai';
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { Env } from 'data/adapters/env';
 import { cookies } from 'next/headers';
 
