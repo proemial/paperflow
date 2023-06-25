@@ -1,6 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai-edge';
 import { Message, OpenAIStream, StreamingTextResponse } from 'ai';
 import { Env } from 'data/adapters/env';
+import { cookies } from 'next/headers';
 
 const config = new Configuration({
   apiKey: Env.connectors.openai.apiKey,
@@ -13,21 +14,23 @@ export async function POST(req: Request) {
   const { messages, title, abstract } = await req.json();
 
   const moddedMessages = [
-    {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}`},
+    {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}.`},
     ...messages,
   ];
+
+  const {model, prompt} = chatConfig();
 
   const lastMessage = moddedMessages.at(-1);
   if(lastMessage.role === 'user') {
     if(!lastMessage.content.startsWith('!!'))
-      lastMessage.content = `In a single sentence, ${lastMessage.content}`;
+      lastMessage.content = `${prompt} ${lastMessage.content}`;
     else
       lastMessage.content = lastMessage.content.substring(2); // Remove the `!!`
   }
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
-    model: 'gpt-3.5-turbo',
+    model,
     stream: true,
     messages: moddedMessages,
   });
@@ -35,4 +38,17 @@ export async function POST(req: Request) {
   const stream = OpenAIStream(response);
   // Respond with the stream
   return new StreamingTextResponse(stream);
+}
+
+function chatConfig() {
+  const cookieStore = cookies();
+  const user = cookieStore.get('user').value;
+  return {
+    model: user === 'mgb4'
+      ? 'gpt-4'
+      : 'gpt-3.5-turbo',
+    prompt:  user === 'mgb4'
+      ? 'In a single sentence, enclosing relevant concepts with double parenthesis,'
+      : 'In a single sentence, ',
+  }
 }

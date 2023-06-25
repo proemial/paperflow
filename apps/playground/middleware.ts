@@ -12,12 +12,11 @@ export function middleware(req: NextRequest) {
 
   if (basicAuth) {
     const authValue = basicAuth.split(" ")[1];
-    const [user, pwd] = atob(authValue).split(":");
+    const [user] = atob(authValue).split(":");
 
-    const validUser = 'mgb';
-    const validPassWord = '2023';
+    const validUsers = ['mgb', 'mgb4'];
 
-    if (user === validUser && pwd === validPassWord) {
+    if (validUsers.includes(user)) {
       return NextResponse.next();
     }
   }
