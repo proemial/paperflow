@@ -93,7 +93,7 @@ export function MenuItems() {
 type Props = {
   name: string;
   onClick: () => void;
-  children: React.ReactNode;
+  children: any;
 };
 
 function Category({ name, onClick, children }: Props) {
@@ -105,7 +105,6 @@ function Category({ name, onClick, children }: Props) {
             variant="outline"
             onClick={onClick}
             style={{ width: 40, padding: 0 }}
-            alt="Tada"
           >
             {children}
           </Button>
