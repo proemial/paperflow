@@ -2,36 +2,42 @@ import { PipelineDao } from "data/storage/pipeline";
 import { CardList } from "./card-list";
 import { cookies } from "next/headers";
 import { UpdateIndex } from "data/adapters/redis/redis-client";
+import { UserSettings } from "../profile/page";
 
 export const revalidate = 60;
 
+function getCategoriesFromCookie(): string[] {
+  const cookieStore = cookies();
+  const settingsString = cookieStore.get("settings");
+
+  if (!settingsString?.value) return [];
+
+  const settings = JSON.parse(settingsString.value) as UserSettings;
+  return Object.keys(settings).filter((key) => !!settings[key]);
+}
+
 export default async function HomePage() {
+  const categories = getCategoriesFromCookie();
+
   const filter = (index?: UpdateIndex) => {
-    const cookieStore = cookies();
-    const category = cookieStore.get("category");
-    console.log("category", category);
-
-    if (!index) return [];
-
-    if (!category || category.value === "*") return index;
-
-    if (category.value !== "physics")
-      return index?.filter((entry) =>
-        entry.category.startsWith(category.value)
-      );
-
-    return index?.filter((entry) => {
-      return (
-        entry.category.startsWith(category.value) ||
-        entry.category.startsWith("astro") ||
-        entry.category.startsWith("cond-mat") ||
-        entry.category.startsWith("hep") ||
-        entry.category.startsWith("gr-qc") ||
-        entry.category.startsWith("nlin") ||
-        entry.category.startsWith("nucl") ||
-        entry.category.startsWith("quant")
-      );
-    });
+    return categories.length === 0
+      ? index?.filter((entry) => entry.category.startsWith("cs"))
+      : index?.filter((entry) => {
+          return (
+            categories.filter(
+              (category) =>
+                entry.category.startsWith(category) ||
+                (category === "physics" &&
+                  (entry.category.startsWith("astro") ||
+                    entry.category.startsWith("cond-mat") ||
+                    entry.category.startsWith("hep") ||
+                    entry.category.startsWith("gr-qc") ||
+                    entry.category.startsWith("nlin") ||
+                    entry.category.startsWith("nucl") ||
+                    entry.category.startsWith("quant")))
+            ).length > 0
+          );
+        });
   };
 
   const ingestionIndex = await PipelineDao.getIngestionIndex();

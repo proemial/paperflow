@@ -2,6 +2,7 @@ import { Configuration, OpenAIApi } from 'openai-edge';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { Env } from 'data/adapters/env';
 import { cookies } from 'next/headers';
+import { UserSettings } from '@/app/(pages)/profile/page';
 
 const config = new Configuration({
   apiKey: Env.connectors.openai.apiKey,
@@ -41,14 +42,22 @@ export async function POST(req: Request) {
 }
 
 function chatConfig() {
-  const cookieStore = cookies();
-  const user = cookieStore.get('user').value;
+  const model = getModel();
   return {
-    model: user === 'mgb4'
-      ? 'gpt-4'
-      : 'gpt-3.5-turbo',
-    prompt:  user === 'mgb4'
+    model,
+    prompt: model === 'gpt-4'
       ? 'In a single sentence, enclosing relevant concepts with double parenthesis,'
       : 'In a single sentence, ',
   }
+}
+
+function getModel() {
+  const cookieStore = cookies();
+  const settingsString = cookieStore.get("settings")?.value || "{}";
+
+  const settings = JSON.parse(settingsString) as UserSettings;
+
+  return settings['gpt4']
+    ? 'gpt-4'
+    : 'gpt-3.5-turbo';
 }

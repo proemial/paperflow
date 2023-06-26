@@ -1,30 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { initAuth0 } from '@auth0/nextjs-auth0/edge';
+
+const auth0 = initAuth0({ routes: { login: '/api/page-router-auth/login' } });
+
+export default auth0.withMiddlewareAuthRequired();
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/page-router/profile-middleware', '/profile-middleware']
 };
-
-export function middleware(req: NextRequest) {
-  const basicAuth = req.headers.get("authorization");
-  const url = req.nextUrl;
-
-  if (basicAuth) {
-    const authValue = basicAuth.split(" ")[1];
-    const [user] = atob(authValue).split(":");
-
-    const validUsers = ['mgb', 'mgb4'];
-
-    if (validUsers.includes(user)) {
-      const response = NextResponse.next();
-      response.cookies.set('user', user);
-
-      return response;
-    }
-  }
-
-  url.pathname = "/api/auth";
-
-  return NextResponse.rewrite(url);
-}
