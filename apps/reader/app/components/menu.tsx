@@ -1,7 +1,7 @@
 "use client";
 import { UserProfile, useUser } from "@auth0/nextjs-auth0/client";
 import { Toaster } from "./shadcn-ui/Toaster";
-import { LockClosedIcon } from "@radix-ui/react-icons";
+import { KeyRound } from "lucide-react";
 import { Button } from "./shadcn-ui/Button";
 import {
   Tooltip,
@@ -38,7 +38,7 @@ function AuthButton({ user }: { user?: UserProfile }) {
                 onClick={() => (window.location.href = `/api/auth/login`)}
                 style={{ width: 40, padding: 0 }}
               >
-                <LockClosedIcon />
+                <KeyRound />
               </Button>
             )}
             {user && (

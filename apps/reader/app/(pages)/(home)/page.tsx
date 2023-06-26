@@ -3,6 +3,8 @@ import { CardList } from "./card-list";
 import { cookies } from "next/headers";
 import { UpdateIndex } from "data/adapters/redis/redis-client";
 import { UserSettings } from "../profile/page";
+import { getSession } from "@auth0/nextjs-auth0";
+import { LandingPage } from "./landing-page";
 
 export const revalidate = 60;
 
@@ -17,6 +19,12 @@ function getCategoriesFromCookie(): string[] {
 }
 
 export default async function HomePage() {
+  const session = await getSession();
+
+  if (!session) {
+    return <LandingPage />;
+  }
+
   const categories = getCategoriesFromCookie();
 
   const filter = (index?: UpdateIndex) => {

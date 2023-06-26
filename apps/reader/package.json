@@ -25,7 +25,7 @@
     "clsx": "1.2.1",
     "data": "workspace:*",
     "dayjs": "^1.11.8",
-    "lucide-react": "^0.233.0",
+    "lucide-react": "^0.252.0",
     "next": "^13.4.7",
     "openai-edge": "^1.0.0",
     "react": "18.2.0",

@@ -20,6 +20,7 @@ import { Button } from "@/app/components/shadcn-ui/Button";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { setCookie, getCookie } from "cookies-next";
 
+// https://github.com/auth0/nextjs-auth0/tree/beta/example-app
 const categories = [
   { key: "cs", label: "Computer Science" },
   { key: "econ", label: "Economics" },
