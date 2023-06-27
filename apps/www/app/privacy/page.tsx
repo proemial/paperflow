@@ -7,11 +7,12 @@ export default function Home() {
           <p>Effective Date: June 27, 2023</p>
           <p>
             Paperflow, a company located at [Company Address], along with its
-            affiliates and subsidiaries (collectively, "Paperflow," "we," "our,"
-            or "us"), respects your privacy. This Privacy Policy describes our
-            approach towards personal data in relation to our website,
-            www.paperflow.ai (the "Site") and the services available through our
-            Site (the "Services").
+            affiliates and subsidiaries (collectively, &quot;Paperflow,&quot;
+            &quot;we,&quot; &quot;our,&quot; or &quot;us&quot;), respects your
+            privacy. This Privacy Policy describes our approach towards personal
+            data in relation to our website, www.paperflow.ai (the
+            &quot;Site&quot;) and the services available through our Site (the
+            &quot;Services&quot;).
           </p>
           <h2>INFORMATION WE COLLECT</h2>
           <p>
