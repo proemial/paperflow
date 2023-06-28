@@ -44,7 +44,10 @@ export default async function ReaderPage({
           </div>
         </div>
         <div>
-          <Accordion type="single" collapsible defaultValue="related">
+          <Accordion
+            type="multiple"
+            defaultValue={["summary", "qa", "related"]}
+          >
             <AccordionItem value="summary" className="px-4 py2 lg:hidden">
               <AccordionTrigger>Summary</AccordionTrigger>
               <AccordionContent>
