@@ -4,7 +4,6 @@ import {
   HashBadges,
 } from "@/app/components/paperflow-card/hashtags";
 import { sanitize } from "@/app/components/paperflow-card/sanitizer";
-import { Badge } from "@/app/components/shadcn-ui/Badge";
 import {
   Card,
   CardDescription,
@@ -13,8 +12,8 @@ import {
 import Spinner from "@/app/components/spinner";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import { PapersDao } from "data/storage/papers";
-import { Heart } from "lucide-react";
 import { Suspense } from "react";
+import dayjs from "dayjs";
 
 export const revalidate = 5;
 
@@ -56,7 +55,10 @@ async function PaperCard({ id }: { id: string }) {
             id={id}
             title={sanitized.sanitized}
             className="hover:underline"
-          />
+          />{" "}
+          <span className="text-slate-300">
+            {dayjs(paper.raw.published).format("YYYY-MM-DD")}
+          </span>
         </CardDescription>
         <CardDescription className="pt-2">
           <HashBadge text={arXivCategory(category)?.title} heavy />
