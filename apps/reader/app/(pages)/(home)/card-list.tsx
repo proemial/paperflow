@@ -1,6 +1,19 @@
-import { PaperflowCard } from "@/app/components/paperflow-card/card";
+import { CardLink } from "@/app/components/paperflow-card/card-link";
+import {
+  HashBadge,
+  HashBadges,
+} from "@/app/components/paperflow-card/hashtags";
+import { sanitize } from "@/app/components/paperflow-card/sanitizer";
+import { Badge } from "@/app/components/shadcn-ui/Badge";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+} from "@/app/components/shadcn-ui/Card";
 import Spinner from "@/app/components/spinner";
-import Link from "next/link";
+import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
+import { PapersDao } from "data/storage/papers";
+import { Heart } from "lucide-react";
 import { Suspense } from "react";
 
 export const revalidate = 5;
@@ -20,9 +33,36 @@ export function CardList({ latestIds }: { latestIds?: string[] }) {
         {randomIds?.map((id, i) => (
           <Suspense key={i} fallback={<Spinner />}>
             {/* @ts-expect-error Server Component */}
-            <PaperflowCard id={id} />
-          </Suspense>))}
+            <PaperCard id={id} />
+          </Suspense>
+        ))}
       </div>
     </div>
+  );
+}
+
+async function PaperCard({ id }: { id: string }) {
+  const { text } = await PapersDao.getGptSummary(id, "sm");
+  const paper = await PapersDao.getArXivAtomPaper(id);
+  const { category } = paper?.parsed;
+
+  const sanitized = sanitize(text);
+
+  return (
+    <Card className="max-sm:w-full">
+      <CardHeader className="p-3">
+        <CardDescription>
+          <CardLink
+            id={id}
+            title={sanitized.sanitized}
+            className="hover:underline"
+          />
+        </CardDescription>
+        <CardDescription className="pt-2">
+          <HashBadge text={arXivCategory(category)?.title} heavy />
+          <HashBadges hashtags={sanitized.hashtags} />
+        </CardDescription>
+      </CardHeader>
+    </Card>
   );
 }

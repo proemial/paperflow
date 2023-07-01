@@ -24,7 +24,7 @@ export default async function ReaderPage({
       <div className="flex-1">
         <div className="m-2 lg:m-4">
           {/* @ts-expect-error Server Component */}
-          <PaperflowCard id={params.id} useLink />
+          <PaperflowCard id={params.id} />
         </div>
         <div className="border-t max-lg:hidden p-4 mt-4">
           <Suspense fallback={<Spinner />}>
