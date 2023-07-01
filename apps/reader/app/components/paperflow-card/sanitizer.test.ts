@@ -1,9 +1,9 @@
-import { isLastish, sanitize } from "./hashtags";
+import { isLastish, sanitize } from "./sanitizer";
 
 describe('removeHashtags', () => {
     it('lastish should work', () => {
         const words = ['foo', '#bar', 'baz', '#gaz', '#jazz'];
-        
+
         expect(isLastish(0, words)).toBeFalsy();
         expect(isLastish(1, words)).toBeFalsy();
         expect(isLastish(3, words)).toBeTruthy();
