@@ -18,7 +18,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  console.log("session", session);
+  // console.log("session", session);
 
   const heightFix = session ? "" : "flex items-center justify-center";
 

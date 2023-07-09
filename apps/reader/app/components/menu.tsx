@@ -61,7 +61,7 @@ function AuthButton({ user }: { user?: UserProfile }) {
 }
 
 function UserProfile({ user }: { user: UserProfile }) {
-  console.log("user.picture", user.picture);
+  // console.log("user.picture", user.picture);
   const initials = user.name.split(" ").map((name) => name.charAt(0));
 
   return (

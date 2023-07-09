@@ -20,7 +20,7 @@ function getCategoriesFromCookie(): string[] {
 
 export async function ListPage() {
   const categories = getCategoriesFromCookie();
-  console.log("categories", categories);
+  // console.log("categories", categories);
 
   const filter = (index?: UpdateIndex) => {
     return categories.length === 0

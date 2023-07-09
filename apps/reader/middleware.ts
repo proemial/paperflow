@@ -1,9 +1,7 @@
-import { initAuth0 } from '@auth0/nextjs-auth0/edge';
+import { authMiddleware } from "./app/components/utils/middleware/authMiddleware";
+import { loggingMiddleware } from "./app/components/utils/middleware/loggingMiddleware";
+import { MiddlewareStack } from "./app/components/utils/middleware/middleware";
 
-const auth0 = initAuth0({ routes: { login: '/api/page-router-auth/login' } });
+const middlewares = [loggingMiddleware, authMiddleware];
 
-export default auth0.withMiddlewareAuthRequired();
-
-export const config = {
-  matcher: ['/page-router/profile-middleware', '/profile-middleware']
-};
+export default MiddlewareStack(middlewares);
