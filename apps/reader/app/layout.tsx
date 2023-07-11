@@ -1,9 +1,5 @@
-import { Menu } from "./components/menu";
-import "./styles/globals.css";
 import { Inter } from "next/font/google";
-import { AnalyticsClient } from "./components/utils/AnalyticsClient";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
-import { getSession } from "@auth0/nextjs-auth0";
+import "./styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,32 +13,22 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
-  console.log("session", session);
-
-  const heightFix = session ? "" : "flex items-center justify-center";
-
   return (
-    <UserProvider>
-      <html lang="en">
-        <body className={`${inter.className} dark:dark`}>
-          <main
-            className="flex min-h-screen max-h-screen flex-col md:flex-row-reverse justify-between"
-            style={{
-              minHeight: "100dvh",
-              maxHeight: "100dvh",
-            }}
-          >
-            <div className={`flex-1 overflow-scroll ${heightFix}`}>
-              {children}
-            </div>
-            <div className="max-sm:shadow-inner md:border-r md:h-screen sticky top-0">
-              <Menu />
-            </div>
-          </main>
-          <AnalyticsClient />
-        </body>
-      </html>
-    </UserProvider>
+    <html lang="en">
+      <body className={`${inter.className} dark:dark`}>
+        <main
+          className="flex min-h-screen max-h-screen flex-col md:flex-row-reverse justify-between"
+          style={{
+            minHeight: "100dvh",
+            maxHeight: "100dvh",
+          }}
+        >
+          <div className={`flex-1 overflow-scroll`}>{children}</div>
+          <div className="max-sm:shadow-inner md:border-r md:h-screen sticky top-0">
+            M
+          </div>
+        </main>
+      </body>
+    </html>
   );
 }
