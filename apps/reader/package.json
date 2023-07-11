@@ -32,7 +32,9 @@
     "react-dom": "18.2.0",
     "react-ga4": "^2.1.0",
     "utils": "workspace:*",
-    "cookies-next": "^2.1.2"
+    "cookies-next": "^2.1.2",
+    "@splitsoftware/splitio": "^10.22.6",
+    "encoding": "^0.1.13"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",

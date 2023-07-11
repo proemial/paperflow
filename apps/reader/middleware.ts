@@ -1,7 +1,7 @@
 import { authMiddleware } from "./app/components/utils/middleware/authMiddleware";
-import { loggingMiddleware } from "./app/components/utils/middleware/loggingMiddleware";
 import { MiddlewareStack } from "./app/components/utils/middleware/middleware";
+import { splitMiddleware } from "./app/components/utils/middleware/splitMiddleware";
 
-const middlewares = [loggingMiddleware, authMiddleware];
+const middlewares = [authMiddleware, splitMiddleware];
 
 export default MiddlewareStack(middlewares);

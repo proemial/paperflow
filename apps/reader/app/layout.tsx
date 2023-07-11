@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { AnalyticsClient } from "./components/utils/AnalyticsClient";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { getSession } from "@auth0/nextjs-auth0";
+import { getSplits } from "./components/utils/Splits";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +19,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await getSession();
-  // console.log("session", session);
-
   const heightFix = session ? "" : "flex items-center justify-center";
+
+  const { uiV2 } = await getSplits(["uiV2"]);
+  console.log("Splits", uiV2);
 
   return (
     <UserProvider>
