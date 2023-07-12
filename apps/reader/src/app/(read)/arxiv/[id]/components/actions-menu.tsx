@@ -1,7 +1,7 @@
 import { Bookmark, Forward } from "lucide-react";
-import { Button } from "./shadcn-ui/button";
+import { Button } from "src/components/shadcn-ui/button";
 
-export function PaperMenu({ className }: { className: string }) {
+export function ActionsMenu({ className }: { className: string }) {
   return (
     <div
       className={`${className} w-full flex justify-between items-center shadow`}

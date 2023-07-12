@@ -1,6 +1,6 @@
-import assetImg1 from "./images/asset-bg-1.png";
-import assetImg3 from "./images/asset-bg-3.png";
-import scrollImg from "./images/scroll.svg";
+import assetImg1 from "src/images/asset-bg-1.png";
+import assetImg3 from "src/images/asset-bg-3.png";
+import scrollImg from "src/images/scroll.svg";
 
 type variants = "asset" | "related";
 export function PaperCard({
