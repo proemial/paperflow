@@ -10,7 +10,6 @@ const images = [assetImg1, assetImg2, assetImg3];
 
 export async function PaperCard({ id }: { id: string }) {
   const { text } = await PapersDao.getGptSummary(id, "sm");
-  const paper = await PapersDao.getArXivAtomPaper(id);
   const sanitized = sanitize(text);
 
   return (
@@ -21,7 +20,7 @@ export async function PaperCard({ id }: { id: string }) {
         backgroundSize: "cover",
       }}
     >
-      <CardLink>{sanitized.sanitized}</CardLink>
+      <CardLink id={id}>{sanitized.sanitized}</CardLink>
       <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
         {sanitized.hashtags.map((tag, index) => (
           <Badge key={index} text={tag.slice(1)} />

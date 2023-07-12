@@ -1,13 +1,25 @@
 import { ActionsMenu } from "./components/actions-menu";
 import { PaperCard } from "./components/paper-card";
 import { Panel } from "src/components/panel";
+import { PapersDao } from "data/storage/papers";
+import { Suspense } from "react";
+import { sanitize } from "@/src/components/sanitizer";
+import dayjs from "dayjs";
 
-export default function Home() {
+type Props = {
+  params: { id: string };
+};
+
+export default async function ReaderPage({ params }: Props) {
+  const paper = await PapersDao.getArXivAtomPaper(params.id);
+
   return (
     <main className="flex min-h-screen flex-col justify-start">
-      <PaperCard>
-        DR-TB patients in Bangladesh face delays due to seeking care from
-        multiple informal providers
+      <PaperCard id={params.id}>
+        <Suspense fallback={<div>S</div>}>
+          {/* @ts-expect-error Server Component */}
+          <GptAbstract id={params.id} size="sm" />
+        </Suspense>
       </PaperCard>
 
       <ActionsMenu className="p-4 top-0 sticky bg-background" />
@@ -15,33 +27,29 @@ export default function Home() {
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6">
           <Panel title="Summary">
-            In Bangladesh, DR-TB cases usually seek care from multiple
-            providers, particularly from informal providers, and among them,
-            alarmingly higher healthcare-seeking related delays were noted.
-            Immediate measures should be taken in the community to reduce the
-            burden of the disease.
+            <Suspense fallback={<div>S</div>}>
+              {/* @ts-expect-error Server Component */}
+              <GptAbstract id={params.id} size="md" />
+            </Suspense>
           </Panel>
 
-          <Panel title="Article Metadata">
+          <Panel title="Article Metadata" closed>
             <>
-              <div>
-                Healthcare seeking behavior and delays in case of Drug-Resistant
-                Tuberculosis patients in Bangladesh: Findings from a
-                cross-sectional survey
+              <div>{paper.parsed.title}</div>
+              <div className="flex py-2 gap-4 flex-nowrap overflow-scroll no-scrollbar">
+                {paper.parsed.authors.map((author, index) => (
+                  <div key={index} className="whitespace-nowrap">
+                    {author}
+                  </div>
+                ))}
               </div>
-              <div className="flex gap-2">
-                <div>Noman</div>
-                <div>Islam</div>
-                <div>Aktar</div>
-                <div>Parray</div>
-                <div>Finnegan</div>
-                <div>Et al.</div>
+              <div className="flex justify-end">
+                arXiv, {dayjs(paper.raw.published).format("YYYY-MM-DD hh:mm")}
               </div>
-              <div className="flex justify-end">medRxiv, April 25, 2023</div>
             </>
           </Panel>
 
-          <Panel title="Ask a question">
+          <Panel title="Ask a question" closed>
             <>
               <div>When was the study performed?</div>
               <div>How were the participants recruited?</div>
@@ -65,15 +73,15 @@ export default function Home() {
           </Panel>
 
           <div>
-            <PaperCard variant="related">
+            <PaperCard id={"012"} variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
             </PaperCard>
-            <PaperCard variant="related">
+            <PaperCard id={"234"} variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
             </PaperCard>
-            <PaperCard variant="related">
+            <PaperCard id={"567"} variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
             </PaperCard>
@@ -82,4 +90,11 @@ export default function Home() {
       </div>
     </main>
   );
+}
+
+async function GptAbstract({ id, size }: { id: string; size: "sm" | "md" }) {
+  const { text } = await PapersDao.getGptSummary(id, size);
+  const sanitized = sanitize(text);
+
+  return <>{sanitized.sanitized}</>;
 }
