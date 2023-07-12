@@ -10,7 +10,7 @@ export function Badge({ text }: { text: string }) {
 
   return (
     <div
-      className={`${textStyle} border rounded-lg px-2 py-0 whitespace-nowrap flex items-center gap-1`}
+      className={`${textStyle} border rounded-lg px-1 py-0 whitespace-nowrap flex items-center gap-1`}
       onClick={() => setLiked(!liked)}
     >
       <Heart width={16} className={heartStyle} />

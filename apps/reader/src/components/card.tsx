@@ -22,7 +22,7 @@ export async function PaperCard({ id }: { id: string }) {
       }}
     >
       <CardLink>{sanitized.sanitized}</CardLink>
-      <div className="w-full pt-6 text-xs flex justify-begin gap-2 overflow-scroll no-scrollbar">
+      <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
         {sanitized.hashtags.map((tag, index) => (
           <Badge key={index} text={tag.slice(1)} />
         ))}
