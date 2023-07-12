@@ -5,7 +5,10 @@ import { PaperCard } from "../components/paper-card";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col justify-start">
-      <PaperCard />
+      <PaperCard>
+        DR-TB patients in Bangladesh face delays due to seeking care from
+        multiple informal providers
+      </PaperCard>
 
       <PaperMenu className="p-4 top-0 sticky bg-background" />
 
@@ -71,26 +74,18 @@ export default function Home() {
           </div>
 
           <div>
-            <div>
+            <PaperCard variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
-              <div className="flex justify-end">Microsummary by Paperflow </div>
-            </div>
-            <div>
+            </PaperCard>
+            <PaperCard variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
-              <div className="flex justify-end">Microsummary by Paperflow </div>
-            </div>
-            <div>
+            </PaperCard>
+            <PaperCard variant="related">
               New Reinforcement Learning framework RLTF improves code generation
               using real-time feedback
-              <div className="flex justify-end">Microsummary by Paperflow </div>
-            </div>
-            <div>
-              New Reinforcement Learning framework RLTF improves code generation
-              using real-time feedback
-              <div className="flex justify-end">Microsummary by Paperflow </div>
-            </div>
+            </PaperCard>
           </div>
         </div>
       </div>
