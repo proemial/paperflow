@@ -23,7 +23,7 @@ export default async function ReaderPage({ params }: Props) {
         </Suspense>
       </PaperCard>
 
-      <ActionsMenu className="p-4 top-0 sticky bg-background" />
+      <ActionsMenu id={params.id} className="p-4 top-0 sticky bg-background" />
 
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6">
