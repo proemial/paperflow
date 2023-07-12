@@ -46,14 +46,22 @@
 
   secondary: 103 42% 41% (#55943D)
   Gradient: 103 42% 41% - 147 98% 22% (#55943D - #016D31)
+
+  muted: 0 0 0% (#000000)
+  muted-foreground: 270 100% 90% (#E5CCFF)
+  muted-foreground-disabled: 0 0% 53% (#888888)
+
+  purple: 274 100% 72% (#C171FF)
+  turquise: 170 100% 50% (#00FFD5)
   */
 
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
+    --muted: 0 0% 100%;
+    --muted-foreground: 270 100% 90%;
+    --muted-foreground-disabled: 0 0% 53%;
 
     --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
@@ -61,22 +69,26 @@
     --popover: 0 0% 0%;
     --popover-foreground: 215 20.2% 65.1%;
 
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
+    --border: 0 0% 100%;
+    --input: 103 42% 41%;
 
     --card: 0 0% 0%;
     --card-foreground: 213 31% 91%;
 
+    /* TODO: Use gradient */
     --primary: 274 68% 42%;
-    --primary-foreground: 222.2 47.4% 1.2%;
+    --primary-gradient-end: 270 82% 27%;
+    --primary-foreground: 0 0% 100%;
 
+    /* TODO: Use gradient */
     --secondary: 103 42% 41%;
+    --secondary-gradient-end: 147 98% 22%;
     --secondary-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
-    --ring: 216 34% 17%;
+    --ring: 170 100% 50%;
 
     --radius: 0.5rem;
   }

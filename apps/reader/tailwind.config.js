@@ -5,6 +5,10 @@ module.exports = {
   content: [
     "./src/**/*.{ts,tsx}",
   ],
+  mode: 'jit',
+   purge: [
+    "./src/**/*.{ts,tsx}",
+   ],
   theme: {
     container: {
       center: true,
@@ -14,6 +18,9 @@ module.exports = {
       },
     },
     extend: {
+      boxShadow: {
+        DEFAULT: '0 4px 8px hsl(var(--background))',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -23,10 +30,12 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          gradient: "hsl(var(--primary-gradient-end))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          gradient: "hsl(var(--secondary-gradient-end))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -35,6 +44,7 @@ module.exports = {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+          disabled: "hsl(var(--muted-foreground-disabled))"
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",

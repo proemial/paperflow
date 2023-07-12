@@ -1,6 +1,6 @@
 import { Anek_Malayalam } from "next/font/google";
 import "src/styles/globals.css";
-import { MainMenu } from "src/components/menu";
+import { MainMenu } from "@/src/components/main-menu";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
 const lightModeEnabled = false;
@@ -29,7 +29,7 @@ export default async function RootLayout({
             maxHeight: "100dvh",
           }}
         >
-          <div className={`flex-1 overflow-scroll px-4`}>{children}</div>
+          <div className={`flex-1 overflow-scroll`}>{children}</div>
 
           <div className="py-4">
             <MainMenu />
