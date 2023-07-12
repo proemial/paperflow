@@ -37,7 +37,9 @@ export default async function ReaderPage({ params }: Props) {
 
           <Panel title="Article Metadata" closed>
             <>
-              <div>{paper.parsed.title}</div>
+              <div>
+                <Markdown>{paper.parsed.title}</Markdown>
+              </div>
               <div className="flex py-2 gap-4 flex-nowrap overflow-scroll no-scrollbar">
                 {paper.parsed.authors.map((author, index) => (
                   <div key={index} className="whitespace-nowrap">
