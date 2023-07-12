@@ -15,7 +15,7 @@ export async function PaperCard({ id }: { id: string }) {
 
   return (
     <div
-      className="p-4 pt-8 flex flex-col justify-end items-center shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
+      className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
       style={{
         backgroundImage: `url(${image(id)})`,
         backgroundSize: "cover",
