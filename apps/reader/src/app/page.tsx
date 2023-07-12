@@ -9,8 +9,8 @@ export default function Home() {
 
       <PaperMenu className="p-4 top-0 sticky bg-background" />
 
-      <div className="px-4">
-        <div className="flex flex-col gap-4">
+      <div className="px-4 pt-2">
+        <div className="flex flex-col gap-6">
           <div>
             <div className="flex justify-between">
               <div>Summary</div>
