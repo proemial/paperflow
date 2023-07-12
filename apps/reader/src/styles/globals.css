@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.two-lines {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -43,9 +36,21 @@
     --radius: 0.5rem;
   }
 
+  /*
+  foreground: 0 0% 100% (#ffffff)
+
+  primary: 274 68% 42% (#7523B5)
+  Gradient: 274 68% 42% - 270 82% 27% (#7523B5 - #450D7D)
+
+  background: 0 0 0% (#000000)
+
+  secondary: 103 42% 41% (#55943D)
+  Gradient: 103 42% 41% - 147 98% 22% (#55943D - #016D31)
+  */
+
   .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
     --muted: 223 47% 11%;
     --muted-foreground: 215.4 16.3% 56.9%;
@@ -53,19 +58,19 @@
     --accent: 216 34% 17%;
     --accent-foreground: 210 40% 98%;
 
-    --popover: 224 71% 4%;
+    --popover: 0 0% 0%;
     --popover-foreground: 215 20.2% 65.1%;
 
     --border: 216 34% 17%;
     --input: 216 34% 17%;
 
-    --card: 224 71% 4%;
+    --card: 0 0% 0%;
     --card-foreground: 213 31% 91%;
 
-    --primary: 210 40% 98%;
+    --primary: 274 68% 42%;
     --primary-foreground: 222.2 47.4% 1.2%;
 
-    --secondary: 222.2 47.4% 11.2%;
+    --secondary: 103 42% 41%;
     --secondary-foreground: 210 40% 98%;
 
     --destructive: 0 63% 31%;
@@ -83,6 +88,5 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
