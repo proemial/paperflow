@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { sanitize } from "@/src/components/sanitizer";
 import dayjs from "dayjs";
 import { RelatedResearch } from "./components/related-research";
+import Markdown from "./components/markdown";
 
 type Props = {
   params: { id: string };
@@ -92,5 +93,5 @@ async function GptAbstract({ id, size }: { id: string; size: "sm" | "md" }) {
   const { text } = await PapersDao.getGptSummary(id, size);
   const sanitized = sanitize(text);
 
-  return <>{sanitized.sanitized}</>;
+  return <Markdown>{sanitized.sanitized}</Markdown>;
 }
