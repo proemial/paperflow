@@ -8,7 +8,6 @@ const images = [assetImg1, assetImg2, assetImg3];
 
 type Props = {
   children: string;
-  id: string;
 };
 
 export function PaperCard({ children }: Props) {
