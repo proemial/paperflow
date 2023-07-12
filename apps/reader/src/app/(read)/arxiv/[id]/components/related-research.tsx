@@ -17,7 +17,7 @@ export async function RelatedResearch({ id, category }: Props) {
   return (
     <>
       {filtered?.slice(0, 3).map((entry, i) => (
-        <div>
+        <div key={i}>
           <Suspense fallback={<div>S</div>}>
             {/* @ts-expect-error Server Component */}
             <PaperCard id={entry.id} />
