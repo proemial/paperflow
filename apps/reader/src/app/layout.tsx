@@ -3,7 +3,7 @@ import "src/styles/globals.css";
 import { MainMenu } from "src/components/menu";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
-const darkMode = "dark"; // Change to `dark:dark` to enable light mode
+const lightModeEnabled = false;
 
 export const metadata = {
   title: "Paperflow",
@@ -17,7 +17,11 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${font.className} flex justify-center ${darkMode}`}>
+      <body
+        className={`${font.className} flex justify-center ${
+          lightModeEnabled ? "dark:dark" : "dark"
+        }`}
+      >
         <main
           className="min-h-screen max-h-screen w-full max-w-[640px] flex flex-col"
           style={{
