@@ -16,7 +16,7 @@ export default async function ReaderPage({ params }: Props) {
 
   return (
     <main className="flex min-h-screen flex-col justify-start">
-      <PaperCard id={params.id}>
+      <PaperCard id={params.id} date={paper.parsed.updated}>
         <Suspense fallback={<div>S</div>}>
           {/* @ts-expect-error Server Component */}
           <GptAbstract id={params.id} size="sm" />

@@ -1,37 +1,31 @@
 import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
-import scrollImg from "src/images/scroll.svg";
+import dayjs from "dayjs";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
-type variants = "asset" | "related";
 export function PaperCard({
   id,
+  date,
   children,
-  variant,
 }: {
   id: string;
+  date: Date;
   children: string | React.ReactNode;
-  variant?: string;
 }) {
-  const isAsset = variant !== "related";
-  const containerStyle = isAsset ? "min-h-[228px]" : "";
-  const textStyle = isAsset ? "text-2xl" : "";
-
   return (
     <div
-      className={`${containerStyle} px-4 py-8 flex flex-col justify-end items-center`}
+      className={`min-h-[228px] px-4 py-8 flex flex-col justify-end items-begin`}
       style={{
         backgroundImage: `url(${image(id)})`,
         backgroundSize: "cover",
       }}
     >
-      <div className={`${textStyle} font-light`}>{children}</div>
-      <div className="w-full pt-4 text-sm font-light flex justify-end items-center">
-        <img src={scrollImg.src} width={16} alt="" />
-        Microsummary by Paperflow{" "}
+      <div className="text-purple-500">
+        Preprint published on ArXiv, {dayjs(date).format("MMM DD, YYYY")}
       </div>
+      <div className={`text-2xl font-light`}>{children}</div>
     </div>
   );
 }
