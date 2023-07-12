@@ -31,7 +31,7 @@ export default async function RootLayout({
         >
           <div className={`flex-1 overflow-scroll`}>{children}</div>
 
-          <div className="py-4">
+          <div className="pb-4 pt-2">
             <MainMenu />
           </div>
         </main>

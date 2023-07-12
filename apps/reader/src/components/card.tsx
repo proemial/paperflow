@@ -1,39 +1,44 @@
 import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
-import scrollImg from "src/images/scroll.svg";
+import { Heart } from "lucide-react";
 import { CardLink } from "./card-link";
+import { Badge } from "./badge";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
 type Props = {
-  children: string;
+  paper: {
+    id: string;
+    text: string;
+    category: string;
+    tags: string[];
+    published: string;
+  };
 };
 
-export function PaperCard({ children }: Props) {
+export function PaperCard({ paper }: Props) {
   return (
     <div
-      className={`px-4 py-8 flex flex-col justify-end items-center border rounded-lg border-zinc-700`}
+      className="p-4 pt-8 flex flex-col justify-end items-center shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
       style={{
-        backgroundImage: `url(${image()})`,
+        backgroundImage: `url(${image(paper.id)})`,
         backgroundSize: "cover",
       }}
     >
-      <CardLink>{children}</CardLink>
-      <div className="w-full pt-4 text-sm font-light flex justify-end items-center">
-        <img src={scrollImg.src} width={16} alt="" />
-        Microsummary by Paperflow{" "}
+      <CardLink>{paper.text}</CardLink>
+      <div className="w-full pt-6 text-xs flex justify-begin gap-2 overflow-scroll no-scrollbar">
+        {paper.tags.map((tag, index) => (
+          <Badge key={index} text={tag.slice(1)} />
+        ))}
       </div>
     </div>
   );
 }
 
-function image() {
-  return images[random(0, 2)].src;
-}
-
-function random(minInclusive: number, maxInclusive: number) {
-  return Math.floor(
-    Math.random() * (maxInclusive - minInclusive + 1) + minInclusive
-  );
+function image(id: string) {
+  const lastNum = Number(id.charAt(id.length - 1));
+  if (lastNum < 3) return images[0].src;
+  if (lastNum < 6) return images[1].src;
+  return images[2].src;
 }

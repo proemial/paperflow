@@ -2,7 +2,10 @@ import { Home, Search, Bookmark, User } from "lucide-react";
 
 export function MainMenu() {
   return (
-    <div className="flex justify-around">
+    <div
+      className="flex justify-around"
+      style={{ boxShadow: "0px -24px 0 rgba(0, 0, 0, 0.85)" }}
+    >
       <div>
         <Home className="stroke-muted-foreground" />
       </div>
