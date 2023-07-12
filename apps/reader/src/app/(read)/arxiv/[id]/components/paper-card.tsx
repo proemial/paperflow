@@ -16,7 +16,7 @@ export function PaperCard({
   variant?: string;
 }) {
   const isAsset = variant !== "related";
-  const containerStyle = isAsset ? "min-h-[228px]" : "mb-4";
+  const containerStyle = isAsset ? "min-h-[228px]" : "";
   const textStyle = isAsset ? "text-2xl" : "";
 
   return (

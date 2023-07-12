@@ -71,23 +71,25 @@ export default async function ReaderPage({ params }: Props) {
               </div>
             </>
           </Panel>
-
-          <div>
-            <PaperCard id={"012"} variant="related">
-              New Reinforcement Learning framework RLTF improves code generation
-              using real-time feedback
-            </PaperCard>
-            <PaperCard id={"234"} variant="related">
-              New Reinforcement Learning framework RLTF improves code generation
-              using real-time feedback
-            </PaperCard>
-            <PaperCard id={"567"} variant="related">
-              New Reinforcement Learning framework RLTF improves code generation
-              using real-time feedback
-            </PaperCard>
-          </div>
         </div>
       </div>
+
+      <Panel title="Related papers" className="px-4 mt-6 mb-4">
+        <>
+          <PaperCard id={"012"} variant="related">
+            New Reinforcement Learning framework RLTF improves code generation
+            using real-time feedback
+          </PaperCard>
+          <PaperCard id={"234"} variant="related">
+            New Reinforcement Learning framework RLTF improves code generation
+            using real-time feedback
+          </PaperCard>
+          <PaperCard id={"567"} variant="related">
+            New Reinforcement Learning framework RLTF improves code generation
+            using real-time feedback
+          </PaperCard>
+        </>
+      </Panel>
     </main>
   );
 }
