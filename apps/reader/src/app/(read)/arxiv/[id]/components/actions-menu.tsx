@@ -1,7 +1,6 @@
 "use client";
 import { Bookmark, Forward } from "lucide-react";
 import { Button } from "src/components/shadcn-ui/button";
-import { redirect } from "next/navigation";
 
 type Props = {
   id: string;
