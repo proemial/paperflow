@@ -5,6 +5,7 @@ import { PapersDao } from "data/storage/papers";
 import { Suspense } from "react";
 import { sanitize } from "@/src/components/sanitizer";
 import dayjs from "dayjs";
+import { RelatedResearch } from "./components/related-research";
 
 type Props = {
   params: { id: string };
@@ -75,20 +76,13 @@ export default async function ReaderPage({ params }: Props) {
       </div>
 
       <Panel title="Related papers" className="px-4 mt-6 mb-4">
-        <>
-          <PaperCard id={"012"} variant="related">
-            New Reinforcement Learning framework RLTF improves code generation
-            using real-time feedback
-          </PaperCard>
-          <PaperCard id={"234"} variant="related">
-            New Reinforcement Learning framework RLTF improves code generation
-            using real-time feedback
-          </PaperCard>
-          <PaperCard id={"567"} variant="related">
-            New Reinforcement Learning framework RLTF improves code generation
-            using real-time feedback
-          </PaperCard>
-        </>
+        <Suspense fallback={<div>S</div>}>
+          {/* @ts-expect-error Server Component */}
+          <RelatedResearch
+            id={paper.parsed.id}
+            category={paper.parsed.category}
+          />
+        </Suspense>
       </Panel>
     </main>
   );
