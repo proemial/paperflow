@@ -1,6 +1,7 @@
 import { Anek_Malayalam } from "next/font/google";
 import "src/styles/globals.css";
 import { MainMenu } from "@/src/components/main-menu";
+import { Toaster } from "../components/shadcn-ui/toaster";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
 const lightModeEnabled = false;
@@ -33,6 +34,7 @@ export default async function RootLayout({
 
           <div className="pb-4 pt-2">
             <MainMenu />
+            <Toaster />
           </div>
         </main>
       </body>

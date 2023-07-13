@@ -1,6 +1,7 @@
 "use client";
-import { Bookmark, Forward } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { Button } from "src/components/shadcn-ui/button";
+import { ShareButton } from "./share-button";
 
 type Props = {
   id: string;
@@ -19,7 +20,7 @@ export function ActionsMenu({ id, className }: Props) {
       <Button onClick={() => handleClick()}>Read the full article</Button>
       <div className="flex gap-4">
         <Bookmark />
-        <Forward />
+        <ShareButton />
       </div>
     </div>
   );
