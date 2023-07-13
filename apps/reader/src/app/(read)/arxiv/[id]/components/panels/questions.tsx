@@ -1,6 +1,8 @@
-export function Questions() {
+import { Panel } from "src/components/panel";
+
+export function QuestionsPanel() {
   return (
-    <>
+    <Panel title="Ask a question" closed>
       <div>When was the study performed?</div>
       <div>How were the participants recruited?</div>
       <div>
@@ -18,6 +20,6 @@ export function Questions() {
         If you ask a novel and relevant question, you will have the opportunity
         to make it public and we will forward it to the author
       </div>
-    </>
+    </Panel>
   );
 }

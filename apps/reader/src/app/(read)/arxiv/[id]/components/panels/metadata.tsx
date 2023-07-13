@@ -6,12 +6,13 @@ import {
 } from "data/adapters/arxiv/arxiv.models";
 import avatar from "src/images/avatar.svg";
 import Image from "next/image";
+import { Panel } from "src/components/panel";
 
-export function Metadata({ paper }: { paper: ArXivAtomPaper }) {
+export function MetadataPanel({ paper }: { paper: ArXivAtomPaper }) {
   const category = arXivCategory(paper.parsed.category);
 
   return (
-    <>
+    <Panel title="Article Metadata" closed>
       <div>
         <div>
           <div className="text-purple-500">
@@ -30,7 +31,7 @@ export function Metadata({ paper }: { paper: ArXivAtomPaper }) {
           <Author key={index} name={author} />
         ))}
       </div>
-    </>
+    </Panel>
   );
 }
 

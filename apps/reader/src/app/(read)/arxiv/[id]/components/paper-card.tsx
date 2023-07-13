@@ -5,15 +5,13 @@ import dayjs from "dayjs";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
-export function PaperCard({
-  id,
-  date,
-  children,
-}: {
+type Props = {
   id: string;
   date: Date;
   children: string | React.ReactNode;
-}) {
+};
+
+export function PaperCard({ id, date, children }: Props) {
   return (
     <div
       className={`min-h-[228px] px-4 py-8 flex flex-col justify-end items-begin`}
