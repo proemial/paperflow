@@ -32,7 +32,7 @@ export default async function RootLayout({
         >
           <div className={`flex-1 overflow-scroll`}>{children}</div>
 
-          <div className="pb-4 pt-2">
+          <div className="pb-4 pt-2 z-50">
             <MainMenu />
             <Toaster />
           </div>
