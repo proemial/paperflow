@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { sanitize } from "@/src/components/sanitizer";
 import dayjs from "dayjs";
 import { RelatedResearch } from "./components/related-research";
-import Markdown from "./components/markdown";
+import Markdown from "src/components/markdown";
 
 type Props = {
   params: { id: string };
