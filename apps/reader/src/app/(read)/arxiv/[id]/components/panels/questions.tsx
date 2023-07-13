@@ -29,7 +29,7 @@ export function QuestionsPanel({ closed }: { closed?: boolean }) {
           <span className="text-primary font-semibold">virus transmission</span>{" "}
           and the effects of{" "}
           <span className="text-primary font-semibold">
-            control measures and people's behavior
+            control measures and people&apos;s behavior
           </span>
           , which can be more reliable than just counting reported infections.
         </Answer>
