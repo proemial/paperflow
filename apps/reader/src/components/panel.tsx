@@ -14,22 +14,21 @@ export function Panel({ title, children, closed, className }: Props) {
 
   return (
     <div>
-      <div className={`${className} flex justify-between`}>
+      <div
+        className={`${className} flex justify-between`}
+        onClick={() => setClosed(!isClosed)}
+      >
         <div className={`text-xl font-medium`}>{title}</div>
-        <Toggle toggle={() => setClosed(!isClosed)} closed={isClosed} />
+        <ToggleButton closed={isClosed} />
       </div>
       <div className={`${isClosed ? "hidden" : ""}`}>{children}</div>
     </div>
   );
 }
 
-function Toggle({ closed, toggle }: { closed: boolean; toggle: () => void }) {
+function ToggleButton({ closed }: { closed: boolean }) {
   return (
-    <button
-      type="button"
-      onClick={() => toggle()}
-      className="text-md font-normal text-primary"
-    >
+    <button type="button" className="text-md font-normal text-primary">
       {closed ? "Show" : "Hide"}
     </button>
   );
