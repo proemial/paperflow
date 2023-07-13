@@ -4,9 +4,9 @@ import { HeartIcon } from "@/src/components/icons/heart";
 import { RepeatIcon } from "@/src/components/icons/repeat";
 import { Panel } from "src/components/panel";
 
-export function StatisticsPanel() {
+export function StatisticsPanel({ closed }: { closed?: boolean }) {
   return (
-    <Panel title="Aggregated Statistics" closed>
+    <Panel title="Aggregated Statistics" closed={closed}>
       <div className="flex justify-between py-4">
         <div className="flex items-center gap-2">
           <CommentsIcon /> 12

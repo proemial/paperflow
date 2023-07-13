@@ -33,17 +33,17 @@ export default async function ReaderPage({ params }: Props) {
 
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6">
-          <SummaryPanel id={params.id} />
+          <SummaryPanel id={params.id} closed />
 
-          <StatisticsPanel />
+          <StatisticsPanel closed />
 
-          <MetadataPanel paper={paper} />
+          <MetadataPanel paper={paper} closed />
 
           <QuestionsPanel />
         </div>
       </div>
 
-      <RelatedPanel paper={paper} />
+      <RelatedPanel paper={paper} closed />
     </main>
   );
 }

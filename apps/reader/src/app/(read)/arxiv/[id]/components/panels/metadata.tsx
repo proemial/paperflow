@@ -8,19 +8,21 @@ import avatar from "src/images/avatar.svg";
 import Image from "next/image";
 import { Panel } from "src/components/panel";
 
-export function MetadataPanel({ paper }: { paper: ArXivAtomPaper }) {
+type Props = {
+  paper: ArXivAtomPaper;
+  closed?: boolean;
+};
+
+export function MetadataPanel({ paper, closed }: Props) {
   const category = arXivCategory(paper.parsed.category);
 
   return (
-    <Panel title="Article Metadata" closed>
+    <Panel title="Article Metadata" closed={closed}>
       <div>
         <div>
           <div className="text-purple-500">
             Preprint published on ArXiv,{" "}
             {dayjs(paper.parsed.published).format("MMM DD, YYYY")}
-          </div>
-          <div className="font-light text-xs leading-tight mb-2">
-            @{category.category} - {category.title}
           </div>
         </div>
         <Markdown>{paper.parsed.title}</Markdown>
