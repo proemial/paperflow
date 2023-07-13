@@ -1,12 +1,12 @@
-import { ActionsMenu } from "./components/actions-menu";
-import { PaperCard } from "./components/paper-card";
-import { Panel } from "src/components/panel";
 import { PapersDao } from "data/storage/papers";
 import { Suspense } from "react";
-import { sanitize } from "@/src/components/sanitizer";
-import dayjs from "dayjs";
+import { Panel } from "src/components/panel";
+import { ActionsMenu } from "./components/actions-menu";
+import { Metadata } from "./components/metadata";
+import { PaperCard } from "./components/paper-card";
+import { Questions } from "./components/questions";
 import { RelatedResearch } from "./components/related-research";
-import Markdown from "src/components/markdown";
+import { GptAbstract } from "./components/gpt-apstract";
 
 type Props = {
   params: { id: string };
@@ -39,44 +39,11 @@ export default async function ReaderPage({ params }: Props) {
           </Panel>
 
           <Panel title="Article Metadata" closed>
-            <>
-              <div>
-                <Markdown>{paper.parsed.title}</Markdown>
-              </div>
-              <div className="flex py-2 gap-4 flex-nowrap overflow-scroll no-scrollbar">
-                {paper.parsed.authors.map((author, index) => (
-                  <div key={index} className="whitespace-nowrap">
-                    {author}
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-end">
-                arXiv, {dayjs(paper.raw.published).format("YYYY-MM-DD hh:mm")}
-              </div>
-            </>
+            <Metadata paper={paper} />
           </Panel>
 
           <Panel title="Ask a question" closed>
-            <>
-              <div>When was the study performed?</div>
-              <div>How were the participants recruited?</div>
-              <div>
-                What is the median diagnostic delay in Bangladesh for other
-                comparable respiratory cases?
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Ask your own question"
-                  className="w-full bg-black border border-input"
-                />
-              </div>
-              <div>
-                If you ask a novel and relevant question, you will have the
-                opportunity to make it public and we will forward it to the
-                author
-              </div>
-            </>
+            <Questions />
           </Panel>
         </div>
       </div>
@@ -92,11 +59,4 @@ export default async function ReaderPage({ params }: Props) {
       </Panel>
     </main>
   );
-}
-
-async function GptAbstract({ id, size }: { id: string; size: "sm" | "md" }) {
-  const { text } = await PapersDao.getGptSummary(id, size);
-  const sanitized = sanitize(text);
-
-  return <Markdown>{sanitized.sanitized}</Markdown>;
 }
