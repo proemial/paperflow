@@ -8,6 +8,7 @@ import { RelatedPanel } from "./components/panels/related-papers";
 import { StatisticsPanel } from "./components/panels/statistics";
 import { SummaryPanel } from "./components/panels/summary";
 import { PaperCard } from "./components/paper-card";
+import { Spinner } from "src/components/spinner";
 
 type Props = {
   params: { id: string };
@@ -19,7 +20,7 @@ export default async function ReaderPage({ params }: Props) {
   return (
     <main className="flex min-h-screen flex-col justify-start">
       <PaperCard id={params.id} date={paper.parsed.updated}>
-        <Suspense fallback={<div>S</div>}>
+        <Suspense fallback={<Spinner />}>
           {/* @ts-expect-error Server Component */}
           <GptAbstract id={params.id} size="sm" />
         </Suspense>

@@ -1,6 +1,7 @@
 import { PaperCard } from "src/components/card";
 import { Suspense } from "react";
 import { PipelineDao } from "data/storage/pipeline";
+import { Spinner } from "src/components/spinner";
 
 type Props = {
   id: string;
@@ -18,7 +19,7 @@ export async function RelatedResearch({ id, category }: Props) {
     <>
       {filtered?.slice(0, 3).map((entry, i) => (
         <div key={i}>
-          <Suspense fallback={<div>S</div>}>
+          <Suspense fallback={<Spinner />}>
             {/* @ts-expect-error Server Component */}
             <PaperCard id={entry.id} />
           </Suspense>
