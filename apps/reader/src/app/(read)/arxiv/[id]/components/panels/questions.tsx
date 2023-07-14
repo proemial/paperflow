@@ -1,3 +1,4 @@
+import { PaperPlaneIcon } from "src/components/icons/paperplane";
 import { Panel } from "src/components/panel";
 
 const questions = [
@@ -34,12 +35,18 @@ export function QuestionsPanel({ closed }: { closed?: boolean }) {
           , which can be more reliable than just counting reported infections.
         </Answer>
       </div>
-      <div>
+      <div className="flex items-center">
         <input
           type="text"
           placeholder="Ask your own question"
-          className="w-full bg-black border-input border-2 rounded-lg p-3"
+          className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3"
         />
+        <button
+          type="button"
+          className="p-3 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
+        >
+          <PaperPlaneIcon />
+        </button>
       </div>
     </Panel>
   );
