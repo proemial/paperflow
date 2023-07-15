@@ -27,6 +27,13 @@ export function QuestionsPanel({ paper, closed }: Props) {
   const chatContainerRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     if (chatContainerRef.current) {
+      console.log(
+        "scrollTop: ",
+        chatContainerRef.current.scrollTop,
+        "scrollHeight: ",
+        chatContainerRef.current.scrollHeight
+      );
+
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
@@ -41,7 +48,10 @@ export function QuestionsPanel({ paper, closed }: Props) {
 
   return (
     <Panel title="Ask a question" closed={closed}>
-      <div ref={chatContainerRef} className="pt-4 flex flex-col justify-start">
+      <div
+        ref={chatContainerRef}
+        className="pt-4 flex flex-col justify-start overflow-scroll max-h-80"
+      >
         {messages.length === 0 &&
           random(questions, 3).map((question, i) => (
             <Question key={i} onClick={() => appendQuestion(question)}>

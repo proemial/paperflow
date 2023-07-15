@@ -16,9 +16,6 @@ export async function POST(req: Request) {
     {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}.`},
     ...messages,
   ];
-  console.log('Messages', moddedMessages);
-
-
   const {model, prompt} = chatConfig();
 
   const lastMessage = moddedMessages.at(-1);
