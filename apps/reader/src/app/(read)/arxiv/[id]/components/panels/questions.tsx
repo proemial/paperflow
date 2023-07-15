@@ -50,7 +50,7 @@ export function QuestionsPanel({ paper, closed }: Props) {
     <Panel title="Ask a question" closed={closed}>
       <div
         ref={chatContainerRef}
-        className="pt-4 flex flex-col justify-start overflow-scroll max-h-80"
+        className="pt-4 flex flex-col justify-start overflow-scroll max-h-96"
       >
         {messages.length === 0 &&
           random(questions, 3).map((question, i) => (
