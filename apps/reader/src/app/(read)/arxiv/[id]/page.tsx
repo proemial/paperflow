@@ -39,7 +39,7 @@ export default async function ReaderPage({ params }: Props) {
 
           <MetadataPanel paper={paper} closed />
 
-          <QuestionsPanel />
+          <QuestionsPanel paper={paper} />
         </div>
       </div>
 

@@ -1,55 +1,98 @@
+"use client";
 import { PaperPlaneIcon } from "src/components/icons/paperplane";
 import { Panel } from "src/components/panel";
+import { useChat } from "ai/react";
+import React from "react";
+import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
+import Markdown from "@/src/components/markdown";
 
 const questions = [
-  "When was the study performed?",
-  "How were the participants recruited?",
-  "What is the median diagnostic delay in Bangladesh for other comparable respiratory cases?",
-  "Why is this important",
+  "Why is this important?",
   "Explain it to me like I'm five",
   "How did they arrive at that conclusion?",
+  "What are the key takeaways?",
+  "What are the key concepts?",
 ];
 
-export function QuestionsPanel({ closed }: { closed?: boolean }) {
+type Props = {
+  paper: ArXivAtomPaper;
+  closed?: boolean;
+};
+
+export function QuestionsPanel({ paper, closed }: Props) {
+  const { messages, input, handleInputChange, handleSubmit, append } = useChat({
+    body: { title: paper?.parsed.title, abstract: paper?.parsed.abstract },
+  });
+
+  const chatContainerRef = React.useRef<HTMLDivElement>();
+  React.useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const appendQuestion = (question: string) =>
+    append({ role: "user", content: question });
+
+  const explainConcept = (msg: string) => {
+    appendQuestion(`What is ${msg}?`);
+  };
+
   return (
     <Panel title="Ask a question" closed={closed}>
-      <div className="pt-4 flex flex-col justify-start">
-        {random(questions, 3).map((question, i) => (
-          <Question key={i}>{question}</Question>
+      <div ref={chatContainerRef} className="pt-4 flex flex-col justify-start">
+        {messages.length === 0 &&
+          random(questions, 3).map((question, i) => (
+            <Question key={i} onClick={() => appendQuestion(question)}>
+              {question}
+            </Question>
+          ))}
+        {messages?.map((message, i) => (
+          <Message
+            key={i}
+            role={message.role}
+            content={message.content}
+            explain={explainConcept}
+          />
         ))}
-        <Answer>
-          This research is important because it uses a{" "}
-          <span className="text-primary font-semibold">mathematical model</span>{" "}
-          that relies on{" "}
-          <span className="text-primary font-semibold">COVID-19 deaths</span>{" "}
-          data to figure out the real{" "}
-          <span className="text-primary font-semibold">
-            number of infections
-          </span>
-          , helping us understand{" "}
-          <span className="text-primary font-semibold">virus transmission</span>{" "}
-          and the effects of{" "}
-          <span className="text-primary font-semibold">
-            control measures and people&apos;s behavior
-          </span>
-          , which can be more reliable than just counting reported infections.
-        </Answer>
-      </div>
-      <div className="flex items-center">
-        <input
-          type="text"
-          placeholder="Ask your own question"
-          className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3"
-        />
-        <button
-          type="button"
-          className="p-3 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
-        >
-          <PaperPlaneIcon />
-        </button>
+        <form onSubmit={handleSubmit} className="flex items-center">
+          <input
+            type="text"
+            placeholder="Ask your own question"
+            className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3"
+            value={input}
+            onChange={handleInputChange}
+          />
+          <button
+            type="submit"
+            className="p-3 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
+          >
+            <PaperPlaneIcon />
+          </button>
+        </form>
       </div>
     </Panel>
   );
+}
+
+type Role = "system" | "user" | "assistant";
+
+function Message({
+  role,
+  content,
+  explain,
+}: {
+  role: Role;
+  content: string;
+  explain: (msg: string) => void;
+}) {
+  const withLinks = applyExplainLinks(content, explain);
+  if (role === "user") {
+    return <Question>{content}</Question>;
+  } else {
+    return <Answer>{withLinks}</Answer>;
+  }
 }
 
 const style =
@@ -60,19 +103,54 @@ function Answer({ children }: { children: React.ReactNode }) {
     <div
       className={`${style} from-secondary to-secondary-gradient rounded-tl-2xl self-end`}
     >
+      {/* @ts-ignore */}
       {children}
     </div>
   );
 }
 
-function Question({ children }: { children: string }) {
+function Question({
+  children,
+  onClick,
+}: {
+  children: string;
+  onClick?: () => void;
+}) {
   return (
     <div
       className={`${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
+      onClick={() => onClick && onClick()}
     >
       {children}
     </div>
   );
+}
+
+function applyExplainLinks(
+  msg: string,
+  onClick: (concept: string) => void
+): React.ReactNode {
+  const re = /\(\(.*?\)\)/gi;
+
+  const asLink = (input: string) => {
+    const sanitized = input.replace("((", "").replace("))", "");
+
+    return (
+      <span
+        className="underline cursor-pointer text-primary font-medium"
+        onClick={() => onClick(sanitized)}
+      >
+        {sanitized}
+      </span>
+    );
+  };
+
+  const arr = msg.replace(re, "~~$&~~").split("~~");
+  return arr.map((s, i) => (
+    <span key={i}>
+      {s.match(re) ? <span>{s.match(re) ? asLink(s) : s}</span> : s}
+    </span>
+  ));
 }
 
 function random(arr: string[], num: number) {
