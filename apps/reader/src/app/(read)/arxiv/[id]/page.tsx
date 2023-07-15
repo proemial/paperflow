@@ -33,7 +33,7 @@ export default async function ReaderPage({ params }: Props) {
 
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6">
-          <SummaryPanel id={params.id} closed />
+          <SummaryPanel id={params.id} />
 
           <StatisticsPanel closed />
 
@@ -43,7 +43,7 @@ export default async function ReaderPage({ params }: Props) {
         </div>
       </div>
 
-      <RelatedPanel paper={paper} closed />
+      <RelatedPanel paper={paper} />
     </main>
   );
 }
