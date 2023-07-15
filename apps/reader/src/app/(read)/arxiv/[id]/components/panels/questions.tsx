@@ -76,7 +76,7 @@ export function QuestionsPanel({ paper, closed }: Props) {
   );
 }
 
-type Role = "system" | "user" | "assistant";
+type Role = "function" | "system" | "user" | "assistant";
 
 function Message({
   role,
