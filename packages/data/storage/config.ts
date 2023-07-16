@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { PipelineConfig, Redis, PromptConfig } from "../adapters/redis/redis-client";
+import { PipelineConfig, Redis, PromptConfig, Model } from "../adapters/redis/redis-client";
 import { Log } from "utils/log";
 
 export const ConfigDao = {
@@ -26,6 +26,19 @@ export const ConfigDao = {
           throw error;
         } finally {
           Log.metrics(begin, `ConfigDao.getPromptConfig`);
+        }
+    },
+
+    getPaperbotConfig: async () => {
+        const begin = DateMetrics.now();
+
+        try {
+          return await Redis.config.get('paperbot') as {model: Model};
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          Log.metrics(begin, `ConfigDao.getPapepbotConfig`);
         }
     },
 };

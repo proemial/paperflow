@@ -4,7 +4,7 @@ import { Panel } from "src/components/panel";
 import { useChat } from "ai/react";
 import React from "react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
-import Markdown from "@/src/components/markdown";
+import { Model } from "data/adapters/redis/redis-client";
 
 const questions = [
   "Why is this important?",
@@ -12,16 +12,22 @@ const questions = [
   "How did they arrive at that conclusion?",
   "What are the key takeaways?",
   "What are the key concepts?",
+  "How was the study perfomed?",
 ];
 
 type Props = {
   paper: ArXivAtomPaper;
+  model: Model;
   closed?: boolean;
 };
 
-export function QuestionsPanel({ paper, closed }: Props) {
+export function QuestionsPanel({ paper, model, closed }: Props) {
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
-    body: { title: paper?.parsed.title, abstract: paper?.parsed.abstract },
+    body: {
+      title: paper?.parsed.title,
+      abstract: paper?.parsed.abstract,
+      model,
+    },
   });
 
   const chatContainerRef = React.useRef<HTMLDivElement>();

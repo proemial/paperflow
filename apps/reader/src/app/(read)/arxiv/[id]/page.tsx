@@ -1,4 +1,5 @@
 import { PapersDao } from "data/storage/papers";
+import { ConfigDao } from "data/storage/config";
 import { Suspense } from "react";
 import { ActionsMenu } from "./components/actions-menu";
 import { GptAbstract } from "./components/gpt-apstract";
@@ -25,6 +26,7 @@ export default async function ReaderPage({ params }: Props) {
 
 async function PageContent({ id }: { id: string }) {
   const paper = await PapersDao.getArXivAtomPaper(id);
+  const { model } = await ConfigDao.getPaperbotConfig();
 
   return (
     <main className="flex min-h-screen flex-col justify-start">
@@ -45,7 +47,7 @@ async function PageContent({ id }: { id: string }) {
 
           <MetadataPanel paper={paper} closed />
 
-          <QuestionsPanel paper={paper} />
+          <QuestionsPanel paper={paper} model={model} />
         </div>
       </div>
 

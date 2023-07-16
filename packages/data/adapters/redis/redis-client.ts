@@ -246,7 +246,7 @@ export type PromptConfig = {
 export type PromptTemplate = {
   hash: string,
   args: {
-    model: string,
+    model: Model,
     messages: Array<GptPrompt>,
   }
 }
@@ -255,3 +255,5 @@ export type GptPrompt = {
   role: ChatCompletionRequestMessageRoleEnum,
   content: string,
 };
+
+export type Model = 'gpt-4' | 'gpt-5.5-turbo';
