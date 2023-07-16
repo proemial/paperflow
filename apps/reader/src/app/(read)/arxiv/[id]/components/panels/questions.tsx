@@ -54,7 +54,11 @@ export function QuestionsPanel({ paper, closed }: Props) {
       >
         {messages.length === 0 &&
           random(questions, 3).map((question, i) => (
-            <Question key={i} onClick={() => appendQuestion(question)}>
+            <Question
+              key={i}
+              onClick={() => appendQuestion(question)}
+              className="cursor-pointer"
+            >
               {question}
             </Question>
           ))}
@@ -122,13 +126,15 @@ function Answer({ children }: { children: React.ReactNode }) {
 function Question({
   children,
   onClick,
+  className,
 }: {
   children: string;
   onClick?: () => void;
+  className?: string;
 }) {
   return (
     <div
-      className={`${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
+      className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
       onClick={() => onClick && onClick()}
     >
       {children}
