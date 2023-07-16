@@ -1,7 +1,7 @@
 import { PapersDao } from "data/storage/papers";
 import { ConfigDao } from "data/storage/config";
 import { Suspense } from "react";
-import { ActionsMenu } from "./components/actions-menu";
+import { ActionsMenu } from "./components/menu/actions-menu";
 import { GptAbstract } from "./components/gpt-apstract";
 import { MetadataPanel } from "./components/panels/metadata";
 import { QuestionsPanel } from "./components/panels/questions";
