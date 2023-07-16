@@ -1,9 +1,12 @@
 "use client";
 import { Bookmark, Home, Search, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { AuthButton } from "./auth";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export function MainMenu() {
   const { push } = useRouter();
+  const { user } = useUser();
 
   const handleHome = () => {
     push("/");
@@ -24,7 +27,8 @@ export function MainMenu() {
         <Bookmark className="stroke-zinc-700" />
       </div>
       <div>
-        <User className="stroke-zinc-700" />
+        {/* <User className="stroke-zinc-700" /> */}
+        <AuthButton user={user} />
       </div>
     </div>
   );

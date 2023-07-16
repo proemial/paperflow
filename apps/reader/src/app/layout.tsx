@@ -2,6 +2,8 @@ import { Anek_Malayalam } from "next/font/google";
 import "src/styles/globals.css";
 import { MainMenu } from "@/src/components/main-menu";
 import { Toaster } from "../components/shadcn-ui/toaster";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { AnalyticsClient } from "../components/analytics";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
 const lightModeEnabled = false;
@@ -17,27 +19,31 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${font.className} flex justify-center ${
-          lightModeEnabled ? "dark:dark" : "dark"
-        }`}
-      >
-        <main
-          className="min-h-screen max-h-screen w-full max-w-[640px] flex flex-col"
-          style={{
-            minHeight: "100dvh",
-            maxHeight: "100dvh",
-          }}
+    // @ts-ignore
+    <UserProvider>
+      <html lang="en">
+        <body
+          className={`${font.className} flex justify-center ${
+            lightModeEnabled ? "dark:dark" : "dark"
+          }`}
         >
-          <div className={`flex-1 overflow-scroll`}>{children}</div>
+          <main
+            className="min-h-screen max-h-screen w-full max-w-[640px] flex flex-col"
+            style={{
+              minHeight: "100dvh",
+              maxHeight: "100dvh",
+            }}
+          >
+            <div className={`flex-1 overflow-scroll`}>{children}</div>
 
-          <div className="pb-4 pt-2 z-50">
-            <MainMenu />
-            <Toaster />
-          </div>
-        </main>
-      </body>
-    </html>
+            <div className="pb-4 pt-2 z-50">
+              <MainMenu />
+              <Toaster />
+            </div>
+          </main>
+          <AnalyticsClient />
+        </body>
+      </html>
+    </UserProvider>
   );
 }
