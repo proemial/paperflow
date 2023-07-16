@@ -8,32 +8,38 @@ import { RelatedPanel } from "./components/panels/related-papers";
 import { StatisticsPanel } from "./components/panels/statistics";
 import { SummaryPanel } from "./components/panels/summary";
 import { PaperCard } from "./components/paper-card";
-import { Spinner } from "src/components/spinner";
+import { EmptySpinner, Spinner } from "src/components/spinner";
 
 type Props = {
   params: { id: string };
 };
 
 export default async function ReaderPage({ params }: Props) {
-  const paper = await PapersDao.getArXivAtomPaper(params.id);
+  return (
+    <Suspense fallback={<CenteredSpinner />}>
+      {/* @ts-expect-error Server Component */}
+      <PageContent id={params.id} />
+    </Suspense>
+  );
+}
+
+async function PageContent({ id }: { id: string }) {
+  const paper = await PapersDao.getArXivAtomPaper(id);
 
   return (
     <main className="flex min-h-screen flex-col justify-start">
-      <PaperCard id={params.id} date={paper.parsed.updated}>
-        <Suspense fallback={<Spinner />}>
+      <PaperCard id={id} date={paper.parsed.updated}>
+        <Suspense fallback={<EmptySpinner />}>
           {/* @ts-expect-error Server Component */}
-          <GptAbstract id={params.id} size="sm" />
+          <GptAbstract id={id} size="sm" />
         </Suspense>
       </PaperCard>
 
-      <ActionsMenu
-        id={params.id}
-        className="p-4 top-0 sticky bg-background z-50"
-      />
+      <ActionsMenu id={id} className="p-4 top-0 sticky bg-background z-50" />
 
       <div className="px-4 pt-2">
         <div className="flex flex-col gap-6">
-          <SummaryPanel id={params.id} />
+          <SummaryPanel id={id} />
 
           <StatisticsPanel closed />
 
@@ -45,5 +51,13 @@ export default async function ReaderPage({ params }: Props) {
 
       <RelatedPanel paper={paper} />
     </main>
+  );
+}
+
+function CenteredSpinner() {
+  return (
+    <div className="flex min-h-screen flex-col justify-center">
+      <Spinner />
+    </div>
   );
 }

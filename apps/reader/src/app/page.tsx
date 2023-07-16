@@ -1,9 +1,20 @@
+import { Suspense } from "react";
+import { Spinner, EmptySpinner } from "../components/spinner";
 import { PipelineDao } from "data/storage/pipeline";
 import { PaperCard } from "src/components/card";
-import { Suspense } from "react";
-import { Spinner } from "../components/spinner";
 
 export default async function Home() {
+  return (
+    <main className="flex min-h-screen flex-col justify-begin">
+      <Suspense fallback={<CenteredSpinner />}>
+        {/* @ts-expect-error Server Component */}
+        <PageContent />
+      </Suspense>
+    </main>
+  );
+}
+
+async function PageContent() {
   const ingestionIndex = await PipelineDao.getIngestionIndex();
   const index = await PipelineDao.getIndex(ingestionIndex.at(-1));
 
@@ -14,14 +25,14 @@ export default async function Home() {
   const randomIds = getMultipleRandom(latestIds, 20);
 
   return (
-    <main className="flex min-h-screen flex-col justify-start">
+    <>
       {randomIds.map((id, index) => (
-        <Suspense key={index} fallback={<Spinner />}>
+        <Suspense key={index} fallback={<EmptySpinner />}>
           {/* @ts-expect-error Server Component */}
           <PaperCard key={index} id={id} />
         </Suspense>
       ))}
-    </main>
+    </>
   );
 }
 
@@ -29,4 +40,12 @@ function getMultipleRandom(arr: string[], num: number) {
   const shuffled = [...arr].sort(() => 0.5 - Math.random());
 
   return shuffled.slice(0, num);
+}
+
+function CenteredSpinner() {
+  return (
+    <div className="flex min-h-screen flex-col justify-center">
+      <Spinner />
+    </div>
+  );
 }
