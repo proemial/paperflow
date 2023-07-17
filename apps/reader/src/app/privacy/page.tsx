@@ -14,11 +14,11 @@ export default function Home() {
             Thank you for choosing Paperflow, a non-profit foundation dedicated
             to promoting academic discourse and knowledge sharing. This Privacy
             Policy outlines how we collect, use, and protect your personal
-            information when you use our website or mobile application ("the
-            App") to read and comment on academic preprints published under
-            Creative Commons licenses, such as those from arXiv.org. By using
-            the App, you consent to the practices described in this Privacy
-            Policy.
+            information when you use our website or mobile application
+            (&quot;the App&quot;) to read and comment on academic preprints
+            published under Creative Commons licenses, such as those from
+            arXiv.org. By using the App, you consent to the practices described
+            in this Privacy Policy.
           </p>
 
           <h2>Information We Collect</h2>
@@ -53,7 +53,7 @@ export default function Home() {
           <h3>2.1 Providing and Improving Services</h3>
           <p>
             We use the information collected to provide you with the requested
-            services, enhance your user experience, and improve the App's
+            services, enhance your user experience, and improve the App&apos;s
             functionality. This may include personalizing your content
             recommendations, optimizing our search algorithms, and implementing
             new features based on user feedback.

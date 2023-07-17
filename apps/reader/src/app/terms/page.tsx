@@ -33,8 +33,8 @@ export default function Home() {
 
           <h2>Data</h2>
           <p>
-            Registered users' activities, comments, and posted content will be
-            logged and stored on a public blockchain, becoming part of the
+            Registered users&apos; activities, comments, and posted content will
+            be logged and stored on a public blockchain, becoming part of the
             Commons. However, we will not share sensitive information without
             your consent.
           </p>
