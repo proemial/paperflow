@@ -54,10 +54,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
 
   return (
     <Panel title="Ask a question" closed={closed}>
-      <div
-        ref={chatContainerRef}
-        className="pt-4 flex flex-col justify-start overflow-scroll max-h-96"
-      >
+      <div ref={chatContainerRef} className="pt-4 flex flex-col justify-start">
         {messages.length === 0 &&
           random(questions, 3).map((question, i) => (
             <Question
@@ -116,7 +113,7 @@ function Message({
 }
 
 const style =
-  "inline-block mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r max-w-[80%]";
+  "inline-block mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r";
 
 function Answer({ children }: { children: React.ReactNode }) {
   return (
