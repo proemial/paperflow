@@ -121,7 +121,7 @@ const style =
 function Answer({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className={`${style} from-secondary to-secondary-gradient rounded-tl-2xl self-end`}
+      className={`${style} from-secondary to-secondary-gradient rounded-tr-2xl self-start`}
     >
       {/* @ts-ignore */}
       {children}
