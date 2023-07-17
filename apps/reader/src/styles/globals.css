@@ -13,6 +13,23 @@
   scrollbar-width: none;  /* Firefox */
 }
 
+h1, h2, h3 {
+  margin: 8px 0;
+  font-weight: bold;;
+}
+
+h1 {
+  font-size: x-large;
+}
+
+h2 {
+  font-size: larger;
+}
+
+h3 {
+  font-size: large;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
