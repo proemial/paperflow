@@ -1,5 +1,5 @@
-import { Bookmark } from "lucide-react";
 import { ArxivButton } from "./arxiv-button";
+import { BookmarkButton } from "./bookmark-button";
 import { ShareButton } from "./share-button";
 
 type Props = {
@@ -14,7 +14,7 @@ export function ActionsMenu({ id, className }: Props) {
     >
       <ArxivButton id={id} />
       <div className="flex gap-4">
-        <Bookmark />
+        <BookmarkButton id={id} />
         <ShareButton />
       </div>
     </div>
