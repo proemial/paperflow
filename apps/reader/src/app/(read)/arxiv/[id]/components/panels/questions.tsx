@@ -2,9 +2,10 @@
 import { PaperPlaneIcon } from "src/components/icons/paperplane";
 import { Panel } from "src/components/panel";
 import { useChat } from "ai/react";
-import React from "react";
+import React, { FormEvent } from "react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
+import { Analytics } from "@/src/components/analytics";
 
 const questions = [
   "Why is this important?",
@@ -34,7 +35,18 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
     append({ role: "user", content: question });
 
   const explainConcept = (msg: string) => {
+    Analytics.track("click:question-explainer", { msg });
     appendQuestion(`What is ${msg}?`);
+  };
+
+  const handleSuggestionClick = (question: string) => {
+    Analytics.track("click:question-suggestion", { question });
+    appendQuestion(question);
+  };
+
+  const handlePostQuestion = (e: FormEvent<HTMLFormElement>) => {
+    handleSubmit(e);
+    Analytics.track("click:question-ask");
   };
 
   return (
@@ -44,7 +56,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
           random(questions, 3).map((question, i) => (
             <Question
               key={i}
-              onClick={() => appendQuestion(question)}
+              onClick={() => handleSuggestionClick(question)}
               className="cursor-pointer"
             >
               {question}
@@ -58,7 +70,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             explain={explainConcept}
           />
         ))}
-        <form onSubmit={handleSubmit} className="flex items-center">
+        <form onSubmit={handlePostQuestion} className="flex items-center">
           <input
             type="text"
             placeholder="Ask your own question"

@@ -3,6 +3,7 @@ import { findPaper, useViewHistory } from "@/src/state/history";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Bookmark } from "lucide-react";
 import { useEffect } from "react";
+import { Analytics } from "./analytics";
 
 export function BookmarkButton({ id }: { id: string }) {
   const toggleBookmark = useViewHistory((state) => state.toggleBookmark);
@@ -10,6 +11,10 @@ export function BookmarkButton({ id }: { id: string }) {
   const paper = useHistory(id);
 
   const handleClick = () => {
+    Analytics.track(
+      !!paper?.bookmarked ? "click:bookmark-clear" : "click:bookmark",
+      { id }
+    );
     toggleBookmark(user.sub, id);
   };
 

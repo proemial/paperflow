@@ -53,7 +53,5 @@ async function toggleBookmark(paper: UserPaper) {
 }
 
 export function findPaper(papers: UserPaper[], userId: string, paperId: string) {
-  console.log('papers', papers, userId, paperId);
-
   return papers.find(p => p.user === userId && p.paper === paperId);;
 }

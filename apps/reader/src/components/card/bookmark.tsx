@@ -2,6 +2,7 @@
 import { Bookmark as BookmarkIcon } from "lucide-react";
 import { useTransition } from "react";
 import { bookmark } from "./bookmark.action";
+import { Analytics } from "../analytics";
 
 type Props = {
   id: string;
@@ -12,7 +13,9 @@ export function Bookmark({ id, bookmarked }: Props) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
-    console.log("bookmark", id, !bookmarked, `(${bookmarked})`);
+    Analytics.track(!!bookmarked ? "click:bookmark-clear" : "click:bookmark", {
+      id,
+    });
 
     // @ts-ignore
     startTransition(() => bookmark(id, !bookmarked));

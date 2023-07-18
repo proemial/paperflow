@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Analytics } from "./analytics";
 
 type Props = {
   title: string;
@@ -12,11 +13,19 @@ type Props = {
 export function Panel({ title, children, closed, className }: Props) {
   const [isClosed, setClosed] = useState(!!closed);
 
+  const handleClick = () => {
+    const prefix = isClosed ? "show" : "hide";
+    Analytics.track(
+      `click:panel-${prefix}-${title.split(" ").at(-1).toLowerCase()}`
+    );
+    setClosed(!isClosed);
+  };
+
   return (
     <div>
       <div
         className={`${className} flex justify-between`}
-        onClick={() => setClosed(!isClosed)}
+        onClick={handleClick}
       >
         <div className={`text-xl font-medium`}>{title}</div>
         <ToggleButton closed={isClosed} />

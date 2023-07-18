@@ -14,11 +14,17 @@ export function AnalyticsClient() {
   const initialized = useGoogleAnalytics();
   const pathname = usePathname();
 
+  const getViewName = (path: string) => {
+    if (path === "/") return "home";
+    if (path.startsWith("/arxiv")) return "reader";
+    return path.slice(1);
+  };
+
   useEffect(() => {
     if (initialized) {
       ReactGA.send({ hitType: "pageview", page: pathname, title: pathname });
-      console.log("[AnalyticsClient] path:", pathname);
-      Analytics.track(`view:${pathname === "/" ? "home" : "reader"}`, {
+      console.log("[AnalyticsClient] ", `view:${getViewName(pathname)}`);
+      Analytics.track(`view:${getViewName(pathname)}`, {
         path: pathname,
       });
     }

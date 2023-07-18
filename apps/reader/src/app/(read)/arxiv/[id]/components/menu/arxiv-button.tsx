@@ -1,8 +1,10 @@
 "use client";
+import { Analytics } from "@/src/components/analytics";
 import { Button } from "src/components/shadcn-ui/button";
 
 export function ArxivButton({ id }: { id: string }) {
   const handleClick = () => {
+    Analytics.track("click:share", { id });
     window.location.href = `https://arxiv.org/abs/${id}`;
   };
 
