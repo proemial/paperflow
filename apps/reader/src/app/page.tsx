@@ -40,7 +40,7 @@ async function PageContent() {
 
   const { user } = await getSession();
   if (user) {
-    const read = (await ViewHistoryDao.read(user.sub)).map(
+    const read = (await ViewHistoryDao.readHistory(user.sub)).map(
       (paper) => paper.paper
     );
     latestIds = latestIds.filter((id) => !read.includes(id));

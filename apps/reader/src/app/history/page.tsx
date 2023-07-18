@@ -19,7 +19,7 @@ export default async function HistoryPage() {
 
 async function PageContent() {
   const session = await getSession();
-  const read = await ViewHistoryDao.read(session?.user.sub);
+  const read = await ViewHistoryDao.readHistory(session?.user.sub);
   const latestIds = read.map((entry) => entry.paper).slice(0, 20);
 
   return (

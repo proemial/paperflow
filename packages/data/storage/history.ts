@@ -19,7 +19,7 @@ export const ViewHistoryDao = {
     try {
       await mongo.findOneAndUpdate(
         {user, paper},
-        {$inc: {viewCount: 1}, $set: {updatedAt: new Date(), category}},
+        {$inc: {viewCount: 1}, $set: {updatedAt: new Date(), viewedAt: new Date(), category}},
         {upsert: true, returnDocument: 'after'});
     } catch (error) {
       console.error(error);
@@ -56,7 +56,7 @@ export const ViewHistoryDao = {
     try {
       const result = mongo.find<UserPaper>(
         {user, bookmarked: true},
-        {sort: {updatedAt: -1}}
+        {sort: {bookmarkedAt: -1}}
       );
       return await result.toArray();
     } catch (error) {
@@ -67,14 +67,14 @@ export const ViewHistoryDao = {
     }
   },
 
-  read: async (user: string) => {
+  readHistory: async (user: string) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
 
     try {
       const result = mongo.find<UserPaper>(
         {user, viewCount: {$exists: true}},
-        {sort: {updatedAt: -1}}
+        {sort: {viewedAt: -1}}
       );
       return await result.toArray();
     } catch (error) {
@@ -92,7 +92,7 @@ export const ViewHistoryDao = {
     try {
       await mongo.findOneAndUpdate(
         {user, paper},
-        {$set: {updatedAt: new Date(), bookmarked}},
+        {$set: {updatedAt: new Date(), bookmarkedAt: new Date(), bookmarked}},
         {upsert: true});
     } catch (error) {
       console.error(error);
