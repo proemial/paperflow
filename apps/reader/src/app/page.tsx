@@ -2,8 +2,20 @@ import { Suspense } from "react";
 import { Spinner, EmptySpinner } from "../components/spinner";
 import { PipelineDao } from "data/storage/pipeline";
 import { PaperCard } from "src/components/card";
+import { getSession } from "@auth0/nextjs-auth0";
+import logo from "src/images/logo.png";
 
 export default async function Home() {
+  const session = await getSession();
+  if (!session?.user) {
+    return (
+      <main className="flex min-h-screen flex-col justify-center items-center">
+        <img src={logo.src} width="50%" />
+        <div className="text-4xl">paperflow</div>
+      </main>
+    );
+  }
+
   return (
     <main className="flex min-h-screen flex-col justify-begin">
       <Suspense fallback={<CenteredSpinner />}>
