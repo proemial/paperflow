@@ -1,13 +1,16 @@
 "use client";
 import { Bookmark, Home, Search, LogIn } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AuthButton } from "./auth";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
 export function MainMenu() {
   const { push } = useRouter();
+  const pathname = usePathname();
   const { user } = useUser();
-  const isHome = window.location.pathname === "/";
+
+  // @ts-ignore
+  const isHome = pathname === "/";
 
   const handleHome = () => {
     push("/");
