@@ -1,11 +1,14 @@
 import { Suspense } from "react";
 import { Spinner, EmptySpinner } from "../components/spinner";
 import { PipelineDao } from "data/storage/pipeline";
-import { PaperCard } from "src/components/card";
+import { PaperCard } from "@/src/components/card/card";
 import { getSession } from "@auth0/nextjs-auth0";
 import logo from "src/images/logo.png";
+import { ViewHistoryDao } from "data/storage/history";
 
-export default async function Home() {
+export const revalidate = 1;
+
+export default async function HomePage() {
   const session = await getSession();
   if (!session?.user) {
     return (
@@ -30,11 +33,20 @@ async function PageContent() {
   const ingestionIndex = await PipelineDao.getIngestionIndex();
   const index = await PipelineDao.getIndex(ingestionIndex.at(-1));
 
-  const latestIds = index
+  let latestIds = index
     .map((entry) => entry.id)
     .sort()
     .reverse();
-  const randomIds = getMultipleRandom(latestIds, 20);
+
+  const { user } = await getSession();
+  if (user) {
+    const read = (await ViewHistoryDao.read(user.sub)).map(
+      (paper) => paper.paper
+    );
+    latestIds = latestIds.filter((id) => !read.includes(id));
+  }
+
+  const randomIds = latestIds.slice(0, 20);
 
   return (
     <>
@@ -46,12 +58,6 @@ async function PageContent() {
       ))}
     </>
   );
-}
-
-function getMultipleRandom(arr: string[], num: number) {
-  const shuffled = [...arr].sort(() => 0.5 - Math.random());
-
-  return shuffled.slice(0, num);
 }
 
 function CenteredSpinner() {

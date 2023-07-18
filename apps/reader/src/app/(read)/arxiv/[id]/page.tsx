@@ -10,12 +10,18 @@ import { StatisticsPanel } from "./components/panels/statistics";
 import { SummaryPanel } from "./components/panels/summary";
 import { PaperCard } from "./components/paper-card";
 import { EmptySpinner, Spinner } from "src/components/spinner";
+import { ViewHistoryDao } from "data/storage/history";
+import { getSession } from "@auth0/nextjs-auth0";
+import { revalidatePath } from "next/cache";
 
 type Props = {
   params: { id: string };
 };
 
 export default async function ReaderPage({ params }: Props) {
+  revalidatePath("/history");
+  revalidatePath("/");
+
   return (
     <Suspense fallback={<CenteredSpinner />}>
       {/* @ts-expect-error Server Component */}
@@ -27,6 +33,7 @@ export default async function ReaderPage({ params }: Props) {
 async function PageContent({ id }: { id: string }) {
   const paper = await PapersDao.getArXivAtomPaper(id);
   const { model } = await ConfigDao.getPaperbotConfig();
+  await logHistory(id, paper.parsed.category);
 
   return (
     <main className="flex min-h-screen flex-col justify-start">
@@ -62,4 +69,11 @@ function CenteredSpinner() {
       <Spinner />
     </div>
   );
+}
+
+async function logHistory(id, category) {
+  const session = await getSession();
+  if (session) {
+    await ViewHistoryDao.upsert(session.user.sub, id, category);
+  }
 }

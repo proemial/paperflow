@@ -38,7 +38,7 @@ export const db = async (collection: string) => {
     console.error(e);
     throw e;
   } finally {
-    console.log(`[${DateMetrics.elapsed(begin)}] Mongo connected to ${collection}`);
+    // console.log(`[${DateMetrics.elapsed(begin)}] Mongo connected to ${collection}`);
   }
 };
 

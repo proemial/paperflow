@@ -1,4 +1,4 @@
-import { PaperCard } from "src/components/card";
+import { PaperCard } from "@/src/components/card/card";
 import { Suspense } from "react";
 import { PipelineDao } from "data/storage/pipeline";
 import { EmptySpinner } from "src/components/spinner";

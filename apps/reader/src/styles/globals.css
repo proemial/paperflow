@@ -116,6 +116,9 @@ h3 {
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
 
+    --light-purple: 274 100% 72%
+    --turquise: 170 100% 50%
+
     --ring: 170 100% 50%;
 
     --radius: 0.5rem;
