@@ -11,7 +11,7 @@ export default async function Home() {
     return (
       <main className="flex min-h-screen flex-col justify-center items-center">
         <img src={logo.src} width="50%" />
-        <div className="text-4xl">paperflow</div>
+        <div className="text-4xl md:text-7xl">paperflow</div>
       </main>
     );
   }
