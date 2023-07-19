@@ -18,6 +18,7 @@ export function PaperCard({ id, date, children }: Props) {
       style={{
         backgroundImage: `url(${image(id)})`,
         backgroundSize: "cover",
+        boxShadow: "inset 0 -40px 60px -10px #000000",
       }}
     >
       <div className="text-purple-500">
