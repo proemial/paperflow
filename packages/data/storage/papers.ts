@@ -4,6 +4,7 @@ import {ArXivOaiPaper} from "../adapters/arxiv/arxiv-oai"
 import { ArXivAtomPaper } from "../adapters/arxiv/arxiv.models"
 import { WithTextAndUsage } from "../adapters/openai/openai";
 import {Log} from "utils/log";
+import { sanitize } from "utils/sanitizer";
 
 enum PapersDaoKey {
   Oai = 'arxiv:oai',
@@ -140,6 +141,40 @@ export const PapersDao = {
       throw error;
     } finally {
       Log.metrics(begin, `PapersDao.getGptSummaries`);
+    }
+  },
+
+  buildMetadata: async (ids: string[]) => {
+    const begin = DateMetrics.now();
+
+    try {
+      const papersPipeline = UpStash.papers.pipeline();
+      ids.forEach(id => {
+        papersPipeline.get(`${id}:${PapersDaoKey.Atom}`);
+      })
+      const papers = await papersPipeline.exec() as ArXivAtomPaper[];
+
+      const pipeline = UpStash.papers.pipeline();
+      ids.forEach(id => {
+        pipeline.get(`${id}:${PapersDaoKey.Gpt}:sm`);
+      })
+      const summaries = await pipeline.exec() as Array<{id: string} & WithTextAndUsage>;
+
+      const result = {} as {[id: string]: {categories: string[], tags: string[], published: Date, updated: Date}}
+      papers.forEach(paper => {
+        result[paper.parsed.id] = {categories: paper.parsed.categories, tags: [], published: paper.parsed.published, updated: paper.parsed.updated};
+      })
+
+      summaries.forEach(summary => {
+        result[summary.id].tags = sanitize(summary.text).hashtags;
+      })
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      Log.metrics(begin, `PapersDao.buildMetadata`);
     }
   },
 

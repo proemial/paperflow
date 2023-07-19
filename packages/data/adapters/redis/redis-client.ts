@@ -150,6 +150,34 @@ export const Redis = {
         Log.metrics(begin, `pipeline.getIndex`);
       }
     },
+
+    pushMetadata: async (date: string, metadata: MetadataPayload) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+      try {
+        await client.json.SET(`${date}:metadata`, '$', metadata);
+
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+        Log.metrics(begin, `pipeline.pushMetadata`);
+      }
+    },
+
+    getMetadata: async (date: string) => {
+      const begin = DateMetrics.now();
+      const client = await connect(pipelineEnv);
+
+      try {
+        return await client.json.GET(`${date}:metadata`);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await closeConnetion(client);
+        Log.metrics(begin, `pipeline.getMetadata`);
+      }
+    },
   },
 };
 
@@ -198,6 +226,7 @@ export enum PipelineStage {
   arxivAtom = 'arxivAtom',
   gptSummary = 'gptSummary',
   relatedPapers = 'relatedPapers',
+  metadata = 'metadata',
 }
 
 export type Pipeline = {
@@ -225,6 +254,15 @@ export type GptSummaryWorker = {
 export type GptSummaryPayload = {
   id: string,
   size: 'sm';// | 'md' | 'lg',
+};
+
+export type MetadataPayload = {
+  [id: string]: {
+    categories: string[],
+    tags: string[],
+    published: Date,
+    updated: Date
+  },
 };
 
 export type WorkerStatus = 'idle' | 'scheduled' | 'running' | 'completed' | 'error'

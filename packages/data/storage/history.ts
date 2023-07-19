@@ -1,3 +1,4 @@
+import { Log } from "utils/log";
 import { db } from "../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
 
@@ -8,7 +9,9 @@ export type UserPaper = {
   viewCount?: number,
   category?: string,
   bookmarked?: boolean,
+  bookmarkedAt?: string,
   likes?: string[],
+  likedAt?: string,
 }
 
 export const ViewHistoryDao = {
@@ -85,6 +88,24 @@ export const ViewHistoryDao = {
     }
   },
 
+  fullHistory: async (user: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      const result = mongo.find<UserPaper>(
+        {user},
+        {sort: {viewedAt: -1}}
+      );
+      return await result.toArray();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      Log.metrics(begin, `PapersDao.fullHistory`);
+    }
+  },
+
   bookmark: async (user: string, paper: string, category: string, bookmarked: boolean) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
@@ -109,7 +130,8 @@ export const ViewHistoryDao = {
     try {
       await mongo.findOneAndUpdate(
         {user, paper},
-        {$set: {updatedAt: new Date(), likes, category}});
+        {$set: {updatedAt: new Date(), likedAt: new Date(), likes, category}},
+        {upsert: true});
     } catch (error) {
       console.error(error);
       throw error;

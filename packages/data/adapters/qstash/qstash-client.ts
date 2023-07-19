@@ -45,7 +45,16 @@ export const QStash = {
     return await publishJSON(req);
   },
 
-  schedule: async (date: string, stage: PipelineStage, indices: number[]) => {
+  schedule: async (date: string, stage: PipelineStage, indices?: number[]) => {
+    if(!indices) {
+      await publishJSON({
+        url: `${baseUrl}/${stage}/${date}`,
+        body: '',
+      });
+      await PipelineDao.updateStatus(date, stage, 0, 'scheduled');
+      return;
+    }
+
     for (let index = 0; index < indices.length; index++) {
       await publishJSON({
         url: `${baseUrl}/${stage}/${date}/${indices[index]}`,

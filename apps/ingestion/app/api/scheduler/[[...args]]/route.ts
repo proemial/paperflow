@@ -31,7 +31,9 @@ async function run(params: { args: string[] }) {
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
     const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
 
-    result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}`;
+    const scheduledMetadataWorkers = await scheduleMetadataWorker(date, scheduledGptSummaryWorkers.length)
+
+    result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}, Metadata: ${scheduledMetadataWorkers}`;
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
@@ -70,4 +72,18 @@ async function scheduleGptSummaryWorkers(date: string, actions: GptSummaryWorker
   }
 
   return [];
+}
+
+async function scheduleMetadataWorker(date: string, gptWorkers: number) {
+  if(gptWorkers > 0)
+    return 0;
+
+    const metadata = await PipelineDao.getMetadata(date);
+
+    if(metadata)
+      return 0
+
+    await QStash.schedule(date, PipelineStage.metadata);
+
+    return 1;
 }

@@ -1,5 +1,5 @@
 import { DateMetrics } from "utils/date";
-import { Pipeline, Redis, PipelineStage, GptSummaryPayload, GptSummaryWorker, WorkerStatus, UpdateIndex } from "../adapters/redis/redis-client";
+import { Pipeline, Redis, PipelineStage, GptSummaryPayload, MetadataPayload, WorkerStatus, UpdateIndex } from "../adapters/redis/redis-client";
 import { Log } from "utils/log";
 
 export const PipelineDao = {
@@ -109,6 +109,32 @@ export const PipelineDao = {
           throw error;
         } finally {
           Log.metrics(begin, `PipelineDao.getIngestionIndex`);
+        }
+    },
+
+    pushMetadata: async (date: string, payload: MetadataPayload) => {
+        const begin = DateMetrics.now();
+
+        try {
+          await Redis.pipeline.pushMetadata(date, payload);
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          Log.metrics(begin, `PipelineDao.pushMetadata`);
+        }
+    },
+
+    getMetadata: async (date: string) => {
+        const begin = DateMetrics.now();
+
+        try {
+          return await Redis.pipeline.getMetadata(date) as MetadataPayload;
+        } catch (error) {
+          console.error(error);
+          throw error;
+        } finally {
+          Log.metrics(begin, `PipelineDao.getMetadata`);
         }
     },
 };
