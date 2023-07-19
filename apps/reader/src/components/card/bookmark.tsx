@@ -6,10 +6,11 @@ import { Analytics } from "../analytics";
 
 type Props = {
   id: string;
+  category: string;
   bookmarked?: boolean;
 };
 
-export function Bookmark({ id, bookmarked }: Props) {
+export function Bookmark({ id, category, bookmarked }: Props) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
@@ -18,7 +19,7 @@ export function Bookmark({ id, bookmarked }: Props) {
     });
 
     // @ts-ignore
-    startTransition(() => bookmark(id, !bookmarked));
+    startTransition(() => bookmark(id, category, !bookmarked));
   };
 
   return (

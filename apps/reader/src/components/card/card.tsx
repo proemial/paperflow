@@ -33,7 +33,11 @@ export async function PaperCard({ id }: { id: string }) {
             {dayjs(parsed.published).format("MMM DD, YYYY")}
           </div>
           <div className="w-full flex justify-end pb-4">
-            <Bookmark id={id} bookmarked={!!history?.bookmarked} />
+            <Bookmark
+              id={id}
+              category={parsed.category}
+              bookmarked={!!history?.bookmarked}
+            />
           </div>
         </div>
         <div>
@@ -45,6 +49,7 @@ export async function PaperCard({ id }: { id: string }) {
             <Badge
               key={index}
               id={id}
+              category={parsed.category}
               text={tag.slice(1)}
               likes={history?.likes}
             />

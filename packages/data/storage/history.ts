@@ -85,14 +85,14 @@ export const ViewHistoryDao = {
     }
   },
 
-  bookmark: async (user: string, paper: string, bookmarked: boolean) => {
+  bookmark: async (user: string, paper: string, category: string, bookmarked: boolean) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
 
     try {
       await mongo.findOneAndUpdate(
         {user, paper},
-        {$set: {updatedAt: new Date(), bookmarkedAt: new Date(), bookmarked}},
+        {$set: {updatedAt: new Date(), bookmarkedAt: new Date(), bookmarked, category}},
         {upsert: true});
     } catch (error) {
       console.error(error);
@@ -102,14 +102,14 @@ export const ViewHistoryDao = {
     }
   },
 
-  like: async (user: string, paper: string, likes: string[]) => {
+  like: async (user: string, paper: string, category: string, likes: string[]) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
 
     try {
       await mongo.findOneAndUpdate(
         {user, paper},
-        {$set: {updatedAt: new Date(), likes}});
+        {$set: {updatedAt: new Date(), likes, category}});
     } catch (error) {
       console.error(error);
       throw error;

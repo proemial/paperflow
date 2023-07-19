@@ -6,11 +6,12 @@ import { Analytics } from "../analytics";
 
 type Props = {
   id: string;
+  category: string;
   text: string;
   likes?: string[];
 };
 
-export function Badge({ id, text, likes }: Props) {
+export function Badge({ id, category, text, likes }: Props) {
   const [isPending, startTransition] = useTransition();
 
   const liked = likes?.includes(text);
@@ -23,10 +24,9 @@ export function Badge({ id, text, likes }: Props) {
     const updatedLikes = !!liked
       ? likes.filter((like) => like !== text)
       : [...(likes || []), text];
-    console.log(`startTransition(() => like(${id}, ${updatedLikes}));`);
 
     // @ts-ignore
-    startTransition(() => like(id, updatedLikes));
+    startTransition(() => like(id, category, updatedLikes));
   };
 
   // return (
