@@ -1,4 +1,4 @@
-import { sanitize } from "@/src/components/sanitizer";
+import { sanitize } from "utils/sanitizer";
 import { PapersDao } from "data/storage/papers";
 import Markdown from "src/components/markdown";
 

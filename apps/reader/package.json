@@ -10,6 +10,7 @@
   "dependencies": {
     "data": "workspace:*",
     "ui": "workspace:*",
+    "utils": "workspace:*",
     "@auth0/nextjs-auth0": "^3.0.0-beta.3",
     "@types/node": "^20.4.1",
     "@types/react": "^18.2.14",

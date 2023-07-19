@@ -129,7 +129,7 @@ export const PipelineDao = {
         const begin = DateMetrics.now();
 
         try {
-          return await Redis.pipeline.getMetadata(date) as MetadataPayload;
+          return await Redis.pipeline.getMetadata(date) as MetadataPayload[];
         } catch (error) {
           console.error(error);
           throw error;

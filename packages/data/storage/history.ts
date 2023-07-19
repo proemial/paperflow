@@ -123,6 +123,22 @@ export const ViewHistoryDao = {
     }
   },
 
+  clearBookmarks: async (user: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      await mongo.updateMany(
+        {user},
+        {$unset: { bookmarked: "", bookmarkedAt: "" }});
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearBookmarks`);
+    }
+  },
+
   like: async (user: string, paper: string, category: string, likes: string[]) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
@@ -137,6 +153,22 @@ export const ViewHistoryDao = {
       throw error;
     } finally {
       console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.like`);
+    }
+  },
+
+  clearLikes: async (user: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      await mongo.updateMany(
+        {user},
+        {$unset: { likes: "", likedAt: "" }});
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearLikes`);
     }
   },
 };

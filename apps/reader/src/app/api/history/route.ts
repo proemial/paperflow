@@ -6,12 +6,12 @@ type Body = UserPaper & {
 };
 
 export async function POST(request: Request) {
-    const {action, user, paper, bookmarked, likes} = await request.json() as Body;
+    const {action, user, paper, bookmarked, likes, category} = await request.json() as Body;
 
     switch(action) {
-        case 'bookmark': await ViewHistoryDao.bookmark(user, paper, bookmarked);
+        case 'bookmark': await ViewHistoryDao.bookmark(user, paper, category, bookmarked);
         break;
-        case 'like': await ViewHistoryDao.like(user, paper, likes);
+        case 'like': await ViewHistoryDao.like(user, paper, category, likes);
         break;
     }
 
