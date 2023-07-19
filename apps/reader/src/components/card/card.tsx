@@ -6,7 +6,7 @@ import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
 import { Badge } from "./badge";
-import { sanitize } from "../sanitizer";
+import { sanitize } from "utils/sanitizer";
 import { Bookmark } from "./bookmark";
 import { CardLink } from "./card-link";
 
