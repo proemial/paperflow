@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
-import { Badge } from "../badge";
+import { Badge } from "./badge";
 import { sanitize } from "../sanitizer";
 import { Bookmark } from "./bookmark";
 import { CardLink } from "./card-link";
@@ -42,7 +42,12 @@ export async function PaperCard({ id }: { id: string }) {
         </div>
         <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
           {sanitized.hashtags.map((tag, index) => (
-            <Badge key={index} text={tag.slice(1)} />
+            <Badge
+              key={index}
+              id={id}
+              text={tag.slice(1)}
+              likes={history?.likes}
+            />
           ))}
         </div>
       </div>

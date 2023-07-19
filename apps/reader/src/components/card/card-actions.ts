@@ -7,3 +7,11 @@ export async function bookmark(id: string, bookmarked: boolean) {
 
     await ViewHistoryDao.bookmark(session.user.sub, id, bookmarked);
 }
+
+export async function like(id: string, likes: string[]) {
+    const session = await getSession();
+    console.log(`like(${session.user.sub}, ${id}, ${likes})`);
+
+
+    await ViewHistoryDao.like(session.user.sub, id, likes);
+}

@@ -1,7 +1,7 @@
 "use client";
 import { Bookmark as BookmarkIcon } from "lucide-react";
 import { useTransition } from "react";
-import { bookmark } from "./bookmark.action";
+import { bookmark } from "./card-actions";
 import { Analytics } from "../analytics";
 
 type Props = {
