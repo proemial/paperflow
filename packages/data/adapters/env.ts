@@ -29,6 +29,10 @@ export const Env = {
         uri: process.env.REDIS_PAPERS_URL as string,
         token: process.env.REDIS_PAPERS_TOKEN as string,
       },
+      feed: {
+        uri: process.env.REDIS_FEED_URL as string,
+        token: process.env.REDIS_FEED_TOKEN as string,
+      },
       // Redis Enterprise
       pipeline: {
         uri: process.env.REDIS_PIPELINE_URL as string,

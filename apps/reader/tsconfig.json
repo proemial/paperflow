@@ -5,7 +5,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "../../packages/data/feed.ts"  ],
   "exclude": [
     "node_modules"
   ],

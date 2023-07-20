@@ -1,0 +1,85 @@
+"use client";
+import dayjs from "dayjs";
+import assetImg1 from "src/images/asset-bg-1.png";
+import assetImg2 from "src/images/asset-bg-2.png";
+import assetImg3 from "src/images/asset-bg-3.png";
+import { Badge } from "./badge";
+import { Bookmark } from "./bookmark";
+import { CardLink } from "./card-link";
+import { useQuery } from "@tanstack/react-query";
+import { PaperResponse } from "src/app/api/papers/[id]/route";
+import { Spinner } from "../spinner";
+
+const images = [assetImg1, assetImg2, assetImg3];
+
+export function PaperCard({ id }: { id: string }) {
+  const { data, isLoading } = useQuery<PaperResponse>(
+    ["card", id],
+    async () => {
+      const res = await fetch(`/api/papers/${id}`);
+      return await res.json();
+    }
+  );
+
+  if (isLoading) {
+    return (
+      <div
+        className="flex justify-center items-center bg-gradient-to-r from-primary to-primary-gradient opacity-70 shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
+        style={{
+          backgroundImage: `url(${image(id)})`,
+          backgroundSize: "cover",
+          width: 640,
+          height: 194,
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
+      style={{
+        backgroundImage: `url(${image(id)})`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
+        <div className="w-full flex justify-evenly">
+          <div className="w-full flex items-end text-purple-500">
+            {dayjs(data.paper.published).format("MMM DD, YYYY")}
+          </div>
+          <div className="w-full flex justify-end pb-4">
+            <Bookmark
+              id={id}
+              category={data.paper.category}
+              bookmarked={!!data.history?.bookmarked}
+            />
+          </div>
+        </div>
+        <div>
+          <CardLink id={id} text={data.paper.text} />
+        </div>
+        <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
+          {data.paper.tags.map((tag, index) => (
+            <Badge
+              key={index}
+              id={id}
+              category={data.paper.category}
+              text={tag.slice(1)}
+              likes={data.history?.likes}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function image(id: string) {
+  const lastNum = Number(id.charAt(id.length - 1));
+  if (lastNum < 3) return images[0].src;
+  if (lastNum < 6) return images[1].src;
+  return images[2].src;
+}

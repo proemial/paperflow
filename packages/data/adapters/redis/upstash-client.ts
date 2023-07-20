@@ -1,9 +1,9 @@
 import { Redis } from "@upstash/redis";
 import { Env } from "../env";
 
-const {ingestion, prompts, modelOutput, papers, ingestionLog} = Env.connectors.redis;
+const {ingestion, prompts, modelOutput, papers, ingestionLog, feed} = Env.connectors.redis;
 
-if (!ingestion || !prompts || !modelOutput || !papers || !ingestionLog) {
+if (!ingestion || !prompts || !modelOutput || !papers || !ingestionLog || !feed) {
   throw new Error("[redis-client] Please fix your environment variables");
 }
 
@@ -27,5 +27,9 @@ export const UpStash = {
   ingestionLog: new Redis({
     url: ingestionLog.uri,
     token: ingestionLog.token
+  }),
+  feed: new Redis({
+    url: feed.uri,
+    token: feed.token
   }),
 };

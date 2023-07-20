@@ -1,17 +1,20 @@
-import { UserTags, getFeed } from "@/src/utils/feed";
+import { UserTags, buildFeed } from "src/utils/feed";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import { ClearBookmarks, ClearHistory, ClearLikes } from "./clear-buttons";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
-import { Badge } from "@/src/components/card/badge";
+import { Badge } from "src/components/card/badge";
 import { LinkButton } from "./link-button";
+import { filterFeed } from "@/src/utils/feed-filter";
 
 type Props = {
   params: { date: string };
 };
 
 export default async function FeedTest({ params }: Props) {
-  const feed = await getFeed(params.date);
+  const feed = await buildFeed(params.date);
+  const highScoring = feed.papers.filter((p) => p.score > 4);
+  const filteredFeed = filterFeed(feed.papers);
 
   const session = await getSession();
   const history =
@@ -61,10 +64,10 @@ export default async function FeedTest({ params }: Props) {
 
       <h1 className="mb-0">{feed.papers.length} Feed papers</h1>
       <div className="text-secondary mb-3">
-        {feed.highScoring.length} has a score above 4 (daily total: {feed.total}
-        )
+        {highScoring.length} has a score above 4 (daily total:{" "}
+        {feed.papers.length})
       </div>
-      {feed.papers.map((paper, index) => (
+      {filteredFeed.map((paper, index) => (
         <div key={index}>
           <div className="flex justify-between">
             <LinkButton id={paper.id} />
