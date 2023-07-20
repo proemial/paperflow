@@ -77,6 +77,10 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
   async function getUserHistory() {
     const session = await getSession();
     const history = await ViewHistoryDao.fullHistory(session?.user.sub);
+    if(history.length < 1) {
+        return [];
+    }
+
     const summaries = await PapersDao.getGptSummaries(
       history.map((h) => h.paper)
     );
