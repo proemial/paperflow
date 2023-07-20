@@ -7,17 +7,11 @@ import { sanitize } from "utils/sanitizer";
 
 export async function getFeed(date: string) {
     const begin = DateMetrics.now();
-    const userHistory = await getUserHistory();
     const metadata = await getMetadata(date);
 
-    const tags = {
-        liked: getLikedTags(userHistory),
-        bookmarked: getBookmarkTags(userHistory),
-        viewed: getViewTags(userHistory),
-    };
-    const bookmarks = userHistory.filter((h) => h.bookmarked);
+    const {tags, bookmarks, size} = await getUserHistory();
 
-    const feedPapers = getFeedPapers(metadata, tags);
+    const feedPapers = getFeedPapers(metadata, tags, size);
     const highScoring = feedPapers.filter((p) => p.score > 4);
     const lowScoring = feedPapers.filter((p) => p.score <= 4);
     const total = highScoring.length + lowScoring.length;
@@ -37,11 +31,15 @@ export async function getFeed(date: string) {
     return {papers, highScoring, lowScoring, tags, bookmarks, total, elapsed}
 }
 
-function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
+function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: number) {
     const feedPapers = metadata.map((m) => ({
       ...m,
       score: 0,
     }));
+
+    if(size === 0) {
+      return feedPapers;
+    }
 
     const find = (id: string) => feedPapers.find((p) => p.id === id);
 
@@ -76,19 +74,30 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
 
   async function getUserHistory() {
     const session = await getSession();
+
+    const empty = {
+      bookmarks: [],
+      tags: {
+        liked: [],
+        bookmarked: [],
+        viewed: [],
+      },
+      size: 0,
+    };
+
     if(!session) {
-      return []
+      return empty;
     }
     const history = await ViewHistoryDao.fullHistory(session?.user.sub);
     if(history.length < 1) {
-        return [];
+        return empty;
     }
 
     const summaries = await PapersDao.getGptSummaries(
       history.map((h) => h.paper)
     );
 
-    return history.map((h) => {
+    const withTags = history.map((h) => {
       const summary = summaries.find((s) => s.id === h.paper);
       const tags = sanitize(summary.text).hashtags;
       return {
@@ -96,6 +105,15 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
         tags,
       };
     });
+
+    const tags = {
+      liked: getLikedTags(withTags),
+      bookmarked: getBookmarkTags(withTags),
+      viewed: getViewTags(withTags),
+    };
+    const bookmarks = withTags.filter((h) => h.bookmarked);
+
+    return {tags, bookmarks, size: history.length};
   }
 
   function getLikedTags(userHistory: Array<UserPaper & { tags: string[] }>) {
