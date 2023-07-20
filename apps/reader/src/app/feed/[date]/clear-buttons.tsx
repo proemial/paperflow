@@ -12,7 +12,7 @@ export function ClearLikes({ count }: { count: number }) {
   };
 
   return (
-    <button onClick={handleClick} className="ml-2 text-sm text-purple-500">
+    <button onClick={handleClick} className="ml-2 text-sm text-secondary">
       [Clear all ({count}) likes]
     </button>
   );
@@ -27,7 +27,7 @@ export function ClearBookmarks({ count }: { count: number }) {
   };
 
   return (
-    <button onClick={handleClick} className="ml-2 text-sm text-purple-500">
+    <button onClick={handleClick} className="ml-2 text-sm text-secondary">
       [Clear all ({count}) bookmarks]
     </button>
   );

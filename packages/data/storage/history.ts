@@ -171,4 +171,22 @@ export const ViewHistoryDao = {
       console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearLikes`);
     }
   },
+
+  liked: async (user: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      const result = mongo.find<UserPaper>(
+        {user, likes: {$exists: true}},
+        {sort: {likedAt: -1}}
+      );
+      return await result.toArray();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.get`);
+    }
+  },
 };

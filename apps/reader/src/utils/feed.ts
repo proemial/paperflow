@@ -42,7 +42,6 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
       ...m,
       score: 0,
     }));
-    console.log("userTags", userTags);
 
     const find = (id: string) => feedPapers.find((p) => p.id === id);
 

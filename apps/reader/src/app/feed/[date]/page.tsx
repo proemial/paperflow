@@ -2,6 +2,9 @@ import { UserTags, getFeed } from "@/src/utils/feed";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
 import Link from "next/link";
 import { ClearBookmarks, ClearLikes } from "./clear-buttons";
+import { ViewHistoryDao } from "data/storage/history";
+import { getSession } from "@auth0/nextjs-auth0";
+import { Badge } from "@/src/components/card/badge";
 
 type Props = {
   params: { date: string };
@@ -9,6 +12,26 @@ type Props = {
 
 export default async function FeedTest({ params }: Props) {
   const feed = await getFeed(params.date);
+
+  const session = await getSession();
+  const likes = await ViewHistoryDao.liked((await session).user.sub);
+
+  const likedTags = [] as {
+    id: string;
+    text: string;
+    category: string;
+    likes: string[];
+  }[];
+  likes.forEach((liked) => {
+    liked.likes.forEach((tag) => {
+      likedTags.push({
+        id: liked.paper,
+        text: tag,
+        category: liked.category,
+        likes: liked.likes,
+      });
+    });
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-begin justify-between p-24">
@@ -20,6 +43,16 @@ export default async function FeedTest({ params }: Props) {
         {feed.tags.liked.length > 0 && (
           <ClearLikes count={feed.tags.liked.length} />
         )}
+      </div>
+      <div className="flex gap-1">
+        {likedTags.map((liked) => (
+          <Badge
+            id={liked.id}
+            text={liked.text}
+            category={liked.category}
+            likes={liked.likes}
+          />
+        ))}
       </div>
 
       <h1 className="mb-0">{feed.papers.length} Feed papers</h1>
