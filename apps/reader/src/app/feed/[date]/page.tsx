@@ -1,10 +1,10 @@
 import { UserTags, getFeed } from "@/src/utils/feed";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
-import Link from "next/link";
 import { ClearBookmarks, ClearLikes } from "./clear-buttons";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { Badge } from "@/src/components/card/badge";
+import { LinkButton } from "./link-button";
 
 type Props = {
   params: { date: string };
@@ -58,17 +58,13 @@ export default async function FeedTest({ params }: Props) {
 
       <h1 className="mb-0">{feed.papers.length} Feed papers</h1>
       <div className="text-secondary mb-3">
-        {feed.highScoring.length} of {feed.total} with score above 4
+        {feed.highScoring.length} has a score above 4 (daily total: {feed.total}
+        )
       </div>
       {feed.papers.map((paper, index) => (
         <div key={index}>
           <div className="flex justify-between">
-            <>
-              {/* @ts-ignore */}
-              <Link href={`/arxiv/${paper.id}`} className="text-purple-500">
-                {paper.id}
-              </Link>
-            </>
+            <LinkButton id={paper.id} />
             <div>{paper.score}</div>
           </div>
           <div className="text-xs">
