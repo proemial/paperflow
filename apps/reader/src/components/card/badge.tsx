@@ -29,12 +29,6 @@ export function Badge({ id, category, text, likes }: Props) {
     startTransition(() => like(id, category, updatedLikes));
   };
 
-  // return (
-  //   <BookmarkIcon
-  //     onClick={handleClick}
-  //     className={bookmarked ? "fill-foreground" : ""}
-  //   />
-  // );
   const borderStyle = checked ? "" : "border-primary";
   const textStyle = checked ? "bg-white" : "bg-black";
   const heartStyle = checked ? "fill-primary" : "";
