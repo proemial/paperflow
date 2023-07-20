@@ -45,8 +45,9 @@ export default async function FeedTest({ params }: Props) {
         )}
       </div>
       <div className="flex gap-1">
-        {likedTags.map((liked) => (
+        {likedTags.map((liked, index) => (
           <Badge
+            key={index}
             id={liked.id}
             text={liked.text}
             category={liked.category}
