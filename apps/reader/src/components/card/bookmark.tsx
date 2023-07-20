@@ -1,6 +1,6 @@
 "use client";
 import { Bookmark as BookmarkIcon } from "lucide-react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { bookmark } from "./card-actions";
 import { Analytics } from "../analytics";
 
@@ -11,9 +11,11 @@ type Props = {
 };
 
 export function Bookmark({ id, category, bookmarked }: Props) {
+  const [checked, setChecked] = useState(bookmarked);
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
+    setChecked(!bookmarked);
     Analytics.track(!!bookmarked ? "click:bookmark-clear" : "click:bookmark", {
       id,
     });
@@ -25,7 +27,7 @@ export function Bookmark({ id, category, bookmarked }: Props) {
   return (
     <BookmarkIcon
       onClick={handleClick}
-      className={bookmarked ? "fill-foreground" : ""}
+      className={checked ? "fill-foreground" : ""}
     />
   );
 }

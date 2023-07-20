@@ -1,6 +1,6 @@
 "use client";
 import { Heart } from "lucide-react";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { like } from "./card-actions";
 import { Analytics } from "../analytics";
 
@@ -12,16 +12,16 @@ type Props = {
 };
 
 export function Badge({ id, category, text, likes }: Props) {
+  const [checked, setChecked] = useState(likes?.includes(text));
   const [isPending, startTransition] = useTransition();
 
-  const liked = likes?.includes(text);
-
   const handleClick = () => {
-    Analytics.track(!!liked ? "click:like-clear" : "click:like", {
+    setChecked(!checked);
+    Analytics.track(!!checked ? "click:like-clear" : "click:like", {
       id,
     });
 
-    const updatedLikes = !!liked
+    const updatedLikes = !!checked
       ? likes.filter((like) => like !== text)
       : [...(likes || []), text];
 
@@ -35,9 +35,9 @@ export function Badge({ id, category, text, likes }: Props) {
   //     className={bookmarked ? "fill-foreground" : ""}
   //   />
   // );
-  const borderStyle = liked ? "" : "border-primary";
-  const textStyle = liked ? "bg-white" : "bg-black";
-  const heartStyle = liked ? "fill-primary" : "";
+  const borderStyle = checked ? "" : "border-primary";
+  const textStyle = checked ? "bg-white" : "bg-black";
+  const heartStyle = checked ? "fill-primary" : "";
 
   return (
     <div
