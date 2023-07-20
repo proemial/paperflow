@@ -13,3 +13,9 @@ export async function clearLikes() {
 
     await ViewHistoryDao.clearLikes(session.user.sub);
 }
+
+export async function clearHistory() {
+    const session = await getSession();
+
+    await ViewHistoryDao.clearFullHistory(session.user.sub);
+}

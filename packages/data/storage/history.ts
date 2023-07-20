@@ -106,6 +106,20 @@ export const ViewHistoryDao = {
     }
   },
 
+  clearFullHistory: async (user: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      await mongo.deleteMany({user});
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearLikes`);
+    }
+  },
+
   bookmark: async (user: string, paper: string, category: string, bookmarked: boolean) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();

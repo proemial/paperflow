@@ -1,6 +1,6 @@
 import { UserTags, getFeed } from "@/src/utils/feed";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
-import { ClearBookmarks, ClearLikes } from "./clear-buttons";
+import { ClearBookmarks, ClearHistory, ClearLikes } from "./clear-buttons";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { Badge } from "@/src/components/card/badge";
@@ -14,7 +14,8 @@ export default async function FeedTest({ params }: Props) {
   const feed = await getFeed(params.date);
 
   const session = await getSession();
-  const likes = await ViewHistoryDao.liked((await session).user.sub);
+  const history = await ViewHistoryDao.fullHistory(session.user.sub);
+  const likes = history.filter((h) => h.likes);
 
   const likedTags = [] as {
     id: string;
@@ -43,6 +44,7 @@ export default async function FeedTest({ params }: Props) {
         {feed.tags.liked.length > 0 && (
           <ClearLikes count={feed.tags.liked.length} />
         )}
+        {history.length > 0 && <ClearHistory count={history.length} />}
       </div>
       <div className="flex gap-1">
         {likedTags.map((liked, index) => (

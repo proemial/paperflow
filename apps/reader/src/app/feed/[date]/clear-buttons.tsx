@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useTransition } from "react";
-import { clearBookmarks, clearLikes } from "./feed-actions";
+import { clearBookmarks, clearLikes, clearHistory } from "./feed-actions";
 
 export function ClearLikes({ count }: { count: number }) {
   const [isPending, startTransition] = useTransition();
@@ -13,7 +13,7 @@ export function ClearLikes({ count }: { count: number }) {
 
   return (
     <button onClick={handleClick} className="ml-2 text-sm text-secondary">
-      [Clear all ({count}) likes]
+      [Clear all likes ({count})]
     </button>
   );
 }
@@ -28,7 +28,22 @@ export function ClearBookmarks({ count }: { count: number }) {
 
   return (
     <button onClick={handleClick} className="ml-2 text-sm text-secondary">
-      [Clear all ({count}) bookmarks]
+      [Clear all bookmarks ({count})]
+    </button>
+  );
+}
+
+export function ClearHistory({ count }: { count: number }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleClick = () => {
+    // @ts-ignore
+    startTransition(() => clearHistory());
+  };
+
+  return (
+    <button onClick={handleClick} className="ml-2 text-sm text-secondary">
+      [Clear your past ({count})]
     </button>
   );
 }
