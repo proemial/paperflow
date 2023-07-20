@@ -3,7 +3,7 @@ import React from "react";
 import { useTransition } from "react";
 import { clearBookmarks, clearLikes } from "./feed-actions";
 
-export function ClearLikes() {
+export function ClearLikes({ count }: { count: number }) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
@@ -13,12 +13,12 @@ export function ClearLikes() {
 
   return (
     <button onClick={handleClick} className="ml-2 text-sm text-purple-500">
-      [Clear all likes]
+      [Clear all ({count}) likes]
     </button>
   );
 }
 
-export function ClearBookmarks() {
+export function ClearBookmarks({ count }: { count: number }) {
   const [isPending, startTransition] = useTransition();
 
   const handleClick = () => {
@@ -28,7 +28,7 @@ export function ClearBookmarks() {
 
   return (
     <button onClick={handleClick} className="ml-2 text-sm text-purple-500">
-      [Clear all bookmarks]
+      [Clear all ({count}) bookmarks]
     </button>
   );
 }
