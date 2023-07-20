@@ -76,6 +76,9 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
 
   async function getUserHistory() {
     const session = await getSession();
+    if(!session) {
+      return []
+    }
     const history = await ViewHistoryDao.fullHistory(session?.user.sub);
     if(history.length < 1) {
         return [];

@@ -14,8 +14,9 @@ export default async function FeedTest({ params }: Props) {
   const feed = await getFeed(params.date);
 
   const session = await getSession();
-  const history = await ViewHistoryDao.fullHistory(session.user.sub);
-  const likes = history.filter((h) => h.likes);
+  const history =
+    (session && (await ViewHistoryDao.fullHistory(session.user.sub))) || [];
+  const likes = (session && history.filter((h) => h.likes)) || [];
 
   const likedTags = [] as {
     id: string;
