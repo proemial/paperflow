@@ -1,0 +1,143 @@
+import { getSession } from "@auth0/nextjs-auth0";
+import { UserPaper, ViewHistoryDao } from "data/storage/history";
+import { PapersDao } from "data/storage/papers";
+import { PipelineDao } from "data/storage/pipeline";
+import { DateMetrics } from "utils/date";
+import { sanitize } from "utils/sanitizer";
+
+export async function getFeed(date: string) {
+    const begin = DateMetrics.now();
+    const userHistory = await getUserHistory();
+    const metadata = await getMetadata(date);
+
+    const tags = {
+        liked: getLikedTags(userHistory),
+        bookmarked: getBookmarkTags(userHistory),
+        viewed: getViewTags(userHistory),
+    };
+    const bookmarks = userHistory.filter((h) => h.bookmarked);
+
+    const feedPapers = getFeedPapers(metadata, tags);
+    const highScoring = feedPapers.filter((p) => p.score > 4);
+    const lowScoring = feedPapers.filter((p) => p.score <= 4);
+    const total = highScoring.length + lowScoring.length;
+
+    let papers = highScoring;
+    if(papers.length < 20) {
+        papers = [
+            ...papers,
+            ...lowScoring.slice(0, 20 - papers.length + 3)
+        ]
+    }
+    if(papers.length > 50)
+    papers = papers.slice(0, 40 + 3)
+
+    const elapsed = DateMetrics.elapsed(begin);
+
+    return {papers, highScoring, lowScoring, tags, bookmarks, total, elapsed}
+}
+
+function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags) {
+    const feedPapers = metadata.map((m) => ({
+      ...m,
+      score: 0,
+    }));
+    console.log("userTags", userTags);
+
+    const find = (id: string) => feedPapers.find((p) => p.id === id);
+
+    // Match tags
+    metadata.forEach((entry) => {
+      for (let i = 0; i < entry.tags.length; i++) {
+        if (userTags.liked.includes(entry.tags[i])) {
+          find(entry.id).score += 20;
+        }
+        if (userTags.bookmarked.includes(entry.tags[i])) {
+          find(entry.id).score += 5;
+        }
+        if (userTags.viewed.includes(entry.tags[i])) {
+          find(entry.id).score += 1;
+        }
+      }
+    });
+
+    return feedPapers.sort((a, b) => b.score - a.score);
+  }
+
+  async function getMetadata(date: string) {
+    const metadata = await PipelineDao.getMetadata(date);
+
+    if (!metadata) return [];
+
+    return Object.keys(metadata).map((id) => ({
+      id,
+      ...metadata[id],
+    })) as PaperMetadata[];
+  }
+
+  async function getUserHistory() {
+    const session = await getSession();
+    const history = await ViewHistoryDao.fullHistory(session?.user.sub);
+    const summaries = await PapersDao.getGptSummaries(
+      history.map((h) => h.paper)
+    );
+
+    return history.map((h) => {
+      const summary = summaries.find((s) => s.id === h.paper);
+      const tags = sanitize(summary.text).hashtags;
+      return {
+        ...h,
+        tags,
+      };
+    });
+  }
+
+  function getLikedTags(userHistory: Array<UserPaper & { tags: string[] }>) {
+    const likes = new Set<string>();
+
+    userHistory
+      .filter((h) => h.likes)
+      .forEach((h) => {
+        h.likes.forEach((l) => likes.add(`#${l}`));
+      });
+
+    return [...likes];
+  }
+
+  function getBookmarkTags(userHistory: Array<UserPaper & { tags: string[] }>) {
+    const likes = new Set<string>();
+
+    userHistory
+      .filter((h) => h.bookmarked)
+      .forEach((h) => {
+        h.tags.forEach((t) => likes.add(t));
+      });
+
+    return [...likes];
+  }
+
+  function getViewTags(userHistory: Array<UserPaper & { tags: string[] }>) {
+    const likes = new Set<string>();
+
+    userHistory
+      .filter((h) => !h.bookmarked && !h.likes)
+      .forEach((h) => {
+        h.tags.forEach((t) => likes.add(t));
+      });
+
+    return [...likes];
+  }
+
+  export type PaperMetadata = {
+    id: string;
+    categories: string[];
+    tags: string[];
+    published: Date;
+    updated: Date;
+  };
+
+  export type UserTags = {
+    liked: string[];
+    bookmarked: string[];
+    viewed: string[];
+  };
