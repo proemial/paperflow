@@ -35,4 +35,23 @@ export const FeedCache = {
         Log.metrics(begin, `FeedDao.push`);
       }
     },
+
+    delete: async (key: string) => {
+      const begin = DateMetrics.now();
+
+      try {
+        const keys = await UpStash.feed.keys(`${key}*`);
+        const pipeline = UpStash.feed.pipeline();
+        keys.forEach(key => {
+          pipeline.del(key);
+        })
+
+        await pipeline.exec();
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        Log.metrics(begin, `FeedDao.get`);
+      }
+    },
 }

@@ -1,5 +1,6 @@
 'use server'
 import { getSession } from "@auth0/nextjs-auth0";
+import { FeedCache } from "data/storage/feed";
 import { ViewHistoryDao } from "data/storage/history";
 
 export async function clearBookmarks() {
@@ -18,4 +19,5 @@ export async function clearHistory() {
     const session = await getSession();
 
     await ViewHistoryDao.clearFullHistory(session.user.sub);
+    await FeedCache.delete(session.user.sub);
 }
