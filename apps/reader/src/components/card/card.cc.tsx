@@ -24,12 +24,10 @@ export function PaperCard({ id }: { id: string }) {
   if (isLoading) {
     return (
       <div
-        className="flex justify-center items-center bg-gradient-to-r from-primary to-primary-gradient opacity-70 shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
+        className="h-[222px] md:h-[194px] flex w-full justify-center items-center bg-gradient-to-r from-primary to-primary-gradient opacity-70 shadow-[inset_0_-48px_48px_rgba(0,0,0,0.9)]"
         style={{
           backgroundImage: `url(${image(id)})`,
           backgroundSize: "cover",
-          width: 640,
-          height: 194,
         }}
       >
         <Spinner />

@@ -34,7 +34,9 @@ export default async function RootLayout({
               maxHeight: "100dvh",
             }}
           >
-            <div className={`flex-1 overflow-scroll`}>{children}</div>
+            <div className={`flex-1 overflow-y-scroll overflow-x-clip`}>
+              {children}
+            </div>
 
             <div className="pb-4 pt-2 z-50">
               <MainMenu />
