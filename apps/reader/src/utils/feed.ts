@@ -4,28 +4,14 @@ import { PapersDao } from "data/storage/papers";
 import { PipelineDao } from "data/storage/pipeline";
 import { DateMetrics } from "utils/date";
 import { sanitize } from "utils/sanitizer";
+import dayjs from "dayjs";
 
 export async function buildFeed(date: string) {
     const begin = DateMetrics.now();
     const metadata = await getMetadata(date);
-
     const {tags, bookmarks, size} = await getUserHistory();
 
     const papers = getFeedPapers(metadata, tags, size);
-    // const highScoring = feedPapers.filter((p) => p.score > 4);
-    // const lowScoring = feedPapers.filter((p) => p.score <= 4);
-    // const total = highScoring.length + lowScoring.length;
-
-    // let papers = highScoring;
-    // if(papers.length < 20) {
-    //     papers = [
-    //         ...papers,
-    //         ...lowScoring.slice(0, 20 - papers.length + 3)
-    //     ]
-    // }
-    // if(papers.length > 50)
-    // papers = papers.slice(0, 40 + 3)
-    // return {papers, highScoring, lowScoring, tags, bookmarks, total, elapsed}
 
     const elapsed = DateMetrics.elapsed(begin);
 
@@ -44,7 +30,6 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: numb
 
     const find = (id: string) => feedPapers.find((p) => p.id === id);
 
-    // Match tags
     metadata.forEach((entry) => {
       for (let i = 0; i < entry.tags.length; i++) {
         if (userTags.liked.includes(entry.tags[i])) {
@@ -54,6 +39,9 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: numb
           find(entry.id).score += 5;
         }
         if (userTags.viewed.includes(entry.tags[i])) {
+          find(entry.id).score += 1;
+        }
+        if(dayjs().diff(dayjs(entry.published), 'days') < 30) {
           find(entry.id).score += 1;
         }
       }
