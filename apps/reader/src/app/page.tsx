@@ -27,7 +27,7 @@ export default function HomePage() {
   return (
     <QueryClientProvider client={queryClient}>
       {!user && (
-        <main className="flex min-h-screen flex-col justify-center items-center">
+        <main className="flex min-h-full flex-col justify-center items-center">
           <img src={logo.src} width="50%" />
           <div className="text-4xl md:text-7xl">paperflow</div>
         </main>
