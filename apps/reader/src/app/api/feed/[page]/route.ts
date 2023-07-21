@@ -50,7 +50,6 @@ export async function GET(request: Request, { params }: { params: { page: string
     const next = (current +1) < last ? current + 1 : undefined
 
     const items = pages[current];
-    console.log(current, last, items);
 
     return NextResponse.json({items, pages: {current, next, last}});
 }
