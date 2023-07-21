@@ -6,6 +6,20 @@ import { DateMetrics } from "utils/date";
 import { sanitize } from "utils/sanitizer";
 import dayjs from "dayjs";
 
+export type PaperMetadata = {
+  id: string;
+  categories: string[];
+  tags: string[];
+  published: Date;
+  updated: Date;
+};
+
+export type UserTags = {
+  liked: string[];
+  bookmarked: string[];
+  viewed: string[];
+};
+
 export async function buildFeed(date: string) {
     const begin = DateMetrics.now();
     const metadata = await getMetadata(date);
@@ -140,17 +154,3 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: numb
 
     return [...likes];
   }
-
-  export type PaperMetadata = {
-    id: string;
-    categories: string[];
-    tags: string[];
-    published: Date;
-    updated: Date;
-  };
-
-  export type UserTags = {
-    liked: string[];
-    bookmarked: string[];
-    viewed: string[];
-  };
