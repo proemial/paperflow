@@ -17,7 +17,8 @@ export const revalidate = 1;
 const queryClient = new QueryClient();
 
 export default function HomePage() {
-  const user = useUser();
+  const { user } = useUser();
+  console.log("user", user);
 
   return (
     <QueryClientProvider client={queryClient}>
