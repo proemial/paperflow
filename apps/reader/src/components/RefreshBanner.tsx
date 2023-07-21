@@ -52,7 +52,7 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
   return (
     <>
       <Transition
-        className="top-0 absolute w-full"
+        className="top-0 absolute w-full max-w-[640px]"
         show={open || isLoading}
         enter="transition-all ease-in-out duration-500 delay-[200ms]"
         enterFrom="opacity-0 translate-y-[-36px]"
@@ -65,7 +65,7 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
           {!isLoading && (
             <>
               <div
-                className="flex gap-1 items-center h-8"
+                className="flex gap-1 items-center h-8 cursor-pointer"
                 onClick={handleUpdate}
               >
                 <RefreshCw className="h-4" />
