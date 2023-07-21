@@ -4,13 +4,14 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   QueryClient,
   QueryClientProvider,
-  useQuery,
+  useInfiniteQuery,
 } from "@tanstack/react-query";
 import { Suspense } from "react";
 import logo from "src/images/logo.png";
 import { Spinner } from "../components/spinner";
-import { FeedItem } from "./api/feed/route";
+import { FeedItem, FeedResponse } from "./api/feed/[page]/route";
 import { filterFeed } from "../utils/feed-filter";
+import React from "react";
 
 export const revalidate = 1;
 
@@ -38,21 +39,49 @@ export default function HomePage() {
   );
 }
 
+async function fetchPage() {
+  const res = await fetch("/api/feed/1");
+  return await res.json();
+}
+
 function PageContent() {
-  const { data, isLoading } = useQuery<FeedItem[]>(["feed"], async () => {
-    const res = await fetch("/api/feed");
-    return await res.json();
+  const {
+    data,
+    error,
+    isLoading,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery<FeedResponse, Error>({
+    queryKey: ["feed"],
+    queryFn: fetchPage,
+    getNextPageParam: (lastPage, pages) => lastPage.pages.next,
   });
 
-  const items = data ? filterFeed(data) : [];
-  console.log(items.length);
+  console.log("data", data);
 
   return (
     <>
       {isLoading && <CenteredSpinner />}
-      {items.map((item, index) => (
-        <PaperCard key={index} id={item.id} />
+      {error && <div>{error.message}</div>}
+      {data?.pages.map((page, index) => (
+        <React.Fragment key={index}>
+          {page.items?.map((item, index) => (
+            <PaperCard key={index} id={item.id} />
+          ))}
+        </React.Fragment>
       ))}
+      <div>
+        {isFetchingNextPage ? (
+          "Loading more..."
+        ) : hasNextPage ? (
+          <button type="button" onClick={() => fetchNextPage()}>
+            Load More
+          </button>
+        ) : (
+          "Nothing more to load"
+        )}
+      </div>
     </>
   );
 }

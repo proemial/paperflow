@@ -1,4 +1,4 @@
-import { FeedItem } from "../app/api/feed/route";
+import { FeedItem } from "../app/api/feed/[page]/route";
 
 export function filterFeed(feedPapers: FeedItem[]) {
     const highScoring = feedPapers.filter((p) => p.score > 4);
