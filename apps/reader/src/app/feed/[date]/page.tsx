@@ -11,6 +11,7 @@ import { getSession } from "@auth0/nextjs-auth0";
 import { Badge } from "src/components/card/badge";
 import { LinkButton } from "./link-button";
 import { filterFeed } from "@/src/utils/feed-filter";
+import { Eye } from "lucide-react";
 
 type Props = {
   params: { date: string };
@@ -80,7 +81,12 @@ export default async function FeedTest({ params }: Props) {
       {filteredFeed.map((paper, index) => (
         <div key={index}>
           <div className="flex justify-between">
-            <LinkButton id={paper.id} />
+            <div className="flex gap-1 items-center">
+              <LinkButton id={paper.id} />
+              {history.find((h) => h.paper === paper.id) && (
+                <Eye className="h-4 stroke-purple-500" />
+              )}
+            </div>
             <div>{paper.score}</div>
           </div>
           <div className="text-xs">
