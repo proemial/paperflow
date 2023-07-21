@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
-import { Badge } from "./badge";
+import { Badge } from "./badge.cc";
 import { Bookmark } from "./bookmark";
 import { CardLink } from "./card-link";
 import { useQuery } from "@tanstack/react-query";

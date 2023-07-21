@@ -41,12 +41,15 @@ export const FeedCache = {
 
       try {
         const keys = await UpStash.feed.keys(`${key}*`);
-        const pipeline = UpStash.feed.pipeline();
-        keys.forEach(key => {
-          pipeline.del(key);
-        })
+        console.log(`Feed keys`, keys);
 
-        await pipeline.exec();
+        if(keys.length > 0) {
+          const pipeline = UpStash.feed.pipeline();
+          keys.forEach(key => {
+            pipeline.del(key);
+          })
+          await pipeline.exec();
+        }
       } catch (error) {
         console.error(error);
         throw error;

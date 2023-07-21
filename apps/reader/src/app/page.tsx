@@ -1,5 +1,5 @@
 "use client";
-import { PaperCard } from "@/src/components/card/card.cc";
+import { PaperCard } from "src/components/card/card.cc";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
   QueryClient,
@@ -7,19 +7,22 @@ import {
   useInfiniteQuery,
   useQuery,
 } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Env } from "data/adapters/env";
 import React, { Suspense, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import logo from "src/images/logo.png";
+import { RefreshBanner } from "../components/RefreshBanner";
 import { Spinner } from "../components/spinner";
 import { FeedResponse } from "./api/feed/[page]/route";
+import { queryClient } from "../state/react-query";
 
 export const revalidate = 1;
 
-const queryClient = new QueryClient();
+const showDevTools = false;
 
 export default function HomePage() {
   const { user } = useUser();
-  console.log("user", user);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -35,6 +38,10 @@ export default function HomePage() {
             <PageContent />
           </Suspense>
         </main>
+      )}
+      {Env.isDev && showDevTools && (
+        // @ts-ignore
+        <ReactQueryDevtools position="bottom-right" />
       )}
     </QueryClientProvider>
   );
@@ -73,6 +80,7 @@ function PageContent() {
 
   return (
     <>
+      <RefreshBanner likes={likes.data} />
       {(feed.isLoading || likes.isLoading) && <CenteredSpinner />}
       {(feed.error || likes.error) && (
         <div>

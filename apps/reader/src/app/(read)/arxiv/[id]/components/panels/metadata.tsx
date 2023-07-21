@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import Markdown from "@/src/components/markdown";
+import Markdown from "src/components/markdown";
 import {
   ArXivAtomPaper,
   arXivCategory,

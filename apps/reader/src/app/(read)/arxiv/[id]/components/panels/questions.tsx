@@ -5,7 +5,7 @@ import { useChat } from "ai/react";
 import React, { FormEvent } from "react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
-import { Analytics } from "@/src/components/analytics";
+import { Analytics } from "src/components/analytics";
 
 const questions = [
   "Why is this important?",

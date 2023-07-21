@@ -1,6 +1,7 @@
 import { Log } from "utils/log";
 import { db } from "../adapters/mongo/mongo-client";
 import { DateMetrics } from "utils/date";
+import { ObjectId } from "mongodb";
 
 export type UserPaper = {
   user: string,
@@ -28,7 +29,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.upsert`);
+      Log.metrics(begin, 'ViewHistoryDao.upsert');
     }
   },
 
@@ -38,17 +39,11 @@ export const ViewHistoryDao = {
 
     try {
       return await mongo.findOne<UserPaper>({user, paper});
-      // if(hit) return hit;
-
-      // return await mongo.findOneAndUpdate(
-      //   {user, paper},
-      //   {$set: {viewCount: 0, updatedAt: new Date()}},
-      //   {upsert: true, returnDocument: 'after'});
     } catch (error) {
       console.error(error);
       throw error;
     } finally {
-      // console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.get`);
+      Log.metrics(begin, 'ViewHistoryDao.get');
     }
   },
 
@@ -66,7 +61,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.get`);
+      Log.metrics(begin, 'ViewHistoryDao.bookmarked');
     }
   },
 
@@ -84,7 +79,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.get`);
+      Log.metrics(begin, 'ViewHistoryDao.readHistory');
     }
   },
 
@@ -116,7 +111,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearLikes`);
+      Log.metrics(begin, 'ViewHistoryDao.clearFullHistory');
     }
   },
 
@@ -133,7 +128,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.bookmark`);
+      Log.metrics(begin, 'ViewHistoryDao.bookmark');
     }
   },
 
@@ -149,24 +144,56 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearBookmarks`);
+      Log.metrics(begin, 'ViewHistoryDao.clearBookmarks');
     }
   },
 
-  like: async (user: string, paper: string, category: string, likes: string[]) => {
+  like: async (user: string, paper: string, category: string, text: string) => {
     const mongo = await db('history');
     const begin = DateMetrics.now();
 
     try {
-      await mongo.findOneAndUpdate(
-        {user, paper},
-        {$set: {updatedAt: new Date(), likedAt: new Date(), likes, category}},
-        {upsert: true});
+      // Only create entry if the liked tag is not in another entry
+      const result = await mongo.findOne<UserPaper>({user, likes: {$in: [text]}});
+      if(!result) {
+        await mongo.insertOne({
+          user, paper, category,
+          updatedAt: new Date(),
+          likedAt: new Date(),
+          likes: [text]
+        });
+      }
     } catch (error) {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.like`);
+      Log.metrics(begin, 'ViewHistoryDao.like');
+    }
+  },
+
+  unlike: async (user: string, text: string) => {
+    const mongo = await db('history');
+    const begin = DateMetrics.now();
+
+    try {
+      // Delete like from all papers
+      const result = await (
+        await mongo.find<UserPaper & {_id: ObjectId}>({user, likes: {$in: [text]}})
+      ).toArray();
+      for (const entry of result) {
+        await mongo.findOneAndUpdate(
+          {_id: entry._id},
+          {$set: {
+            updatedAt: new Date(),
+            likedAt: new Date(),
+            likes: entry.likes?.filter(l => l !== text),
+          }});
+      }
+    } catch (error) {
+      console.error(error);
+      throw error;
+    } finally {
+      Log.metrics(begin, 'ViewHistoryDao.unlike');
     }
   },
 
@@ -182,7 +209,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.clearLikes`);
+      Log.metrics(begin, 'ViewHistoryDao.clearLikes');
     }
   },
 
@@ -200,7 +227,7 @@ export const ViewHistoryDao = {
       console.error(error);
       throw error;
     } finally {
-      console.log(`[${DateMetrics.elapsed(begin)}] ViewHistoryDao.get`);
+      Log.metrics(begin, 'ViewHistoryDao.liked');
     }
   },
 };

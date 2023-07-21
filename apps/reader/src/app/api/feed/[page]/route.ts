@@ -1,4 +1,4 @@
-import { buildFeed } from "@/src/utils/feed";
+import { buildFeed } from "src/utils/feed";
 import { getSession } from "@auth0/nextjs-auth0";
 import { FeedCache } from "data/storage/feed"
 import { ViewHistoryDao } from "data/storage/history";

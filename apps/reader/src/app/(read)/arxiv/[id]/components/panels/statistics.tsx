@@ -1,7 +1,7 @@
-import { CommentsIcon } from "@/src/components/icons/comments";
-import { EyeIcon } from "@/src/components/icons/eye";
-import { HeartIcon } from "@/src/components/icons/heart";
-import { RepeatIcon } from "@/src/components/icons/repeat";
+import { CommentsIcon } from "src/components/icons/comments";
+import { EyeIcon } from "src/components/icons/eye";
+import { HeartIcon } from "src/components/icons/heart";
+import { RepeatIcon } from "src/components/icons/repeat";
 import { Panel } from "src/components/panel";
 
 export function StatisticsPanel({ closed }: { closed?: boolean }) {

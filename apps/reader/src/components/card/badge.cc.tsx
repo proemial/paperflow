@@ -1,9 +1,10 @@
 "use client";
-import { Heart } from "lucide-react";
-import { useState, useTransition } from "react";
-import { like } from "src/components/card/card-actions";
-import { Analytics } from "src/components/analytics";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useMutation } from "@tanstack/react-query";
+import { Heart } from "lucide-react";
+import { LikesPostRequest } from "src/app/api/user/likes/route";
+import { Analytics } from "../analytics";
+import { queryClient } from "src/state/react-query";
 
 type Props = {
   id: string;
@@ -12,24 +13,34 @@ type Props = {
   likes?: string[];
 };
 
+function updateLikes(req: LikesPostRequest) {
+  return fetch("/api/user/likes", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
 export function Badge({ id, category, text, likes }: Props) {
   const { user } = useUser();
-  const [checked, setChecked] = useState(likes?.includes(text));
-  const [isPending, startTransition] = useTransition();
+  const { mutate } = useMutation(updateLikes);
+
+  const checked = likes?.includes(text);
 
   const handleClick = () => {
     if (!user) {
       return;
     }
-    const nowChecked = !checked;
-    Analytics.track(nowChecked ? "click:like" : "click:like-clear", {
-      id,
-    });
 
-    // @ts-ignore
-    startTransition(() => like(id, category, text, nowChecked));
+    Analytics.track(!checked ? "click:like" : "click:like-clear", { id });
 
-    setChecked(nowChecked);
+    mutate(
+      { id, category, text, liked: !checked },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["likes"]);
+        },
+      }
+    );
   };
 
   let textStyle = checked

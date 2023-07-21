@@ -1,7 +1,7 @@
 "use client";
 import { toast } from "src/components/shadcn-ui/toast-hook";
 import { Forward } from "lucide-react";
-import { Analytics } from "@/src/components/analytics";
+import { Analytics } from "src/components/analytics";
 
 export function ShareButton() {
   const handleClick = () => {

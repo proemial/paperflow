@@ -37,7 +37,8 @@
     "@sentry/nextjs": "^7.59.2",
     "@tanstack/react-query": "^4.29.25",
     "@tanstack/react-query-devtools": "^4.29.25",
-    "react-intersection-observer": "^9.5.2"
+    "react-intersection-observer": "^9.5.2",
+    "@headlessui/react": "^1.7.15"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",

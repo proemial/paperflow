@@ -1,9 +1,9 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { ViewHistoryDao } from "data/storage/history";
 import { Suspense } from "react";
-import { PaperCard } from "@/src/components/card/card";
+import { PaperCard } from "src/components/card/card";
 import { EmptySpinner, Spinner } from "src/components/spinner";
-import { NothingHereYet } from "@/src/components/nothing-yet";
+import { NothingHereYet } from "src/components/nothing-yet";
 
 export const revalidate = 1;
 

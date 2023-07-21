@@ -1,5 +1,5 @@
 "use client";
-import { Analytics } from "@/src/components/analytics";
+import { Analytics } from "src/components/analytics";
 import { Button } from "src/components/shadcn-ui/button";
 
 export function ArxivButton({ id }: { id: string }) {

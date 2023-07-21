@@ -2,7 +2,7 @@ import { UserPaper, ViewHistoryDao } from "data/storage/history";
 import { NextResponse } from "next/server";
 
 type Body = UserPaper & {
-    action: 'bookmark' | 'like'
+    action: 'bookmark'
 };
 
 export async function POST(request: Request) {
@@ -10,8 +10,6 @@ export async function POST(request: Request) {
 
     switch(action) {
         case 'bookmark': await ViewHistoryDao.bookmark(user, paper, category, bookmarked);
-        break;
-        case 'like': await ViewHistoryDao.like(user, paper, category, likes);
         break;
     }
 

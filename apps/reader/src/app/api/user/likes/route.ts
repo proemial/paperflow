@@ -15,3 +15,25 @@ export async function GET() {
 
     return NextResponse.json([...likes]);
 }
+
+export type LikesPostRequest = {
+    id: string,
+    category: string,
+    text: string,
+    liked: boolean,
+}
+
+export async function POST(request: Request) {
+    const {id, category, text, liked} = await request.json() as LikesPostRequest;
+
+    const session = await getSession();
+    if(session) {
+        if(liked) {
+            await ViewHistoryDao.like(session.user.sub, id, category, text);
+        } else {
+            await ViewHistoryDao.unlike(session.user.sub, text);
+        }
+    }
+
+    return NextResponse.json({});
+}

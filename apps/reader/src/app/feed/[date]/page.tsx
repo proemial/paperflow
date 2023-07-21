@@ -8,10 +8,10 @@ import {
 } from "./clear-buttons";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
-import { Badge } from "src/components/card/badge";
 import { LinkButton } from "./link-button";
-import { filterFeed } from "@/src/utils/feed-filter";
+import { filterFeed } from "src/utils/feed-filter";
 import { Eye } from "lucide-react";
+import { Badge } from "src/components/card/badge";
 
 type Props = {
   params: { date: string };
