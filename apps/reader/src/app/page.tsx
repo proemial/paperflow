@@ -6,12 +6,11 @@ import {
   QueryClientProvider,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import logo from "src/images/logo.png";
 import { Spinner } from "../components/spinner";
-import { FeedItem, FeedResponse } from "./api/feed/[page]/route";
-import { filterFeed } from "../utils/feed-filter";
-import React from "react";
+import { FeedResponse } from "./api/feed/[page]/route";
 
 export const revalidate = 1;
 
@@ -39,12 +38,13 @@ export default function HomePage() {
   );
 }
 
-async function fetchPage() {
-  const res = await fetch("/api/feed/1");
+async function fetchPage(page: number) {
+  const res = await fetch(`/api/feed/${page}`);
   return await res.json();
 }
 
 function PageContent() {
+  const { ref, inView } = useInView();
   const {
     data,
     error,
@@ -54,11 +54,15 @@ function PageContent() {
     fetchNextPage,
   } = useInfiniteQuery<FeedResponse, Error>({
     queryKey: ["feed"],
-    queryFn: fetchPage,
-    getNextPageParam: (lastPage, pages) => lastPage.pages.next,
+    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam),
+    getNextPageParam: (lastPage) => lastPage.pages.next,
   });
 
-  console.log("data", data);
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   return (
     <>
@@ -66,22 +70,26 @@ function PageContent() {
       {error && <div>{error.message}</div>}
       {data?.pages.map((page, index) => (
         <React.Fragment key={index}>
-          {page.items?.map((item, index) => (
-            <PaperCard key={index} id={item.id} />
-          ))}
+          {page.items?.map((item, index) => {
+            if (page.items.length === index + 1) {
+              return <PaperCard key={index} id={item.id} />;
+            }
+            return <PaperCard key={index} id={item.id} />;
+          })}
         </React.Fragment>
       ))}
-      <div>
-        {isFetchingNextPage ? (
-          "Loading more..."
-        ) : hasNextPage ? (
-          <button type="button" onClick={() => fetchNextPage()}>
-            Load More
-          </button>
-        ) : (
-          "Nothing more to load"
-        )}
-      </div>
+      {isFetchingNextPage && <Spinner />}
+      <button
+        ref={ref}
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage
+          ? "Loading more..."
+          : hasNextPage
+          ? "Load Newer"
+          : "Nothing more to load"}
+      </button>
     </>
   );
 }

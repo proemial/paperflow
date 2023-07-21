@@ -45,7 +45,7 @@ export async function GET(request: Request, { params }: { params: { page: string
         allItems = allItems.filter((item) => !read.includes(item.id));
     }
 
-    const pages = asChunks(allItems, 16);
+    const pages = asChunks(allItems, 8);
     const last = pages.length -1;
     const next = (current +1) < last ? current + 1 : undefined
 
