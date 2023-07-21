@@ -21,3 +21,9 @@ export async function clearHistory() {
     await ViewHistoryDao.clearFullHistory(session.user.sub);
     await FeedCache.delete(session.user.sub);
 }
+
+export async function clearCache() {
+    const session = await getSession();
+
+    await FeedCache.delete(session.user.sub);
+}

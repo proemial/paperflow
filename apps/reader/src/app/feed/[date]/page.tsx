@@ -1,6 +1,11 @@
 import { UserTags, buildFeed } from "src/utils/feed";
 import { arXivCategory } from "data/adapters/arxiv/arxiv.models";
-import { ClearBookmarks, ClearHistory, ClearLikes } from "./clear-buttons";
+import {
+  ClearBookmarks,
+  ClearCache,
+  ClearHistory,
+  ClearLikes,
+} from "./clear-buttons";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { Badge } from "src/components/card/badge";
@@ -42,13 +47,18 @@ export default async function FeedTest({ params }: Props) {
     <main className="flex min-h-screen flex-col items-begin justify-between p-24">
       <div>
         {feed.elapsed}ms{" "}
-        {feed.bookmarks.length > 0 && (
-          <ClearBookmarks count={feed.bookmarks.length} />
+        {session && (
+          <>
+            {feed.bookmarks.length > 0 && (
+              <ClearBookmarks count={feed.bookmarks.length} />
+            )}
+            {feed.tags.liked.length > 0 && (
+              <ClearLikes count={feed.tags.liked.length} />
+            )}
+            <ClearCache count={history.length} />
+            {history.length > 0 && <ClearHistory count={history.length} />}
+          </>
         )}
-        {feed.tags.liked.length > 0 && (
-          <ClearLikes count={feed.tags.liked.length} />
-        )}
-        {history.length > 0 && <ClearHistory count={history.length} />}
       </div>
       <div className="flex gap-1">
         {likedTags.map((liked, index) => (
