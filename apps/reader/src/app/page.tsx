@@ -62,46 +62,46 @@ function useFeed() {
 
 function PageContent() {
   const { ref, inView } = useInView();
-  const qLikes = useLikes();
-  const qFeed = useFeed();
+  const likes = useLikes();
+  const feed = useFeed();
 
   useEffect(() => {
-    if (inView && qFeed.hasNextPage) {
-      qFeed.fetchNextPage();
+    if (inView && feed.hasNextPage) {
+      feed.fetchNextPage();
     }
-  }, [inView, qFeed.fetchNextPage, qFeed.hasNextPage]);
+  }, [inView, feed.fetchNextPage, feed.hasNextPage]);
 
   return (
     <>
-      {(qFeed.isLoading || qLikes.isLoading) && <CenteredSpinner />}
-      {(qFeed.error || qLikes.error) && (
+      {(feed.isLoading || likes.isLoading) && <CenteredSpinner />}
+      {(feed.error || likes.error) && (
         <div>
-          {qFeed.error?.message} {qLikes.error?.message}
+          {feed.error?.message} {likes.error?.message}
         </div>
       )}
-      {qFeed.data?.pages.map((page, index) => (
+      {feed.data?.pages.map((page, index) => (
         <React.Fragment key={index}>
           {page.items?.map((item, index) => {
             if (page.items.length === index + 1) {
               return (
-                <PaperCard key={index} id={item.id} likes={qLikes.data || []} />
+                <PaperCard key={index} id={item.id} likes={likes.data || []} />
               );
             }
             return (
-              <PaperCard key={index} id={item.id} likes={qLikes.data || []} />
+              <PaperCard key={index} id={item.id} likes={likes.data || []} />
             );
           })}
         </React.Fragment>
       ))}
-      {qFeed.isFetchingNextPage && <Spinner />}
+      {feed.isFetchingNextPage && <Spinner />}
       <button
         ref={ref}
-        onClick={() => qFeed.fetchNextPage()}
-        disabled={!qFeed.hasNextPage || qFeed.isFetchingNextPage}
+        onClick={() => feed.fetchNextPage()}
+        disabled={!feed.hasNextPage || feed.isFetchingNextPage}
       >
-        {qFeed.isFetchingNextPage
+        {feed.isFetchingNextPage
           ? "Loading more..."
-          : qFeed.hasNextPage
+          : feed.hasNextPage
           ? "Load Newer"
           : "Nothing more to load"}
       </button>
