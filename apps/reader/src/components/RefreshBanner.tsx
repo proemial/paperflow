@@ -4,10 +4,12 @@ import { Spinner } from "./spinner";
 import { RefreshCw, X } from "lucide-react";
 import { Transition } from "@headlessui/react";
 import { queryClient } from "../state/react-query";
+import dayjs from "dayjs";
 
 export function RefreshBanner({ likes }: { likes?: string[] }) {
   const [hasChanges, setHasChanges] = useState(likes);
   const [open, setOpen] = useState(false);
+  const [cancelled, setCancelled] = useState<Date>();
 
   const { mutate, isLoading } = useMutation((req: {}) => {
     return fetch("/api/feed", {
@@ -16,7 +18,13 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
   });
 
   useEffect(() => {
-    if (hasChanges) {
+    console.log(
+      dayjs(cancelled).format("mm:ss"),
+      cancelled && dayjs().diff(dayjs(cancelled), "minutes")
+    );
+
+    const backoff = cancelled && dayjs().diff(dayjs(cancelled), "minutes") < 2;
+    if (hasChanges && !backoff) {
       setOpen(true);
     }
     setHasChanges(likes);
@@ -24,6 +32,7 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
 
   const handleClose = () => {
     setOpen(false);
+    setCancelled(new Date());
   };
 
   const handleUpdate = () => {
