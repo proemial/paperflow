@@ -5,6 +5,7 @@ import {
   QueryClient,
   QueryClientProvider,
   useInfiniteQuery,
+  useQuery,
 } from "@tanstack/react-query";
 import React, { Suspense, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
@@ -44,50 +45,63 @@ async function fetchPage(page: number) {
   return await res.json();
 }
 
-function PageContent() {
-  const { ref, inView } = useInView();
-  const {
-    data,
-    error,
-    isLoading,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery<FeedResponse, Error>({
+function useLikes() {
+  return useQuery<string[], Error>(["likes"], async () => {
+    const res = await fetch(`/api/user/likes`);
+    return await res.json();
+  });
+}
+
+function useFeed() {
+  return useInfiniteQuery<FeedResponse, Error>({
     queryKey: ["feed"],
     queryFn: ({ pageParam = 0 }) => fetchPage(pageParam),
     getNextPageParam: (lastPage) => lastPage.pages.next,
   });
+}
+
+function PageContent() {
+  const { ref, inView } = useInView();
+  const qLikes = useLikes();
+  const qFeed = useFeed();
 
   useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage();
+    if (inView && qFeed.hasNextPage) {
+      qFeed.fetchNextPage();
     }
-  }, [inView, fetchNextPage, hasNextPage]);
+  }, [inView, qFeed.fetchNextPage, qFeed.hasNextPage]);
 
   return (
     <>
-      {isLoading && <CenteredSpinner />}
-      {error && <div>{error.message}</div>}
-      {data?.pages.map((page, index) => (
+      {(qFeed.isLoading || qLikes.isLoading) && <CenteredSpinner />}
+      {(qFeed.error || qLikes.error) && (
+        <div>
+          {qFeed.error?.message} {qLikes.error?.message}
+        </div>
+      )}
+      {qFeed.data?.pages.map((page, index) => (
         <React.Fragment key={index}>
           {page.items?.map((item, index) => {
             if (page.items.length === index + 1) {
-              return <PaperCard key={index} id={item.id} />;
+              return (
+                <PaperCard key={index} id={item.id} likes={qLikes.data || []} />
+              );
             }
-            return <PaperCard key={index} id={item.id} />;
+            return (
+              <PaperCard key={index} id={item.id} likes={qLikes.data || []} />
+            );
           })}
         </React.Fragment>
       ))}
-      {isFetchingNextPage && <Spinner />}
+      {qFeed.isFetchingNextPage && <Spinner />}
       <button
         ref={ref}
-        onClick={() => fetchNextPage()}
-        disabled={!hasNextPage || isFetchingNextPage}
+        onClick={() => qFeed.fetchNextPage()}
+        disabled={!qFeed.hasNextPage || qFeed.isFetchingNextPage}
       >
-        {isFetchingNextPage
+        {qFeed.isFetchingNextPage
           ? "Loading more..."
-          : hasNextPage
+          : qFeed.hasNextPage
           ? "Load Newer"
           : "Nothing more to load"}
       </button>

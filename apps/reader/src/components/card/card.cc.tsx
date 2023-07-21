@@ -12,7 +12,7 @@ import { Spinner } from "../spinner";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
-export function PaperCard({ id }: { id: string }) {
+export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
   const { data, isLoading } = useQuery<PaperResponse>(
     ["card", id],
     async () => {
@@ -66,7 +66,7 @@ export function PaperCard({ id }: { id: string }) {
               id={id}
               category={data.paper.category}
               text={tag.slice(1)}
-              likes={data.history?.likes}
+              likes={likes}
             />
           ))}
         </div>
