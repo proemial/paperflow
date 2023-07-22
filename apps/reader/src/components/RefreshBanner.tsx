@@ -18,11 +18,6 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
   });
 
   useEffect(() => {
-    console.log(
-      dayjs(cancelled).format("mm:ss"),
-      cancelled && dayjs().diff(dayjs(cancelled), "minutes")
-    );
-
     const backoff = cancelled && dayjs().diff(dayjs(cancelled), "minutes") < 2;
     if (hasChanges && !backoff) {
       setOpen(true);
