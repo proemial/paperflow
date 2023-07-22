@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Spinner } from "./spinner";
 import { RefreshCw, X } from "lucide-react";
 import { Transition } from "@headlessui/react";
-import { queryClient } from "../state/react-query";
 import dayjs from "dayjs";
 
 export function RefreshBanner({ likes }: { likes?: string[] }) {

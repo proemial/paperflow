@@ -9,7 +9,10 @@ export const revalidate = 1;
 
 export default async function HistoryPage() {
   return (
-    <main className="flex h-full min-h-screen flex-col justify-begin">
+    <main className="flex min-h-screen flex-col justify-begin">
+      <div className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow">
+        History
+      </div>
       <Suspense fallback={<CenteredSpinner />}>
         {/* @ts-expect-error Server Component */}
         <PageContent />

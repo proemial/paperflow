@@ -12,7 +12,7 @@ import { Env } from "data/adapters/env";
 import React, { Suspense, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import logo from "src/images/logo.png";
-import { RefreshBanner } from "../components/RefreshBanner";
+import { RefreshBanner } from "../components/refresh-banner";
 import { Spinner } from "../components/spinner";
 import { FeedResponse } from "./api/feed/[page]/route";
 import { queryClient } from "../state/react-query";
@@ -34,6 +34,9 @@ export default function HomePage() {
       )}
       {user && (
         <main className="flex min-h-screen flex-col justify-begin">
+          <div className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow">
+            Recent papers
+          </div>
           <Suspense fallback={<CenteredSpinner />}>
             <PageContent />
           </Suspense>
