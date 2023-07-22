@@ -5,11 +5,10 @@ import { NextResponse } from "next/server";
 export async function GET() {
     const session = await getSession();
 
-    let likes = undefined;
+    const likes = new Set<string>();
     if(session) {
         const likeHistory = await ViewHistoryDao.liked(session.user.sub);
 
-        likes = new Set<string>();
         likeHistory.forEach(h => h.likes?.forEach(l => likes.add(l)));
     }
 
