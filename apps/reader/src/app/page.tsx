@@ -32,7 +32,7 @@ export default function HomePage() {
   return (
     <QueryClientProvider client={queryClient}>
       <main className="flex min-h-screen flex-col justify-begin">
-        <div className="flex h-[calc(100vh-48px)] max-h-screen flex-col justify-center items-center">
+        <div className="flex h-[calc(100dvh-48px)] max-h-screen flex-col justify-center items-center">
           <img src={logo.src} style={{ maxHeight: "40vh" }} />
           <div className="text-3xl md:text-7xl">paperflow</div>
           <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
