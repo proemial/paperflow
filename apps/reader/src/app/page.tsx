@@ -74,6 +74,8 @@ function PageContent() {
 
   useEffect(() => {
     if (inView && feed.hasNextPage) {
+      console.log("Fetching ...");
+
       feed.fetchNextPage();
     }
   }, [inView, feed.fetchNextPage, feed.hasNextPage]);
@@ -89,16 +91,9 @@ function PageContent() {
       )}
       {feed.data?.pages.map((page, index) => (
         <React.Fragment key={index}>
-          {page.items?.map((item, index) => {
-            if (page.items.length === index + 1) {
-              return (
-                <PaperCard key={index} id={item.id} likes={likes.data || []} />
-              );
-            }
-            return (
-              <PaperCard key={index} id={item.id} likes={likes.data || []} />
-            );
-          })}
+          {page.items?.map((item, index) => (
+            <PaperCard key={index} id={item.id} likes={likes.data || []} />
+          ))}
         </React.Fragment>
       ))}
       {feed.isFetchingNextPage && <Spinner />}
