@@ -45,7 +45,7 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
     >
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
         <div className="w-full flex justify-evenly">
-          <div className="w-full flex items-end text-purple-500">
+          <div className="w-full flex items-end text-primary-light text-shadow-purple">
             {dayjs(data.paper.published).format("MMM DD, YYYY")}
           </div>
           <div className="w-full flex justify-end pb-4">

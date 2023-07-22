@@ -21,10 +21,10 @@ export function PaperCard({ id, date, children }: Props) {
         boxShadow: "inset 0 -40px 60px -10px #000000",
       }}
     >
-      <div className="text-purple-500">
+      <div className="text-primary-light text-shadow-purple">
         Preprint published on ArXiv, {dayjs(date).format("MMM DD, YYYY")}
       </div>
-      <div className={`text-2xl font-light`}>{children}</div>
+      <div className={`text-2xl font-light text-shadow-shine`}>{children}</div>
     </div>
   );
 }

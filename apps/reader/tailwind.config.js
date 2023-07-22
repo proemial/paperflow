@@ -1,4 +1,5 @@
 const { fontFamily } = require("tailwindcss/defaultTheme");
+const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -18,6 +19,17 @@ module.exports = {
       },
     },
     extend: {
+      // https://www.hyperui.dev/blog/text-shadow-with-tailwindcss
+      textShadow: {
+        sm: '0 1px 2px var(--tw-shadow-color)',
+        DEFAULT: '0 2px 6px #000000',
+        shine: '0 2px 6px #000000,0 -1px 3px rgba(255,255,255,0.4)', // header title
+        purple: '0 1px 4px #000000,0 -1px 6px rgba(255,102,255,0.5)', // header published
+        purple2: '0 -1px 6px rgba(255,102,255,0.8)', // unliked tag
+        purple3: '0 0 4px rgba(255,102,255,0.5)', // liked tag
+        glow: '0 0 4px #FF66FF', // cards
+        lg: '0 8px 16px var(--tw-shadow-color)',
+      },
       boxShadow: {
         DEFAULT: '0 4px 8px hsl(var(--background))',
       },
@@ -85,5 +97,18 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      )
+    }),
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")
+  ],
 };

@@ -51,9 +51,12 @@ export function Badge({ id, category, text, liked: checked }: Props) {
   };
 
   let textStyle = checked
-    ? "bg-white text-purple-500"
-    : "bg-black text-purple-500";
-  let borderStyle = checked ? "" : "border-primary";
+    ? "bg-white text-primary text-shadow-purple3"
+    : "bg-black text-primary-light text-shadow-purple2";
+
+  // border-color: rgb(255,102,255,0.2);box-shadow: 0 0 4px rgb(255,102,255,0.2);
+  let borderStyle = checked ? "h-[24px]" : "border-[rgb(255,102,255,0.3)]";
+
   let heartStyle = checked ? "fill-primary" : "";
   let cursorStyle = "cursor-pointer";
 

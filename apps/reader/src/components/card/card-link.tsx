@@ -18,7 +18,7 @@ export function CardLink({ id, text }: { id: string; text: string }) {
   };
 
   return (
-    <button onClick={handleClick} className="text-left">
+    <button onClick={handleClick} className="text-left text-shadow-glow">
       <Markdown>{text}</Markdown>
     </button>
   );
