@@ -60,15 +60,24 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
           <CardLink id={id} text={data.paper.text} />
         </div>
         <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
-          {data.paper.tags.map((tag, index) => (
-            <Badge
-              key={index}
-              id={id}
-              category={data.paper.category}
-              text={tag.slice(1)}
-              likes={likes}
-            />
-          ))}
+          {data.paper.tags
+            .map((t) => {
+              const text = t.slice(1);
+              const liked = likes?.includes(text);
+              return { text, liked };
+            })
+            .sort((value) => (value.liked ? -1 : 1)) // weird side effects
+            .map((tag, index) => {
+              return (
+                <Badge
+                  key={index}
+                  id={id}
+                  category={data.paper.category}
+                  text={tag.text}
+                  liked={tag.liked}
+                />
+              );
+            })}
         </div>
       </div>
     </div>

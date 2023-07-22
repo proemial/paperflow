@@ -5,13 +5,12 @@ import { Heart } from "lucide-react";
 import { LikesPostRequest } from "src/app/api/user/likes/route";
 import { Analytics } from "../analytics";
 import { queryClient } from "src/state/react-query";
-import { useEffect, useState } from "react";
 
 type Props = {
   id: string;
   category: string;
   text: string;
-  likes?: string[];
+  liked: boolean;
 };
 
 function updateLikes(req: LikesPostRequest) {
@@ -21,34 +20,34 @@ function updateLikes(req: LikesPostRequest) {
   });
 }
 
-export function Badge({ id, category, text, likes }: Props) {
-  const [checked, setChecked] = useState(likes?.includes(text));
+export function Badge({ id, category, text, liked: checked }: Props) {
   const { user } = useUser();
   const { mutate } = useMutation(updateLikes);
-
-  const liked = likes?.includes(text);
-  useEffect(() => {
-    if (liked !== undefined) {
-      setChecked(liked);
-    }
-  }, [liked]);
 
   const handleClick = () => {
     if (!user) {
       return;
     }
-    setChecked(!checked);
+    const nowChecked = !checked;
 
-    Analytics.track(!checked ? "click:like" : "click:like-clear", { id });
+    Analytics.track(nowChecked ? "click:like" : "click:like-clear", { id });
 
     mutate(
-      { id, category, text, liked: !checked },
+      { id, category, text, liked: nowChecked },
       {
         onSuccess: () => {
           queryClient.invalidateQueries(["likes"]);
         },
       }
     );
+
+    // Optimistic update of query cache
+    queryClient.setQueryData(["likes"], (old: string[]) => {
+      if (nowChecked) {
+        return [...old, text];
+      }
+      return old.filter((todo) => todo !== text);
+    });
   };
 
   let textStyle = checked
