@@ -47,7 +47,7 @@ async function PageContent({ id }: { id: string }) {
       <ActionsMenu id={id} className="p-4 top-0 sticky bg-background z-50" />
 
       <div className="px-4 pt-2">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 text-base">
           <SummaryPanel id={id} />
 
           <StatisticsPanel closed />

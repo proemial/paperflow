@@ -27,7 +27,7 @@ export function Panel({ title, children, closed, className }: Props) {
         className={`${className} flex justify-between`}
         onClick={handleClick}
       >
-        <div className={`text-xl font-medium`}>{title}</div>
+        <div className={`text-xl`}>{title}</div>
         <ToggleButton closed={isClosed} />
       </div>
       <div className={`${isClosed ? "hidden" : ""}`}>{children}</div>
@@ -37,7 +37,7 @@ export function Panel({ title, children, closed, className }: Props) {
 
 function ToggleButton({ closed }: { closed: boolean }) {
   return (
-    <button type="button" className="text-md font-normal text-primary">
+    <button type="button" className="text-sm text-primary">
       {closed ? "Show" : "Hide"}
     </button>
   );

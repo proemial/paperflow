@@ -29,7 +29,7 @@ export async function PaperCard({ id }: { id: string }) {
     >
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
         <div className="w-full flex justify-evenly">
-          <div className="w-full flex items-end text-primary-light  text-shadow-purple">
+          <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
             {dayjs(parsed.published).format("MMM DD, YYYY")}
           </div>
           <div className="w-full flex justify-end pb-4">
@@ -44,7 +44,7 @@ export async function PaperCard({ id }: { id: string }) {
           {/* @ts-ignore */}
           <CardLink id={id} text={sanitized.sanitized} />
         </div>
-        <div className="w-full pt-6 text-xs font-medium tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
+        <div className="w-full pt-6 pb-1 text-xs tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">
           {sanitized.hashtags.map((tag, index) => (
             <Badge
               key={index}

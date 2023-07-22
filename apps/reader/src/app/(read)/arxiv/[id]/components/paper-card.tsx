@@ -14,17 +14,17 @@ type Props = {
 export function PaperCard({ id, date, children }: Props) {
   return (
     <div
-      className={`min-h-[228px] px-4 py-8 flex flex-col justify-end items-begin`}
+      className={`min-h-[228px] px-4 pb-4 pt-16 flex flex-col justify-end items-begin`}
       style={{
         backgroundImage: `url(${image(id)})`,
         backgroundSize: "cover",
         boxShadow: "inset 0 -40px 60px -10px #000000",
       }}
     >
-      <div className="text-primary-light text-shadow-purple">
+      <div className="mb-2 text-sm text-primary-light text-shadow-purple">
         Preprint published on ArXiv, {dayjs(date).format("MMM DD, YYYY")}
       </div>
-      <div className={`text-2xl font-light text-shadow-shine`}>{children}</div>
+      <div className={`text-3xl text-shadow-shine`}>{children}</div>
     </div>
   );
 }

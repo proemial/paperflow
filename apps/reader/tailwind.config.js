@@ -77,6 +77,14 @@ module.exports = {
         md: `calc(var(--radius) - 2px)`,
         sm: "calc(var(--radius) - 4px)",
       },
+      fontSize: {
+        xs: ['12px', { lineHeight: '24px', fontWeight: '500'}],
+        sm: ['16px', { lineHeight: '24px', fontWeight: '500'}],
+        base: ['18px', { lineHeight: '28px', fontWeight: '500'}],
+        xl: ['24px', { lineHeight: '24px', fontWeight: '500'}],
+        '2xl': ['20px', { lineHeight: '24px', fontWeight: '500'}],
+        '3xl': ['32px', { lineHeight: '40px', fontWeight: '500'}],
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         heading: ["var(--font-heading)", ...fontFamily.sans],
