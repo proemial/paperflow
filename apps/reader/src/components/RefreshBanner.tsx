@@ -31,12 +31,12 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
   };
 
   const handleUpdate = () => {
-    // queryClient.invalidateQueries(["feed"]);
     mutate(
       {},
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(["feed"]);
+          // queryClient.invalidateQueries(["feed"]);
+          window.location.reload();
         },
       }
     );
