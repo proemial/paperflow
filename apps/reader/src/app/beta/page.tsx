@@ -24,7 +24,7 @@ export default function BetaPage() {
         className="mt-8"
         onClick={() => (window.location.href = `/api/auth/login`)}
       >
-        Click here for access
+        Try Now
       </Button>
     </main>
   );
