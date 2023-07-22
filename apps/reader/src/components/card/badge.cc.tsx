@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import { LikesPostRequest } from "src/app/api/user/likes/route";
 import { Analytics } from "../analytics";
 import { queryClient } from "src/state/react-query";
+import { useEffect, useState } from "react";
 
 type Props = {
   id: string;
@@ -21,15 +22,22 @@ function updateLikes(req: LikesPostRequest) {
 }
 
 export function Badge({ id, category, text, likes }: Props) {
+  const [checked, setChecked] = useState(likes?.includes(text));
   const { user } = useUser();
   const { mutate } = useMutation(updateLikes);
 
-  const checked = likes?.includes(text);
+  const liked = likes?.includes(text);
+  useEffect(() => {
+    if (liked !== undefined) {
+      setChecked(liked);
+    }
+  }, [liked]);
 
   const handleClick = () => {
     if (!user) {
       return;
     }
+    setChecked(!checked);
 
     Analytics.track(!checked ? "click:like" : "click:like-clear", { id });
 
