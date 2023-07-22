@@ -38,8 +38,6 @@ async function getHistory(id: string) {
     if(!session || !history) {
         return {history: undefined}
     }
-    console.log('history', history);
-
 
     const {bookmarked, likes} = history;
     return {history: {bookmarked, likes}};

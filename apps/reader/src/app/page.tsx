@@ -1,21 +1,18 @@
 "use client";
-import { PaperCard } from "src/components/card/card.cc";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
-  QueryClient,
   QueryClientProvider,
   useInfiniteQuery,
   useQuery,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { Env } from "data/adapters/env";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
+import { PaperCard } from "src/components/card/card.cc";
 import logo from "src/images/logo.png";
 import { RefreshBanner } from "../components/refresh-banner";
 import { Spinner } from "../components/spinner";
-import { FeedResponse } from "./api/feed/[page]/route";
 import { queryClient } from "../state/react-query";
+import { FeedResponse } from "./api/feed/[page]/route";
 
 export const revalidate = 1;
 
@@ -23,29 +20,35 @@ const showDevTools = false;
 
 export default function HomePage() {
   const { user } = useUser();
+  const ref = useRef(null);
 
+  useEffect(() => {
+    if (window.location.search.includes("reload=true")) {
+      ref.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
+
+  // h-[calc(100vh-120px)]
   return (
     <QueryClientProvider client={queryClient}>
-      {!user && (
-        <main className="flex min-h-full flex-col justify-center items-center">
+      <main className="flex min-h-screen flex-col justify-begin">
+        <div className="flex h-screen flex-col justify-center items-center">
           <img src={logo.src} width="50%" />
-          <div className="text-4xl md:text-7xl">paperflow</div>
-        </main>
-      )}
-      {user && (
-        <main className="flex min-h-screen flex-col justify-begin">
-          <div className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow">
-            Recent papers
+          <div className="text-3xl md:text-7xl">paperflow</div>
+          <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
+            Swipe up to read your daily papers
           </div>
-          <Suspense fallback={<CenteredSpinner />}>
-            <PageContent />
-          </Suspense>
-        </main>
-      )}
-      {Env.isDev && showDevTools && (
-        // @ts-ignore
-        <ReactQueryDevtools position="bottom-right" />
-      )}
+        </div>
+        <div
+          ref={ref}
+          className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow"
+        >
+          Recent papers
+        </div>
+        <Suspense fallback={<CenteredSpinner />}>
+          <PageContent />
+        </Suspense>
+      </main>
     </QueryClientProvider>
   );
 }

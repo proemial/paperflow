@@ -35,7 +35,8 @@ export function RefreshBanner({ likes }: { likes?: string[] }) {
       {
         onSuccess: () => {
           // queryClient.invalidateQueries(["feed"]);
-          window.location.reload();
+          // window.location.reload();
+          window.location.href = `${window.location.pathname}?reload=true`;
         },
       }
     );
