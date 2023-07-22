@@ -58,6 +58,9 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: numb
         if(dayjs().diff(dayjs(entry.published), 'days') < 30) {
           find(entry.id).score += 1;
         }
+        if(dayjs().diff(dayjs(entry.published), 'days') > 90) {
+          find(entry.id).score -= 30;
+        }
       }
     });
 
