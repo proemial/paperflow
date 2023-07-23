@@ -8,7 +8,7 @@ export function HomeMenuItem() {
   const { user } = useUser();
 
   const handleHome = () => {
-    push("/");
+    push("/?reload=true");
   };
 
   return (
