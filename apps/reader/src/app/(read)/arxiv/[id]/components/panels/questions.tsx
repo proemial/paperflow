@@ -80,7 +80,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
           />
           <button
             type="submit"
-            className="p-3 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
+            className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
           >
             <PaperPlaneIcon />
           </button>
