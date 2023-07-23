@@ -75,6 +75,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             type="text"
             placeholder="Ask your own question"
             className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3"
+            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             value={input}
             onChange={handleInputChange}
           />
