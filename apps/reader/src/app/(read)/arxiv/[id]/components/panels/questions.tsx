@@ -31,6 +31,20 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
     },
   });
 
+  const chatContainerRef = React.useRef<HTMLDivElement>();
+  React.useEffect(() => {
+    if (chatContainerRef.current) {
+      console.log(
+        "scrollTop: ",
+        chatContainerRef.current.scrollTop,
+        "scrollHeight: ",
+        chatContainerRef.current.scrollHeight
+      );
+
+      chatContainerRef.current.scrollIntoView(false);
+    }
+  }, [messages]);
+
   const appendQuestion = (question: string) =>
     append({ role: "user", content: question });
 
@@ -74,7 +88,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
           <input
             type="text"
             placeholder="Ask your own question"
-            className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3"
+            className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
             style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
             value={input}
             onChange={handleInputChange}
@@ -86,6 +100,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             <PaperPlaneIcon />
           </button>
         </form>
+        <div ref={chatContainerRef}></div>
       </div>
     </Panel>
   );
