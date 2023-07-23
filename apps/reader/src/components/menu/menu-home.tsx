@@ -13,12 +13,9 @@ export function HomeMenuItem() {
 
   return (
     <>
-      {user && (
-        <button type="button" onClick={handleHome}>
-          <Home className="stroke-muted-foreground" />
-        </button>
-      )}
-      {!user && <Home className="stroke-zinc-700" />}
+      <button type="button" onClick={handleHome}>
+        <Home className="stroke-muted-foreground" />
+      </button>
     </>
   );
 }

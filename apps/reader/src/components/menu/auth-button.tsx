@@ -9,6 +9,7 @@ export function AuthButton({ user }: { user?: UserProfile }) {
 
   return (
     <>
+      {/* <User className="stroke-zinc-700" /> */}
       {!user && (
         <LogIn
           onClick={() => (window.location.href = `/api/auth/login`)}

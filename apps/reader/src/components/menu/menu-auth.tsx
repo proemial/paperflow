@@ -10,15 +10,5 @@ export function AuthMenuItem() {
 
   const isHome = pathname === "/";
 
-  return (
-    <>
-      {(user || !isHome) && (
-        <div>
-          {/* <User className="stroke-zinc-700" /> */}
-          <AuthButton user={user} />
-        </div>
-      )}
-      {!user && isHome && <LogIn className="stroke-zinc-700" />}
-    </>
-  );
+  return <AuthButton user={user} />;
 }
