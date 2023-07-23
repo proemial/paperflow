@@ -10,6 +10,7 @@ export type PaperResponse = {
         text: string,
         tags: string[],
         published: string,
+        updated: string,
         category: string,
     },
     history: {
@@ -22,14 +23,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const {id} = params;
 
     const { parsed } = await PapersDao.getArXivAtomPaper(id);
-    const {published, category} = parsed;
+    const {published, updated, category} = parsed;
 
     const { text: summary } = await PapersDao.getGptSummary(id, "sm");
     const {sanitized: text, hashtags: tags} = sanitize(summary);
 
     const {history} = await getHistory(id);
 
-    return NextResponse.json({paper: {id, text, tags, published, category}, history});
+    return NextResponse.json({paper: {id, text, tags, published, updated, category}, history});
 }
 
 async function getHistory(id: string) {

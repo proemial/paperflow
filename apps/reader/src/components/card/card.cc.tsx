@@ -45,9 +45,7 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
     >
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
         <div className="w-full flex justify-evenly">
-          <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
-            {dayjs(data.paper.published).format("MMM DD, YYYY")}
-          </div>
+          <PubDate paper={data.paper} />
           <div className="w-full flex justify-end pb-4">
             <Bookmark
               id={id}
@@ -80,6 +78,24 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
             })}
         </div>
       </div>
+    </div>
+  );
+}
+
+function PubDate({ paper }: { paper: { updated: string; published: string } }) {
+  const today = dayjs();
+  const publishedAt = dayjs(paper.published);
+  const updatedAt = dayjs(paper.updated);
+
+  const diff = today.diff(publishedAt, "days");
+  const text =
+    diff <= 5 // days
+      ? `Published at ${publishedAt.format("MMM DD, YYYY")}`
+      : `Updated at ${updatedAt.format("MMM DD, YYYY")}`;
+
+  return (
+    <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
+      {text}
     </div>
   );
 }
