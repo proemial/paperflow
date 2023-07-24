@@ -1,14 +1,14 @@
 import { getSession } from "@auth0/nextjs-auth0";
 import { ViewHistoryDao } from "data/storage/history";
 import { PapersDao } from "data/storage/papers";
-import dayjs from "dayjs";
 import assetImg1 from "src/images/asset-bg-1.png";
 import assetImg2 from "src/images/asset-bg-2.png";
 import assetImg3 from "src/images/asset-bg-3.png";
-import { Badge } from "./badge";
 import { sanitize } from "utils/sanitizer";
+import { Badge } from "./badge";
 import { Bookmark } from "./bookmark";
 import { CardLink } from "./card-link";
+import { PubDate } from "./pub-date";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
@@ -30,7 +30,12 @@ export async function PaperCard({ id }: { id: string }) {
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
         <div className="w-full flex justify-evenly">
           <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
-            {dayjs(parsed.published).format("MMM DD, YYYY")}
+            <PubDate
+              paper={{
+                updated: `${parsed.updated}`,
+                published: `${parsed.published}`,
+              }}
+            />
           </div>
           <div className="w-full flex justify-end pb-4">
             <Bookmark

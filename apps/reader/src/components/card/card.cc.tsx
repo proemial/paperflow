@@ -9,6 +9,7 @@ import { CardLink } from "./card-link";
 import { useQuery } from "@tanstack/react-query";
 import { PaperResponse } from "src/app/api/papers/[id]/route";
 import { Spinner } from "../spinner";
+import { PubDate } from "./pub-date";
 
 const images = [assetImg1, assetImg2, assetImg3];
 
@@ -78,24 +79,6 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
             })}
         </div>
       </div>
-    </div>
-  );
-}
-
-function PubDate({ paper }: { paper: { updated: string; published: string } }) {
-  const today = dayjs();
-  const publishedAt = dayjs(paper.published);
-  const updatedAt = dayjs(paper.updated);
-
-  const diff = today.diff(publishedAt, "days");
-  const text =
-    diff <= 5 // days
-      ? `Published on ${publishedAt.format("MMM DD, YYYY")}`
-      : `Updated on ${updatedAt.format("MMM DD, YYYY")}`;
-
-  return (
-    <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
-      {text}
     </div>
   );
 }
