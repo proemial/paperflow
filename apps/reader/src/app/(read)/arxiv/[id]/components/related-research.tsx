@@ -23,9 +23,7 @@ export async function RelatedResearch({ id, category }: Props) {
   const sameTopic = filtered.filter(
     (e) => e.category === paperCategory.category && !sameCategory.includes(e)
   );
-
   const finalSet = [...sameCategory, ...sameTopic];
-  console.log(finalSet);
 
   return (
     <>
