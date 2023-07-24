@@ -32,11 +32,16 @@ export default function HomePage() {
   return (
     <QueryClientProvider client={queryClient}>
       <main className="flex min-h-screen flex-col justify-begin">
-        <div className="flex h-[calc(100dvh-48px)] max-h-screen flex-col justify-center items-center">
-          <img src={logo.src} style={{ maxHeight: "40vh" }} />
-          <div className="text-3xl md:text-7xl">paperflow</div>
-          <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
-            Swipe up to read your daily papers
+        <div className="flex h-[calc(100dvh-48px)] max-h-screen flex-col justify-center items-center bg-zinc-900">
+          <div className="h-[10%]"></div>
+          <div className="h-[50%] w-full flex flex-col justify-center items-center">
+            <img src={logo.src} style={{ maxHeight: "40%" }} />
+            <div className="text-3xl md:text-7xl">Paperflow</div>
+          </div>
+          <div className="h-[40%] w-full flex justify-center items-center">
+            <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
+              Swipe up to get started
+            </div>
           </div>
         </div>
         <div
