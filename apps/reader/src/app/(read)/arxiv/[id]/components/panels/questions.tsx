@@ -2,7 +2,7 @@
 import { PaperPlaneIcon } from "src/components/icons/paperplane";
 import { Panel } from "src/components/panel";
 import { useChat } from "ai/react";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
 import { Analytics } from "src/components/analytics";
@@ -23,6 +23,7 @@ type Props = {
 };
 
 export function QuestionsPanel({ paper, model, closed }: Props) {
+  const [suggestions] = useState(random(questions, 3));
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     body: {
       title: paper?.parsed.title,
@@ -34,13 +35,6 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
   const chatContainerRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
     if (chatContainerRef.current) {
-      console.log(
-        "scrollTop: ",
-        chatContainerRef.current.scrollTop,
-        "scrollHeight: ",
-        chatContainerRef.current.scrollHeight
-      );
-
       chatContainerRef.current.scrollIntoView(false);
     }
   }, [messages]);
@@ -67,7 +61,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
     <Panel title="Ask a question" closed={closed}>
       <div className="pt-4 flex flex-col justify-start">
         {messages.length === 0 &&
-          random(questions, 3).map((question, i) => (
+          suggestions.map((question, i) => (
             <Question
               key={i}
               onClick={() => handleSuggestionClick(question)}
