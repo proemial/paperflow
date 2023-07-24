@@ -6,7 +6,7 @@ import { normalizeError } from "utils/error";
 import { dateFromParams } from "@/app/api/utils";
 import { ConfigDao } from "data/storage/config";
 import { QStash } from "data/adapters/qstash/qstash-client"
-import { ArxivAtomWorker, GptSummaryWorker, PipelineStage, PipelineStageConfig } from "data/adapters/redis/redis-client";
+import { ArxivAtomWorker, GptSummaryWorker, PipelineStage, PipelineStageConfig, WorkerStatus } from "data/adapters/redis/redis-client";
 
 export const revalidate = 1;
 
@@ -31,7 +31,10 @@ async function run(params: { args: string[] }) {
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
     const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
 
-    const scheduledMetadataWorkers = await scheduleMetadataWorker(date, scheduledGptSummaryWorkers.length)
+    let scheduledMetadataWorkers = 0;
+    if(isDone(pipeline.stages.gptSummary)) {
+      scheduledMetadataWorkers = await scheduleMetadataWorker(date, scheduledGptSummaryWorkers.length);
+    }
 
     result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}, Metadata: ${scheduledMetadataWorkers}`;
     return NextResponse.json({result});
@@ -86,4 +89,10 @@ async function scheduleMetadataWorker(date: string, gptWorkers: number) {
     await QStash.schedule(date, PipelineStage.metadata);
 
     return 1;
+}
+
+function isDone(workers: {status: WorkerStatus}[]) {
+  return workers.length > 0
+      && workers.map(s => s.status)
+                .filter(s => ['idle', 'scheduled', 'running'].includes(s)).length === 0;
 }
