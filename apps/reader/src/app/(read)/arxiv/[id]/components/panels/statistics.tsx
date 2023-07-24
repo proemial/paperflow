@@ -21,6 +21,13 @@ export function StatisticsPanel({ closed }: { closed?: boolean }) {
           <EyeIcon /> 19k
         </div>
       </div>
+      <div className="text-xxs opacity-70">
+        Coming soon. We are currently building out our social media monitoring
+        service, which will track views, likes, and comments on papers across
+        all key platforms. We would like to collect and save a copy of all
+        relevant comments on the Paperflow blockchain, and make this part of the
+        public record of a paper.
+      </div>
     </Panel>
   );
 }
