@@ -90,8 +90,8 @@ function PubDate({ paper }: { paper: { updated: string; published: string } }) {
   const diff = today.diff(publishedAt, "days");
   const text =
     diff <= 5 // days
-      ? `Published at ${publishedAt.format("MMM DD, YYYY")}`
-      : `Updated at ${updatedAt.format("MMM DD, YYYY")}`;
+      ? `Published on ${publishedAt.format("MMM DD, YYYY")}`
+      : `Updated on ${updatedAt.format("MMM DD, YYYY")}`;
 
   return (
     <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
