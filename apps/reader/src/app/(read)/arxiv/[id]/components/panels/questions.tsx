@@ -33,7 +33,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
     },
   });
 
-  const chatContainerRef = React.useRef<HTMLDivElement>();
+  const chatContainerRef = React.useRef<HTMLInputElement>();
   React.useEffect(() => {
     if (messages?.length > 0 && chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView(false);
@@ -84,9 +84,14 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             type="text"
             placeholder="Ask your own question"
             className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
-            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            style={{
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+              scrollMargin: 16,
+            }}
             value={input}
             onChange={handleInputChange}
+            ref={chatContainerRef}
           />
           <button
             type="submit"
@@ -95,7 +100,6 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             <PaperPlaneIcon />
           </button>
         </form>
-        <div ref={chatContainerRef}></div>
       </div>
     </Panel>
   );
