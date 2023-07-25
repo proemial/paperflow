@@ -78,7 +78,7 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontSize: {
-        xxs: ['13px', { lineHeight: '20px', fontWeight: '500'}],
+        xxs: ['12px', { lineHeight: '20px', fontWeight: '500'}],
         xs: ['12px', { lineHeight: '24px', fontWeight: '500'}],
         sm: ['16px', { lineHeight: '24px', fontWeight: '500'}],
         base: ['18px', { lineHeight: '28px', fontWeight: '500'}],

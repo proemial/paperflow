@@ -1,8 +1,7 @@
-import { Anek_Malayalam } from "next/font/google";
-import "src/styles/globals.css";
-import { MainMenu } from "src/components/menu/menu";
-import { Toaster } from "../components/shadcn-ui/toaster";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { Anek_Malayalam } from "next/font/google";
+import { MainMenu } from "src/components/menu/menu";
+import "src/styles/globals.css";
 import { AnalyticsClient } from "../components/analytics";
 
 const font = Anek_Malayalam({ subsets: ["latin"], display: "swap" });
@@ -38,10 +37,7 @@ export default async function RootLayout({ children }: Props) {
               {children}
             </div>
 
-            <div className="pb-4 pt-2 z-50">
-              <MainMenu />
-              <Toaster />
-            </div>
+            <MainMenu />
           </main>
           <AnalyticsClient />
         </body>
