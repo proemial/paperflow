@@ -47,7 +47,7 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
         <div className="w-full flex justify-evenly">
           <PubDate paper={data.paper} />
-          <div className="w-full flex justify-end pb-4">
+          <div className="flex justify-end pb-4">
             <Bookmark
               id={id}
               category={data.paper.category}
