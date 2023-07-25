@@ -45,7 +45,7 @@ export function PaperCard({ id, likes }: { id: string; likes?: string[] }) {
       }}
     >
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
-        <div className="w-full flex justify-evenly">
+        <div className="w-full flex justify-between">
           <PubDate paper={data.paper} />
           <div className="flex justify-end pb-4">
             <Bookmark

@@ -19,7 +19,7 @@ export function PubDate({ paper }: Props) {
       : `Updated on ${updatedAt.format("MMM DD, YYYY")}`;
 
   return (
-    <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
+    <div className="flex items-end text-sm text-primary-light text-shadow-purple">
       {text}
     </div>
   );

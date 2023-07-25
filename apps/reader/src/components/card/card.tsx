@@ -28,8 +28,8 @@ export async function PaperCard({ id }: { id: string }) {
       }}
     >
       <div className="p-4 pt-8 flex flex-col justify-end text-lg font-medium items-center ">
-        <div className="w-full flex justify-evenly">
-          <div className="w-full flex items-end text-sm text-primary-light text-shadow-purple">
+        <div className="w-full flex justify-between">
+          <div className="flex items-end text-sm text-primary-light text-shadow-purple">
             <PubDate
               paper={{
                 updated: `${parsed.updated}`,
@@ -37,7 +37,7 @@ export async function PaperCard({ id }: { id: string }) {
               }}
             />
           </div>
-          <div className="w-full flex justify-end pb-4">
+          <div className="flex justify-end pb-4">
             <Bookmark
               id={id}
               category={parsed.category}
