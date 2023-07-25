@@ -24,6 +24,7 @@ type Props = {
 
 export function QuestionsPanel({ paper, model, closed }: Props) {
   const [suggestions] = useState(random(questions, 3));
+
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     body: {
       title: paper?.parsed.title,
@@ -34,7 +35,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
 
   const chatContainerRef = React.useRef<HTMLDivElement>();
   React.useEffect(() => {
-    if (chatContainerRef.current) {
+    if (messages?.length > 0 && chatContainerRef.current) {
       chatContainerRef.current.scrollIntoView(false);
     }
   }, [messages]);
