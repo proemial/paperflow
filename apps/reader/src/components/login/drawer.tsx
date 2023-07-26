@@ -2,10 +2,10 @@
 // https://letsbuildui.dev/articles/building-a-drawer-component-with-react-portals
 
 import { useRef, useEffect } from "react";
-import { cn } from "./shadcn-ui/utils";
+import { cn } from "../shadcn-ui/utils";
 import "src/styles/drawer.css";
 import { createPortal } from "react-dom";
-import useMountTransition from "./use-mount-transition";
+import useMountTransition from "../use-mount-transition";
 import { X } from "lucide-react";
 
 function createPortalRoot() {

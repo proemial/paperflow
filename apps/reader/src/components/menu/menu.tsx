@@ -1,8 +1,8 @@
 "use client";
 import { User } from "lucide-react";
-import { useState } from "react";
-import Drawer from "../drawer";
 import { Logo } from "../icons/logo";
+import Drawer from "../login/drawer";
+import { useDrawerState } from "../login/state";
 import { Button } from "../shadcn-ui/button";
 import { Toaster } from "../shadcn-ui/toaster";
 import { BookmarksMenuItem } from "./menu-bookmarks";
@@ -10,7 +10,7 @@ import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
 
 export function MainMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { open, toggle } = useDrawerState();
 
   return (
     <div className="z-[1000]">
@@ -23,12 +23,12 @@ export function MainMenu() {
           <HistoryMenuItem />
           <BookmarksMenuItem />
           {/* <AuthMenuItem /> */}
-          <button type="button" onClick={() => setIsOpen(!isOpen)}>
+          <button type="button" onClick={toggle}>
             <User className="stroke-muted-foreground" />
           </button>
         </div>
       </div>
-      <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Drawer isOpen={open} onClose={toggle}>
         <div className="flex flex-col gap-2">
           <div className="text-center text-base">Please log in to continue</div>
           <LoginButton variant="google" />
