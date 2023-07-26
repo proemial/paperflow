@@ -87,7 +87,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
         ))}
         <form onSubmit={handlePostQuestion} className="flex items-center">
           <input
-            readOnly
+            readOnly={!user}
             onFocus={() => !user && open()}
             type="text"
             placeholder="Ask your own question"
