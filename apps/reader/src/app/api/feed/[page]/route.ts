@@ -5,6 +5,8 @@ import { ViewHistoryDao } from "data/storage/history";
 import { PipelineDao } from "data/storage/pipeline";
 import { NextResponse } from "next/server";
 import {asChunks} from "utils/array"
+import { cookies } from "next/dist/client/components/headers";
+import { UserSettings } from "@/src/app/profile/categories";
 
 export type FeedItem = {
     id: string,
@@ -43,6 +45,26 @@ export async function GET(request: Request, { params }: { params: { page: string
     if(session) {
         const read = (await ViewHistoryDao.readHistory(session.user.sub)).map(p => p.paper);
         allItems = allItems.filter((item) => !read.includes(item.id));
+
+        const categories = getCategoriesFromCookie();
+        if(categories && Object.keys(categories).length > 0 && categories.length > 0) {
+            allItems = allItems.filter((item) => {
+                return item.categories.filter(itemCategory => {
+                    return categories.filter(category => {
+                        return itemCategory.startsWith(category) ||
+                        (category === "physics" &&
+                            (itemCategory.startsWith("astro") ||
+                            itemCategory.startsWith("cond-mat") ||
+                            itemCategory.startsWith("hep") ||
+                            itemCategory.startsWith("gr-qc") ||
+                            itemCategory.startsWith("nlin") ||
+                            itemCategory.startsWith("nucl") ||
+                            itemCategory.startsWith("quant")))
+                    }).length > 0;
+
+                }).length > 0;
+            });
+        }
     }
 
     const pages = asChunks(allItems, 20);
@@ -53,3 +75,13 @@ export async function GET(request: Request, { params }: { params: { page: string
 
     return NextResponse.json({items, pages: {current, next, last}});
 }
+
+function getCategoriesFromCookie(): string[] {
+    const cookieStore = cookies();
+    const settingsString = cookieStore.get("settings");
+
+    if (!settingsString?.value) return [];
+
+    const settings = JSON.parse(settingsString.value) as UserSettings;
+    return Object.keys(settings).filter((key) => !!settings[key]);
+  }

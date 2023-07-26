@@ -7,6 +7,8 @@ import {
 import { Button } from "src/components/shadcn-ui/button";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import * as React from "react";
+import { Panel } from "@/src/components/panel";
+import { CategoryToggles } from "./categories";
 
 export default function Page() {
   const { user } = useUser();
@@ -29,7 +31,12 @@ export default function Page() {
           </Avatar>
           <div>{user?.name}</div>
         </div>
-        <Button onClick={handleLogout}>Log out</Button>
+        <Panel title="Areas of interest">
+          <CategoryToggles />
+        </Panel>
+        <Button onClick={handleLogout} className="mt-4">
+          Log out
+        </Button>
       </div>
     </main>
   );
