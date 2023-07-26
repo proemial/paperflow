@@ -1,13 +1,14 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { Home } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useDrawerState } from "../login/state";
 
 export function HomeMenuItem() {
   const { push } = useRouter();
-  const { user } = useUser();
+  const { close } = useDrawerState();
 
   const handleHome = () => {
+    close();
     push("/?reload=true");
   };
 

@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import { LikesPostRequest } from "src/app/api/user/likes/route";
 import { Analytics } from "../analytics";
 import { queryClient } from "src/state/react-query";
+import { useDrawerState } from "../login/state";
 
 type Props = {
   id: string;
@@ -23,9 +24,11 @@ function updateLikes(req: LikesPostRequest) {
 export function Badge({ id, category, text, liked: checked }: Props) {
   const { user } = useUser();
   const { mutate } = useMutation(updateLikes);
+  const { open } = useDrawerState();
 
   const handleClick = () => {
     if (!user) {
+      open();
       return;
     }
     const nowChecked = !checked;
@@ -50,22 +53,15 @@ export function Badge({ id, category, text, liked: checked }: Props) {
     });
   };
 
-  let textStyle = checked
+  const textStyle = checked
     ? "bg-white text-primary text-shadow-purple3"
     : "bg-black text-primary-light text-shadow-purple2";
 
   // border-color: rgb(255,102,255,0.2);box-shadow: 0 0 4px rgb(255,102,255,0.2);
-  let borderStyle = checked ? "h-[24px]" : "border-[rgb(255,102,255,0.3)]";
+  const borderStyle = checked ? "h-[24px]" : "border-[rgb(255,102,255,0.3)]";
 
-  let heartStyle = checked ? "fill-primary" : "";
-  let cursorStyle = "cursor-pointer";
-
-  if (!user) {
-    textStyle = "bg-black text-zinc-600";
-    heartStyle = "fill-zinc-600";
-    borderStyle = "border-zinc-600";
-    cursorStyle = "";
-  }
+  const heartStyle = checked ? "fill-primary" : "";
+  const cursorStyle = "cursor-pointer";
 
   return (
     <div

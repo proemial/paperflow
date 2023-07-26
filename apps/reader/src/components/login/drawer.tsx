@@ -100,15 +100,6 @@ function Drawer({
           role="dialog"
         >
           <div className="backdrop flex-1" onClick={onClose} />
-          <div className="w-full flex justify-end relative right-6 bottom-[-13px] z-50">
-            <button
-              type="button"
-              onClick={() => onClose()}
-              className="mt-2 border rounded-xl bg-primary border-primary p-1"
-            >
-              <X className="h-4 w-4 stroke-[4]" />
-            </button>
-          </div>
           <div
             className="h-fit p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem]"
             style={{
@@ -116,6 +107,15 @@ function Drawer({
               backdropFilter: "blur(5px)",
             }}
           >
+            <div className="w-full flex justify-end absolute right-4 top-0 z-50">
+              <button
+                type="button"
+                onClick={() => onClose()}
+                className="mt-2 border rounded-xl bg-primary border-primary p-1"
+              >
+                <X className="h-4 w-4 stroke-[4]" />
+              </button>
+            </div>
             {children}
           </div>
         </div>

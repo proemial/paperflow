@@ -4,13 +4,20 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { Bookmark } from "lucide-react";
 import { useEffect } from "react";
 import { Analytics } from "./analytics";
+import { useDrawerState } from "./login/state";
 
 export function BookmarkButton({ id }: { id: string }) {
   const toggleBookmark = useViewHistory((state) => state.toggleBookmark);
   const { user } = useUser();
   const paper = useHistory(id);
+  const { open } = useDrawerState();
 
   const handleClick = () => {
+    if (!user) {
+      open();
+      return;
+    }
+
     Analytics.track(
       !!paper?.bookmarked ? "click:bookmark-clear" : "click:bookmark",
       { id }
@@ -21,14 +28,9 @@ export function BookmarkButton({ id }: { id: string }) {
   const active = user && paper;
 
   return (
-    <>
-      {active && (
-        <button type="button" onClick={handleClick}>
-          <Bookmark className={`${!!paper?.bookmarked && "fill-foreground"}`} />
-        </button>
-      )}
-      {!active && <Bookmark className="stroke-zinc-700" />}
-    </>
+    <button type="button" onClick={handleClick}>
+      <Bookmark className={`${!!paper?.bookmarked && "fill-foreground"}`} />
+    </button>
   );
 }
 

@@ -10,7 +10,7 @@ import { HomeMenuItem } from "./menu-home";
 import { ProfileMenuItem } from "./menu-profile";
 
 export function MainMenu() {
-  const { open, toggle } = useDrawerState();
+  const { isOpen, close } = useDrawerState();
 
   return (
     <div className="z-[1000]">
@@ -25,7 +25,7 @@ export function MainMenu() {
           <ProfileMenuItem />
         </div>
       </div>
-      <Drawer isOpen={open} onClose={toggle}>
+      <Drawer isOpen={isOpen} onClose={close}>
         <div className="flex flex-col gap-2">
           <div className="text-center text-base">Please log in to continue</div>
           <LoginButton variant="google" />

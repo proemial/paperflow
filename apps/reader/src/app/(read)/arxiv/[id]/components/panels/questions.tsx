@@ -6,6 +6,8 @@ import React, { FormEvent, useState } from "react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
 import { Analytics } from "src/components/analytics";
+import { useDrawerState } from "src/components/login/state";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const questions = [
   "Why is this important?",
@@ -24,6 +26,8 @@ type Props = {
 
 export function QuestionsPanel({ paper, model, closed }: Props) {
   const [suggestions] = useState(random(questions, 3));
+  const { user } = useUser();
+  const { open } = useDrawerState();
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     body: {
@@ -58,6 +62,8 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
     Analytics.track("click:question-ask");
   };
 
+  console.log("USER", user);
+
   return (
     <Panel title="Ask a question" closed={closed}>
       <div className="pt-4 flex flex-col justify-start">
@@ -81,6 +87,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
         ))}
         <form onSubmit={handlePostQuestion} className="flex items-center">
           <input
+            onFocus={() => !user && open()}
             type="text"
             placeholder="Ask your own question"
             className="w-full bg-black border-input border-l-2 border-y-2 rounded-tl-lg rounded-bl-lg p-3 focus-visible:outline-none"
@@ -94,6 +101,7 @@ export function QuestionsPanel({ paper, model, closed }: Props) {
             ref={chatContainerRef}
           />
           <button
+            onClick={() => !user && open()}
             type="submit"
             className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"
           >
@@ -147,10 +155,21 @@ function Question({
   onClick?: () => void;
   className?: string;
 }) {
+  const { user } = useUser();
+  const { open } = useDrawerState();
+
+  const handleClick = () => {
+    if (!user) {
+      open();
+      return;
+    }
+    onClick && onClick();
+  };
+
   return (
     <div
       className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
-      onClick={() => onClick && onClick()}
+      onClick={handleClick}
     >
       {children}
     </div>

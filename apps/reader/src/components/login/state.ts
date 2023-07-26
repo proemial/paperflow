@@ -1,11 +1,17 @@
 import { create } from 'zustand'
 
 export type DrawerState = {
-  open: boolean,
+  isOpen: boolean,
+  setOpen: (open: boolean) => void,
   toggle: () => void,
+  open: () => void,
+  close: () => void,
 };
 
 export const useDrawerState = create<DrawerState>(set => ({
-  open: false,
-  toggle: () => set((state) => ({open: !state.open}))
+  isOpen: false,
+  setOpen: (isOpen) => set(() => ({isOpen})),
+  toggle: () => set((state) => ({isOpen: !state.isOpen})),
+  open: () => set(() => ({isOpen: true})),
+  close: () => set(() => ({isOpen: false})),
 }))

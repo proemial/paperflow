@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { like } from "src/components/card/card-actions";
 import { Analytics } from "src/components/analytics";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { useDrawerState } from "../login/state";
 
 type Props = {
   id: string;
@@ -16,9 +17,11 @@ export function Badge({ id, category, text, likes }: Props) {
   const { user } = useUser();
   const [checked, setChecked] = useState(likes?.includes(text));
   const [isPending, startTransition] = useTransition();
+  const { open } = useDrawerState();
 
   const handleClick = () => {
     if (!user) {
+      open();
       return;
     }
     const nowChecked = !checked;
@@ -32,22 +35,15 @@ export function Badge({ id, category, text, likes }: Props) {
     setChecked(nowChecked);
   };
 
-  let textStyle = checked
+  const textStyle = checked
     ? "bg-white text-primary text-shadow-purple3"
     : "bg-black text-primary-light text-shadow-purple2";
 
   // border-color: rgb(255,102,255,0.2);box-shadow: 0 0 4px rgb(255,102,255,0.2);
-  let borderStyle = checked ? "h-[24px]" : "border-[rgb(255,102,255,0.3)]";
+  const borderStyle = checked ? "h-[24px]" : "border-[rgb(255,102,255,0.3)]";
 
-  let heartStyle = checked ? "fill-primary" : "";
-  let cursorStyle = "cursor-pointer";
-
-  if (!user) {
-    textStyle = "bg-black text-zinc-600";
-    heartStyle = "fill-zinc-600";
-    borderStyle = "border-zinc-600";
-    cursorStyle = "";
-  }
+  const heartStyle = checked ? "fill-primary" : "";
+  const cursorStyle = "cursor-pointer";
 
   return (
     <div
