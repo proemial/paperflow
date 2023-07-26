@@ -9,6 +9,7 @@ import { BookmarksMenuItem } from "./menu-bookmarks";
 import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
 import { ProfileMenuItem } from "./menu-profile";
+import { X } from "lucide-react";
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
@@ -34,8 +35,18 @@ export function MainMenu() {
       {isMounted && (
         <Drawer isOpen={isOpen} onClose={close}>
           <div className="flex flex-col gap-2">
-            <div className="text-center text-base">
-              Please log in to continue
+            <div className="flex justify-between items-center my-2">
+              <div className="w-2"></div>
+              <div className="text-center text-base">
+                Please log in to continue
+              </div>
+              <button
+                type="button"
+                onClick={close}
+                className="border rounded-xl bg-primary border-primary p-1"
+              >
+                <X className="h-4 w-4 stroke-[4]" />
+              </button>
             </div>
             <LoginButton variant="google" />
             <LoginButton variant="twitter" />

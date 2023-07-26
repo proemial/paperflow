@@ -1,7 +1,6 @@
 "use client";
 // https://letsbuildui.dev/articles/building-a-drawer-component-with-react-portals
 
-import { X } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import "src/styles/drawer.css";
@@ -107,15 +106,6 @@ function Drawer({
               backdropFilter: "blur(5px)",
             }}
           >
-            <div className="w-full flex justify-end absolute right-4 top-0 z-50">
-              <button
-                type="button"
-                onClick={() => onClose()}
-                className="mt-2 border rounded-xl bg-primary border-primary p-1"
-              >
-                <X className="h-4 w-4 stroke-[4]" />
-              </button>
-            </div>
             <div className="w-full flex flex-col items-center">
               <div className="flex max-w-[420px]">{children}</div>
             </div>
