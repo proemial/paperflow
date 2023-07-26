@@ -1,6 +1,5 @@
-import { PapersDao } from "data/storage/papers";
-import { PipelineDao } from "data/storage/pipeline";
 import { NextResponse } from "next/server";
+import { extractMetadata } from "../metadata";
 
 export const revalidate = 1;
 
@@ -12,13 +11,6 @@ export async function POST(request: Request, { params }: { params: { date: strin
     return await run(params.date);
 }
 
-export async function run(date: string) {
-    const index = await PipelineDao.getIndex(date);
-
-    if(index.length > 0){
-        const metadata = await PapersDao.buildMetadata(index.map((i) => i.id));
-        await PipelineDao.pushMetadata(date, metadata);
-    }
-
-    return NextResponse.json({date, count: index.length});
+async function run(date: string) {
+    return NextResponse.json(await extractMetadata(date));
 }

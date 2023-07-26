@@ -1,5 +1,6 @@
 import { PipelineDao } from "data/storage/pipeline";
-import { run as runMetadataExtraction } from "./[date]/route";
+import { extractMetadata } from "./metadata";
+import { NextResponse } from "next/server";
 
 export const revalidate = 1;
 
@@ -15,5 +16,5 @@ async function run() {
     const ingestionIndex = await PipelineDao.getIngestionIndex();
     const date = ingestionIndex.at(-1) as string;
 
-    return await runMetadataExtraction(date);
+    return NextResponse.json(await extractMetadata(date));
 }
