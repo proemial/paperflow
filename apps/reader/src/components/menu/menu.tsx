@@ -1,5 +1,4 @@
 "use client";
-import { User } from "lucide-react";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
 import { useDrawerState } from "../login/state";
@@ -8,6 +7,7 @@ import { Toaster } from "../shadcn-ui/toaster";
 import { BookmarksMenuItem } from "./menu-bookmarks";
 import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
+import { ProfileMenuItem } from "./menu-profile";
 
 export function MainMenu() {
   const { open, toggle } = useDrawerState();
@@ -22,10 +22,7 @@ export function MainMenu() {
           <HomeMenuItem />
           <HistoryMenuItem />
           <BookmarksMenuItem />
-          {/* <AuthMenuItem /> */}
-          <button type="button" onClick={toggle}>
-            <User className="stroke-muted-foreground" />
-          </button>
+          <ProfileMenuItem />
         </div>
       </div>
       <Drawer isOpen={open} onClose={toggle}>
