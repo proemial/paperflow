@@ -103,7 +103,7 @@ function Drawer({
           <div
             className="h-fit w-full p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] max-w-[640px]"
             style={{
-              background: "rgba(0, 0, 0, 0.7)",
+              background: "rgba(0, 0, 0, 0.8)",
               backdropFilter: "blur(5px)",
             }}
           >
