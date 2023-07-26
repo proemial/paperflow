@@ -96,12 +96,12 @@ function Drawer({
     >
       <div className="w-full h-full">
         <div
-          className={`h-full flex flex-col drawer ${position}`}
+          className={`h-full flex flex-col drawer ${position} items-center`}
           role="dialog"
         >
           <div className="backdrop flex-1" onClick={onClose} />
           <div
-            className="h-fit p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem]"
+            className="h-fit w-full p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] max-w-[640px]"
             style={{
               background: "rgba(0, 0, 0, 0.7)",
               backdropFilter: "blur(5px)",
@@ -116,7 +116,9 @@ function Drawer({
                 <X className="h-4 w-4 stroke-[4]" />
               </button>
             </div>
-            {children}
+            <div className="w-full flex flex-col items-center">
+              <div className="flex max-w-[420px]">{children}</div>
+            </div>
           </div>
         </div>
       </div>
