@@ -1,15 +1,14 @@
-#drawer-root {
+/* #drawer-root {
   height: 100%;
   width: 100%;
   position: absolute;
-}
+} */
 
 .drawer-container {
   --transition-speed: 0.3s;
 }
 
 .drawer {
-  /* background: rgba(0, 0, 0, 0.7); */
   width: 30%;
   overflow: auto;
   position: fixed;
@@ -67,7 +66,7 @@
 }
 
 .drawer.bottom {
-  bottom: 64px;
+  bottom: 47px;
   left: 0;
   right: 0;
   width: 100%;

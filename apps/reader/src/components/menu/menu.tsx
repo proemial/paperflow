@@ -13,7 +13,7 @@ export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className=" bg-black z-[1000]">
+    <div className="z-[1000]">
       <div className="pb-4 pt-2">
         <div
           className="flex justify-around"
@@ -23,7 +23,7 @@ export function MainMenu() {
           <HistoryMenuItem />
           <BookmarksMenuItem />
           {/* <AuthMenuItem /> */}
-          <button type="button" onClick={() => setIsOpen(true)}>
+          <button type="button" onClick={() => setIsOpen(!isOpen)}>
             <User className="stroke-muted-foreground" />
           </button>
         </div>

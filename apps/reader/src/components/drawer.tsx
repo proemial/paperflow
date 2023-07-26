@@ -6,6 +6,7 @@ import { cn } from "./shadcn-ui/utils";
 import "src/styles/drawer.css";
 import { createPortal } from "react-dom";
 import useMountTransition from "./use-mount-transition";
+import { X } from "lucide-react";
 
 function createPortalRoot() {
   const drawerRoot = document.createElement("div");
@@ -95,19 +96,26 @@ function Drawer({
     >
       <div className="w-full h-full">
         <div
-          className={`h-full flex flex-col drawer border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] ${position}`}
+          className={`h-full flex flex-col drawer ${position}`}
           role="dialog"
         >
           <div className="backdrop flex-1" onClick={onClose} />
+          <div className="w-full flex justify-end relative right-6 bottom-[-13px] z-50">
+            <button
+              type="button"
+              onClick={() => onClose()}
+              className="mt-2 border rounded-xl bg-primary border-primary p-1"
+            >
+              <X className="h-4 w-4 stroke-[4]" />
+            </button>
+          </div>
           <div
-            className="h-fit  p-4"
-            style={{ background: "rgba(0, 0, 0, 0.7)" }}
+            className="h-fit p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem]"
+            style={{
+              background: "rgba(0, 0, 0, 0.7)",
+              backdropFilter: "blur(5px)",
+            }}
           >
-            <div className="w-full flex justify-end">
-              <button type="button" onClick={() => onClose()} className="mt-2">
-                Close
-              </button>
-            </div>
             {children}
           </div>
         </div>
