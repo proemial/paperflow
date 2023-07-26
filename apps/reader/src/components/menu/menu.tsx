@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Logo } from "../icons/logo";
 import Drawer from "../login/drawer";
 import { useDrawerState } from "../login/state";
@@ -11,6 +12,11 @@ import { ProfileMenuItem } from "./menu-profile";
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className="z-[1000]">
@@ -25,19 +31,24 @@ export function MainMenu() {
           <ProfileMenuItem />
         </div>
       </div>
-      <Drawer isOpen={isOpen} onClose={close}>
-        <div className="flex flex-col gap-2">
-          <div className="text-center text-base">Please log in to continue</div>
-          <LoginButton variant="google" />
-          <LoginButton variant="twitter" />
-          <LoginButton variant="github" />
-          <div className="text-xxs text-center text-foreground/70">
-            Paperflow is a non-profit foundation dedicated to promoting academic
-            discourse and knowledge sharing. By using Paperflow, you consent to
-            our <Link variant="privacy" /> and <Link variant="privacy" />.
+      {isMounted && (
+        <Drawer isOpen={isOpen} onClose={close}>
+          <div className="flex flex-col gap-2">
+            <div className="text-center text-base">
+              Please log in to continue
+            </div>
+            <LoginButton variant="google" />
+            <LoginButton variant="twitter" />
+            <LoginButton variant="github" />
+            <div className="text-xxs text-center text-foreground/70">
+              Paperflow is a non-profit foundation dedicated to promoting
+              academic discourse and knowledge sharing. By using Paperflow, you
+              consent to our <Link variant="privacy" /> and{" "}
+              <Link variant="privacy" />.
+            </div>
           </div>
-        </div>
-      </Drawer>
+        </Drawer>
+      )}
       <Toaster />
     </div>
   );
