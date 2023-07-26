@@ -12,7 +12,7 @@ export async function POST(request: Request, { params }: { params: { date: strin
     return await run(params.date);
 }
 
-async function run(date: string) {
+export async function run(date: string) {
     const index = await PipelineDao.getIndex(date);
 
     if(index.length > 0){
@@ -20,5 +20,5 @@ async function run(date: string) {
         await PipelineDao.pushMetadata(date, metadata);
     }
 
-    return NextResponse.json({count: index.length});
+    return NextResponse.json({date, count: index.length});
 }

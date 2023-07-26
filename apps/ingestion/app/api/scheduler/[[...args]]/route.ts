@@ -31,12 +31,7 @@ async function run(params: { args: string[] }) {
     const scheduledArxivAtomWorkers = await scheduleArxivAtomWorker(date, pipeline.stages.arxivAtom);
     const scheduledGptSummaryWorkers = await scheduleGptSummaryWorkers(date, pipeline.stages.gptSummary, config.stages.gptSummary);
 
-    let scheduledMetadataWorkers = 0;
-    if(isDone(pipeline.stages.gptSummary)) {
-      scheduledMetadataWorkers = await scheduleMetadataWorker(date, scheduledGptSummaryWorkers.length);
-    }
-
-    result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}, Metadata: ${scheduledMetadataWorkers}`;
+    result = `ArxivAtom: ${scheduledArxivAtomWorkers}, GptSummary: ${scheduledGptSummaryWorkers.length}}`;
     return NextResponse.json({result});
   } catch (e) {
     console.error(e);
@@ -75,24 +70,4 @@ async function scheduleGptSummaryWorkers(date: string, actions: GptSummaryWorker
   }
 
   return [];
-}
-
-async function scheduleMetadataWorker(date: string, gptWorkers: number) {
-  if(gptWorkers > 0)
-    return 0;
-
-    const metadata = await PipelineDao.getMetadata(date);
-
-    if(metadata)
-      return 0
-
-    await QStash.schedule(date, PipelineStage.metadata);
-
-    return 1;
-}
-
-function isDone(workers: {status: WorkerStatus}[]) {
-  return workers.length > 0
-      && workers.map(s => s.status)
-                .filter(s => ['idle', 'scheduled', 'running'].includes(s)).length === 0;
 }
