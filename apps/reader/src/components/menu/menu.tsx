@@ -13,18 +13,20 @@ export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="pb-4 pt-2 bg-black z-[1000]">
-      <div
-        className="flex justify-around"
-        style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
-      >
-        <HomeMenuItem />
-        <HistoryMenuItem />
-        <BookmarksMenuItem />
-        {/* <AuthMenuItem /> */}
-        <button type="button" onClick={() => setIsOpen(true)}>
-          <User className="stroke-muted-foreground" />
-        </button>
+    <div className=" bg-black z-[1000]">
+      <div className="pb-4 pt-2">
+        <div
+          className="flex justify-around"
+          style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
+        >
+          <HomeMenuItem />
+          <HistoryMenuItem />
+          <BookmarksMenuItem />
+          {/* <AuthMenuItem /> */}
+          <button type="button" onClick={() => setIsOpen(true)}>
+            <User className="stroke-muted-foreground" />
+          </button>
+        </div>
       </div>
       <Drawer isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className="flex flex-col gap-2">

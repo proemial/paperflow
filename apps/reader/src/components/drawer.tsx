@@ -87,26 +87,31 @@ function Drawer({
   return createPortal(
     <div
       aria-hidden={isOpen ? "false" : "true"}
-      className={cn("drawer-container", {
+      className={cn("drawer-container h-full w-full", {
         open: isOpen,
         in: isTransitioning,
         className,
       })}
     >
-      <div
-        className={`drawer border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] p-4 ${position}`}
-        role="dialog"
-      >
-        <div className="w-full flex justify-end">
-          <button type="button" onClick={() => onClose()} className="mt-2">
-            Close
-          </button>
+      <div className="w-full h-full">
+        <div
+          className={`h-full flex flex-col drawer border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] ${position}`}
+          role="dialog"
+        >
+          <div className="backdrop flex-1" onClick={onClose} />
+          <div
+            className="h-fit  p-4"
+            style={{ background: "rgba(0, 0, 0, 0.7)" }}
+          >
+            <div className="w-full flex justify-end">
+              <button type="button" onClick={() => onClose()} className="mt-2">
+                Close
+              </button>
+            </div>
+            {children}
+          </div>
         </div>
-        {children}
       </div>
-      {/* TODO: Move to top and align using flexbox to fill available space */}
-      {/* Also remove position fixed */}
-      <div className="backdrop" onClick={onClose} />
     </div>,
     portalRootRef.current
   );
