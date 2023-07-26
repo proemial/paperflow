@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 .katex {
   font-size: inherit !important;
 }
@@ -13,13 +17,15 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin: 8px 0;
-  font-weight: bold;;
+  font-weight: bold;
 }
 
 h1 {
