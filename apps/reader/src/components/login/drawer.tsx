@@ -95,15 +95,14 @@ function Drawer({
     >
       <div className="w-full h-full">
         <div
-          className={`h-full flex flex-col drawer ${position} items-center`}
+          className={`backdrop h-full flex flex-col drawer ${position} items-center`}
           role="dialog"
         >
-          <div className="backdrop flex-1" onClick={onClose} />
+          <div className="flex-1 w-full" onClick={onClose} />
           <div
             className="h-fit w-full p-4 border border-black rounded-tl-[1.5rem] rounded-tr-[1.5rem] max-w-[640px]"
             style={{
-              background: "rgba(0, 0, 0, 0.8)",
-              backdropFilter: "blur(5px)",
+              background: "rgba(0, 0, 0, 0.65)",
             }}
           >
             <div className="w-full flex flex-col items-center">

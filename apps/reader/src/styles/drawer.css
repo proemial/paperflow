@@ -20,7 +20,7 @@
 .backdrop {
   visibility: hidden;
   opacity: 0;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
   transition:
     opacity var(--transition-speed) ease,
     visibility var(--transition-speed) ease;
