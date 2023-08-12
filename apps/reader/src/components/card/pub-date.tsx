@@ -16,7 +16,7 @@ export function PubDate({ paper }: Props) {
   const text =
     diff <= 5 // days
       ? `Published on ${publishedAt.format("MMM DD, YYYY")}`
-      : `Updated on ${updatedAt.format("MMM DD, YYYY")}`;
+      : `Edited on ${updatedAt.format("MMM DD, YYYY")}`;
 
   return (
     <div className="flex items-end text-sm text-primary-light text-shadow-purple">
