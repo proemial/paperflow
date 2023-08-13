@@ -3,8 +3,9 @@ import { MiddlewareFactory } from "./middleware";
 
 export const loggingMiddleware: MiddlewareFactory = (next) => {
   return async (request: NextRequest, _next: NextFetchEvent) => {
-    if(!request.nextUrl.pathname.startsWith('/_next'))
-        console.log(request.nextUrl.pathname);
+    const path = request.nextUrl.pathname;
+    if(!path.startsWith('/_next') && path !== '/api/socket.io')
+        console.log(path);
     return next(request, _next);
   };
 };
