@@ -25,5 +25,10 @@ export async function POST(request: Request) {
 
 // {text: "1. xxx\n2. xxx\n 3. xxx"} > ["xxx", "xxx", "xxx"]
 function asArray(records: Record<string, any>) {
-    return records['text'].split('\n').map(str => str.substring(3))
+    const text = records['text'];
+
+    if(!text[0].match(/^\d/)) {
+        return [text];
+    }
+    return text.split('\n').map(str => str.substring(3))
 }
