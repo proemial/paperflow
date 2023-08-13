@@ -50,7 +50,7 @@ async function run(title: string, abstract: string) {
             SystemMessagePromptTemplate.fromTemplate(
                 "Analyse the following scientific article with title: \"{title}\" and abstract \"{abstract}\". Respond to this message with \"OK\"."
             ),
-            HumanMessagePromptTemplate.fromTemplate("Generate three simple insightful one-line questions to this abstract, that you are able to answer yourself, phrased in plain language."),
+            HumanMessagePromptTemplate.fromTemplate("Produce three straightforward, one-line questions about this abstract that you can answer yourself, using clear language."),
         ]);
 
         const chain = new LLMChain({
