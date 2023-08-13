@@ -12,7 +12,7 @@ export const BotDao = {
     const begin = DateMetrics.now();
 
     try {
-      return await UpStash.papers.get(`${id}:gpt-4:suggestions`) as Suggestions | undefined;
+      return await UpStash.papers.get(`${id}:bot:suggestions`) as Suggestions | undefined;
     } catch (error) {
       console.error(error);
       throw error;
@@ -25,7 +25,7 @@ export const BotDao = {
     const begin = DateMetrics.now();
 
     try {
-      await UpStash.papers.set(`${id}:gpt-4:suggestions`, {suggestions, id});
+      await UpStash.papers.set(`${id}:bot:suggestions`, {suggestions, id});
     } catch (error) {
       console.error(error);
       throw error;

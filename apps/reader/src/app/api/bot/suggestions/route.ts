@@ -41,7 +41,7 @@ async function run(title: string, abstract: string) {
     try{
         const chat = new ChatOpenAI({
             openAIApiKey: Env.connectors.openai.apiKey,
-            modelName: "gpt-4-0613",
+            modelName: "gpt-3.5-turbo",
             temperature: 0,
         });
 
