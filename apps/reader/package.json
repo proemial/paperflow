@@ -39,8 +39,7 @@
     "@tanstack/react-query-devtools": "^4.29.25",
     "react-intersection-observer": "^9.5.2",
     "@headlessui/react": "^1.7.15",
-    "cookies-next": "^2.1.2",
-    "langchain": "^0.0.127"
+    "cookies-next": "^2.1.2"
   },
   "devDependencies": {
     "tsconfig": "workspace:*",
