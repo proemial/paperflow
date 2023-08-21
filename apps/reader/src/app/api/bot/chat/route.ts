@@ -14,7 +14,9 @@ export async function POST(req: Request) {
   const { messages, title, abstract, model } = await req.json();
 
   const moddedMessages = [
-    {role: 'system', content: `Here is some context: title: ${title}, abstract: ${abstract}.`},
+    {role: 'system',
+    content: `Here is some context: title: ${title}, abstract: ${abstract}. ` +
+             'For future reference, "core concepts" are considered short technical concepts and lingo relevant to the title and abstract.'},
     ...messages,
   ];
   const prompt = await chatPrompt(model);
@@ -41,6 +43,6 @@ export async function POST(req: Request) {
 
 async function chatPrompt(model: Model) {
   return model === 'gpt-4'
-    ? 'In a single sentence, enclosing relevant concepts with double parenthesis,'
+    ? 'In a single sentence enclosing "core concepts" with double parenthesis,'
     : 'In a single sentence, ';
 }
