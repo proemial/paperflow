@@ -30,7 +30,7 @@ function applyExplainLinks(
 
     return (
       <span
-        className="underline cursor-pointer text-primary font-medium"
+        className="underline cursor-pointer text-[#E5CCFF] font-medium"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}
