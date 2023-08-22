@@ -30,7 +30,7 @@ function applyExplainLinks(
 
     return (
       <span
-        className="underline cursor-pointer font-medium"
+        className="underline cursor-pointer text-primary font-medium"
         onClick={() => onClick(sanitized)}
       >
         {sanitized}
@@ -51,9 +51,7 @@ const style =
 
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className={`${style} from-secondary to-secondary-gradient rounded-tr-2xl self-start`}
-    >
+    <div className={`${style} bg-[#60A040] rounded-tr-2xl self-start`}>
       {/* @ts-ignore */}
       {children}
     </div>
