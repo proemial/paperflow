@@ -1,0 +1,8 @@
+### Get single user
+GET http://localhost:3000/api/users/single/google-oauth2|113343050005700467125 HTTP/1.1
+
+### Get multiple users
+POST http://localhost:3000/api/users/ HTTP/1.1
+content-type: application/json
+
+["google-oauth2|113343050005700467125", "google-oauth2|116237839610131678110"]

@@ -1,0 +1,11 @@
+### Upsert user
+POST http://localhost:3000/api/events/user HTTP/1.1
+content-type: application/json
+
+{
+    "event": "login",
+    "id": "dummy-user",
+    "info": {
+        "name": "Dummy User"
+    }
+}
