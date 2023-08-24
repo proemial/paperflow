@@ -39,7 +39,10 @@ export async function GET(request: Request, { params }: { params: { page: string
     if(!allItems) {
         const feedData = await buildFeed(date);
         allItems = feedData.papers;
-        await FeedCache.push(key, allItems)
+        if(allItems?.length) {
+            console.log(`Pushing ${allItems.length} feed entries to cache for ${key}`);
+            await FeedCache.push(key, allItems);
+        }
     }
 
     if(session) {
