@@ -27,7 +27,7 @@ function extractUserInfo(session: Session) {
   const domain = email?.substring(email.indexOf('@') +1);
 
   const organisations = ['paperflow.ai'];
-  const org = organisations.includes(domain) && domain;
+  const org = organisations.includes(domain) ? domain : undefined;
 
   return { name, nickname, picture, email, org };
 }
