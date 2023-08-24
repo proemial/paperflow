@@ -12,7 +12,7 @@ export const GET = handleAuth({
       const { sub: id } = session.user;
       const info = extractUserInfo(session);
 
-      QStash.postEvent({
+      QStash.postEvent('user', {
         event: 'login',
         id, info
     });

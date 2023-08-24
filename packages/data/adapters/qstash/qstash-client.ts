@@ -1,8 +1,8 @@
 import { Client, PublishJsonRequest } from "@upstash/qstash";
+import { PipelineDao } from "../../storage/pipeline";
+import { TemporaryDummyEvent, UserEvent } from "../../storage/users.models";
 import { Env } from "../env";
 import { PipelineStage } from "../redis/redis-client";
-import { PipelineDao } from "../../storage/pipeline";
-import { UserEvent, TemporaryDummyEvent } from "../../storage/users.models";
 
 if (!Env.connectors.qstash) {
   throw new Error("[qstash-client] Please fix your environment variables");
@@ -66,10 +66,10 @@ export const QStash = {
     }
   },
 
-  postEvent: async (event: UserEvent | TemporaryDummyEvent) => {
+  postEvent: async (event: string, body: UserEvent | TemporaryDummyEvent) => {
     await publishJSON({
-      url: `${paperflowUrl}/events/${event.event}`,
-      body: event,
+      url: `${paperflowUrl}/events/${event}`,
+      body,
     });
   },
 };
