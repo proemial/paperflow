@@ -17,10 +17,3 @@ content-type: application/json
     "icon_emoji": "paperflow",
     "text": "Heads up! person@email.com just secured a spot on the Paperflow waitlist! ✨"
 }
-
-# "person@email.com joined the Paperflow waitlist! :pray:"
-# "Great news! person@email.com has just added themselves to the Paperflow waitlist! :tada:"
-# "Welcome aboard! person@email.com is now on the Paperflow waitlist! :partying_face:"
-# "Heads up! person@email.com just secured a spot on the Paperflow waitlist! ✨"
-# "Cheers! person@email.com is the latest addition to the Paperflow waitlist! :champagne:"
-# "Exciting times! person@email.com has hopped onto the Paperflow waitlist! :rocket:"

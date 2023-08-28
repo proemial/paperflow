@@ -9,16 +9,12 @@ import dynamic from "next/dynamic";
 
 export const revalidate = 1;
 
-const screenMinusMenu = "calc(100dvh-48px)";
-
 export default function HomePage() {
   return (
     <QueryClientProvider client={queryClient}>
-      <main
-        className={`min-h-[${screenMinusMenu}] flex flex-col justify-begin`}
-      >
+      <main className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
         <div
-          className={`h-[${screenMinusMenu}] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
+          className={`h-[calc(100dvh-48px)] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
         >
           <div className="h-[10%]"></div>
           <div className="h-[50%] w-full flex flex-col justify-center items-center">
@@ -71,7 +67,7 @@ const LoggedoutNudge = dynamic(
               variant="secondary"
               onClick={() => (window.location.href = `/waitlist`)}
             >
-              Join the waitlist
+              Join our waitlist
             </Button>
           );
       }

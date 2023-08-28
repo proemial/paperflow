@@ -11,3 +11,7 @@ export function splitIntoBuckets<T>(inputArray: T[], bucketSize: number): T[][] 
 export function asChunks<T>(inputArray: T[], bucketSize: number): T[][] {
   return splitIntoBuckets(inputArray, bucketSize);
 }
+
+export function randomArrayEntry<T>(array: T[]): T {
+  return array[~~(Math.random() * array.length)];
+}
