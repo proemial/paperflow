@@ -26,9 +26,13 @@ export function MainMenu() {
           className="flex justify-around"
           style={{ boxShadow: "0px -8px 8px 4px rgba(0, 0, 0, 0.85)" }}
         >
+          {/* @ts-ignore */}
           <HomeMenuItem />
+          {/* @ts-ignore */}
           <HistoryMenuItem />
+          {/* @ts-ignore */}
           <BookmarksMenuItem />
+          {/* @ts-ignore */}
           <ProfileMenuItem />
         </div>
       </div>
