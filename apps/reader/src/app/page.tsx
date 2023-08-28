@@ -66,7 +66,14 @@ const LoggedoutNudge = dynamic(
         case "waitlist":
           return <div>You are on the waitlist.</div>;
         default:
-          return <Button variant="secondary">Join the waitlist</Button>;
+          return (
+            <Button
+              variant="secondary"
+              onClick={() => (window.location.href = `/waitlist`)}
+            >
+              Join the waitlist
+            </Button>
+          );
       }
     }),
   {

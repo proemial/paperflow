@@ -12,9 +12,8 @@ export function useAuthActions() {
 
   const status = getCookie("status") as "waitlist" | "member" | undefined;
   const isHome = pathname === "/";
-  const disableMenu = isHome && status !== "member";
-
-  console.log("auth", isHome, disableMenu);
+  const isWaitlist = pathname === "/waitlist";
+  const disableMenu = (isHome || isWaitlist) && status !== "member";
 
   const color = disableMenu ? "stroke-[#444444]" : "stroke-muted-foreground";
 
