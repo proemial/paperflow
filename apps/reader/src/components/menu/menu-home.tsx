@@ -2,17 +2,19 @@
 import { Home } from "lucide-react";
 import { useAuthActions } from "../authentication";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 export const HomeMenuItem = dynamic(
   () =>
     Promise.resolve(() => {
-      const { goto, status, color } = useAuthActions();
+      const { push } = useRouter();
+      const { isHome, color } = useAuthActions();
 
       const handleHome = () => {
-        if (status !== "member") return;
+        if (isHome) return;
 
         close();
-        goto("/?reload=true");
+        push("/?reload=true");
       };
 
       return (

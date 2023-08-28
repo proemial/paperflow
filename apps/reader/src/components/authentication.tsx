@@ -2,15 +2,24 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { useDrawerState } from "./login/state";
 import { getCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function useAuthActions() {
-  const { push: goto } = useRouter();
+  const { push } = useRouter();
+  const pathname = usePathname();
   const { user } = useUser();
-  const { toggle: toggleDrawer } = useDrawerState();
-  const status = getCookie("status") as "waitlist" | "member" | undefined;
-  const color =
-    status === "member" ? "stroke-muted-foreground" : "stroke-[#444444]";
+  const { toggle } = useDrawerState();
 
-  return { user, goto, toggleDrawer, status, color };
+  const status = getCookie("status") as "waitlist" | "member" | undefined;
+  const isHome = pathname === "/";
+  const disableMenu = isHome && status !== "member";
+
+  console.log("auth", isHome, disableMenu);
+
+  const color = disableMenu ? "stroke-[#444444]" : "stroke-muted-foreground";
+
+  const toggleDrawer = !user && !disableMenu ? toggle : () => {};
+  const goto = user ? push : toggleDrawer;
+
+  return { user, goto, toggleDrawer, status, color, isHome };
 }

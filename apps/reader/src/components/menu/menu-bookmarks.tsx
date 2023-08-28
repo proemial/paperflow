@@ -6,12 +6,10 @@ import dynamic from "next/dynamic";
 export const BookmarksMenuItem = dynamic(
   () =>
     Promise.resolve(() => {
-      const { user, goto, toggleDrawer, status, color } = useAuthActions();
+      const { goto, color } = useAuthActions();
 
       const handleBookmarks = () => {
-        if (status !== "member") return;
-
-        user ? goto("/bookmarks") : toggleDrawer();
+        goto("/bookmarks");
       };
 
       return (

@@ -6,12 +6,10 @@ import dynamic from "next/dynamic";
 export const ProfileMenuItem = dynamic(
   () =>
     Promise.resolve(() => {
-      const { user, goto, toggleDrawer, status, color } = useAuthActions();
+      const { goto, color } = useAuthActions();
 
       const handleBookmarks = () => {
-        if (status !== "member") return;
-
-        user ? goto("/profile") : toggleDrawer();
+        goto("/profile");
       };
 
       return (
