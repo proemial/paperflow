@@ -13,6 +13,7 @@ import { EmptySpinner, Spinner } from "src/components/spinner";
 import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { revalidatePath } from "next/cache";
+import { QuestionsPanelOld } from "./components/panels/questions-old";
 
 type Props = {
   params: { id: string };
@@ -53,6 +54,8 @@ async function PageContent({ id }: { id: string }) {
           <StatisticsPanel closed />
 
           <MetadataPanel paper={paper} closed />
+
+          <QuestionsPanelOld paper={paper} model={model} closed />
 
           <QuestionsPanel paper={paper} model={model} />
         </div>

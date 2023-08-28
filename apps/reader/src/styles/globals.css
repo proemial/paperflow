@@ -93,11 +93,19 @@ h3 {
   turquise: 170 100% 50% (#00FFD5)
   */
 
+  .clamp2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --muted: 0 0% 100%;
+    --muted: 0 0% 50%;
     --muted-foreground: 270 100% 90%;
     --muted-foreground-disabled: 0 0% 53%;
 

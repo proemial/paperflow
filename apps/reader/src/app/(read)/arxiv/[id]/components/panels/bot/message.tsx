@@ -1,23 +1,12 @@
 "use client";
-import { useDrawerState } from "src/components/login/state";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { User } from "data/storage/users.models";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "src/components/shadcn-ui/Avatar";
 
-type Role = "function" | "system" | "user" | "assistant";
-
-type Props = {
-  role: Role;
-  content: string;
-  explain: (msg: string) => void;
-};
-
-export function Message({ role, content, explain }: Props) {
-  const withLinks = applyExplainLinks(content, explain);
-  if (role === "user") {
-    return <Question>{content}</Question>;
-  } else {
-    return <Answer>{withLinks}</Answer>;
-  }
-}
+export type Role = "function" | "system" | "user" | "assistant";
 
 function applyExplainLinks(
   msg: string,
@@ -46,42 +35,63 @@ function applyExplainLinks(
   ));
 }
 
-const style =
-  "inline-block mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r";
+const style = "mb-4 rounded-b-2xl py-2 px-4 shadow bg-gradient-to-r";
 
-export function Answer({ children }: { children: React.ReactNode }) {
+export function Answer({ user, children }: { user?: User; children: string }) {
   return (
-    <div className={`${style} bg-[#60A040] rounded-tr-2xl self-start`}>
-      {/* @ts-ignore */}
-      {children}
-    </div>
+    <>
+      <UserAvatar user={user} />
+      <div className={`clamp2 ${style} bg-[#60A040] rounded-tr-2xl self-start`}>
+        <Text>{children}</Text>
+      </div>
+    </>
   );
 }
 
 type QuestionProps = {
+  user?: User;
   children: string;
-  onClick?: () => void;
   className?: string;
 };
 
-export function Question({ children, onClick, className }: QuestionProps) {
-  const { user } = useUser();
-  const { open } = useDrawerState();
+export function Question({ user, children, className }: QuestionProps) {
+  return (
+    <>
+      <UserAvatar user={user} />
+      <div
+        className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
+      >
+        {children}
+      </div>
+    </>
+  );
+}
 
-  const handleClick = () => {
-    if (!user) {
-      open();
-      return;
-    }
-    onClick && onClick();
-  };
+const BotAvatar = {
+  info: {
+    name: "PaperFlowBot",
+    nickname: "paperflowbot",
+    picture: "/bot-avatar.svg",
+  },
+};
+
+function Text({ children }: { children: string }) {
+  return <>{applyExplainLinks(children, () => {})}</>;
+}
+
+function UserAvatar({ user }: { user?: User }) {
+  const userInfo = user?.info ? user.info : BotAvatar.info;
+
+  const { name, nickname, picture } = userInfo;
+  const initials = name.split(" ").map((n) => n.charAt(0));
 
   return (
-    <div
-      className={`${className} ${style} from-primary to-primary-gradient rounded-tr-2xl self-start`}
-      onClick={handleClick}
-    >
-      {children}
+    <div className="flex my-1 gap-1" style={{ fontSize: 14 }}>
+      <Avatar className="inline-flex h-[24px] w-auto mr-1">
+        <AvatarImage src={picture} alt="avatar" />
+        <AvatarFallback>{initials}</AvatarFallback>
+      </Avatar>
+      {name} <span className="text-muted">{` @${nickname}`}</span>
     </div>
   );
 }
