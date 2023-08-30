@@ -2,6 +2,9 @@ import { Session, handleAuth, handleCallback } from '@auth0/nextjs-auth0';
 import { NextRequest } from 'next/server';
 import { QStash } from 'data/adapters/qstash/qstash-client'
 
+// Remember location after login:
+// https://community.auth0.com/t/how-can-i-override-the-callback-handlers-redirect/89285
+
 export const GET = handleAuth({
   onError(req: Request, error: Error) {
     console.error(error);

@@ -10,9 +10,12 @@ import { HistoryMenuItem } from "./menu-history";
 import { HomeMenuItem } from "./menu-home";
 import { ProfileMenuItem } from "./menu-profile";
 import { X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import base64url from "base64url";
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
+  const accessToken = getAccessToken();
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
@@ -37,7 +40,7 @@ export function MainMenu() {
         </div>
       </div>
       {isMounted && (
-        <Drawer isOpen={isOpen} onClose={close}>
+        <Drawer isOpen={isOpen || !!accessToken} onClose={close}>
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center my-2">
               <div className="w-2"></div>
@@ -67,6 +70,13 @@ export function MainMenu() {
       <Toaster />
     </div>
   );
+}
+
+function getAccessToken() {
+  const token = useSearchParams().get("token");
+  const isValid = token && base64url.decode(token) !== "~�";
+
+  return isValid && token;
 }
 
 type Props = {
