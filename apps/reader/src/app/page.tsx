@@ -38,9 +38,9 @@ export default function HomePage() {
 const LoggedinGreeting = dynamic(
   () =>
     Promise.resolve(() => {
-      const { status } = useAuthActions();
+      const { user, status } = useAuthActions();
 
-      if (status !== "member") return undefined;
+      if (!user && status !== "member") return undefined;
 
       return (
         <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
@@ -54,7 +54,9 @@ const LoggedinGreeting = dynamic(
 const LoggedoutNudge = dynamic(
   () =>
     Promise.resolve(() => {
-      const { status } = useAuthActions();
+      const { user, status } = useAuthActions();
+
+      if (user) return undefined;
 
       switch (status) {
         case "member":

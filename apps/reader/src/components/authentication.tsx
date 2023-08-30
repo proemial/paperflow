@@ -1,7 +1,7 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { UserProfile, useUser } from "@auth0/nextjs-auth0/client";
 import { useDrawerState } from "./login/state";
-import { getCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import { usePathname, useRouter } from "next/navigation";
 
 export function useAuthActions() {
@@ -10,10 +10,10 @@ export function useAuthActions() {
   const { user } = useUser();
   const { toggle } = useDrawerState();
 
-  const status = getCookie("status") as "waitlist" | "member" | undefined;
+  const status = getStatus(user);
   const isHome = pathname === "/";
   const isWaitlist = pathname === "/waitlist";
-  const disableMenu = (isHome || isWaitlist) && status !== "member";
+  const disableMenu = (isHome || isWaitlist) && !user && status !== "member";
 
   const color = disableMenu ? "stroke-[#444444]" : "stroke-muted-foreground";
 
@@ -21,4 +21,12 @@ export function useAuthActions() {
   const goto = user ? push : toggleDrawer;
 
   return { user, goto, toggleDrawer, status, color, isHome };
+}
+
+function getStatus(user: UserProfile) {
+  if (user && !getCookie("status")) {
+    setCookie("status", "member");
+    return "member";
+  }
+  return getCookie("status") as "waitlist" | "member" | undefined;
 }

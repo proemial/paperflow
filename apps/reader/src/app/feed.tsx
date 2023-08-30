@@ -13,8 +13,8 @@ export const PaperFeed = dynamic(
   () =>
     Promise.resolve(() => {
       const ref = useRef<HTMLDivElement>();
-      const { status } = useAuthActions();
-      if (status !== "member") return undefined;
+      const { user, status } = useAuthActions();
+      if (!user && status !== "member") return undefined;
 
       useEffect(() => {
         if (window.location.search.includes("reload=true")) {
