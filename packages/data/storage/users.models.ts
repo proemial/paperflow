@@ -23,6 +23,7 @@ export type UserEvent = {
     info: {
         [key in UserInfo]?: string
     },
+    waitlistEmail?: string,
 }
 
 export type TemporaryDummyEvent = {event: 'foo' | 'bar'};

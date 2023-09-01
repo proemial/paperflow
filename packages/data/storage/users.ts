@@ -18,7 +18,7 @@ export const UsersDao  = {
           {
             $inc: getStatIncrement(user.event),
             $set: {info: user.info, updatedAt: now},
-            $setOnInsert: {createdAt: now}
+            $setOnInsert: {createdAt: now, waitlistEmail: user.waitlistEmail}
           },
           {upsert: true, returnDocument: 'after'});
 
