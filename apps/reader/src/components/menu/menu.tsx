@@ -19,8 +19,6 @@ export function MainMenu() {
   const [accessToken, setAccessToken] = useState(useAccessToken());
   const { user } = useUser();
 
-  console.log(user);
-
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
     setIsMounted(true);
