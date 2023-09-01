@@ -31,6 +31,30 @@ export const UsersDao  = {
       }
     },
 
+    updateReadStats: async (userId: string) => {
+      const history = await db('history');
+      const users = await db('users');
+      const begin = DateMetrics.now();
+
+      const now = new Date();
+
+      try {
+        const reads = await history.countDocuments({user: userId})
+        await users.findOneAndUpdate(
+          {id: userId},
+          {
+            $set: {updatedAt: now, "stats.reads": reads},
+          }
+        );
+
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        Log.metrics(begin, 'UsersDao.updateReadStats');
+      }
+    },
+
     get: async (id: string) => {
       const mongo = await db('users');
       const begin = DateMetrics.now();
@@ -50,7 +74,7 @@ export const UsersDao  = {
       const begin = DateMetrics.now();
 
       try {
-        const result = await mongo.find<User>({id: {$in: ids}});
+        const result = mongo.find<User>({id: {$in: ids}});
         return await result.toArray();
       } catch (error) {
         console.error(error);
