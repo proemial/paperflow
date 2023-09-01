@@ -62,7 +62,16 @@ const LoggedoutNudge = dynamic(
         case "member":
           return undefined;
         case "waitlist":
-          return <div>You are on the waitlist.</div>;
+          return (
+            <div>
+              <div className="text-lg text-center">
+                Thank you for your interest!
+              </div>
+              <div className="text-center text-sm">
+                You are on our waitlist.
+              </div>
+            </div>
+          );
         default:
           return (
             <Button
