@@ -24,7 +24,9 @@ export function useAuthActions() {
 }
 
 function getStatus(user: UserProfile) {
-  if (user && !getCookie("status")) {
+  console.log("gaCookie", getCookie("_ga"));
+
+  if (user || getCookie("_ga")) {
     setCookie("status", "member");
     return "member";
   }
