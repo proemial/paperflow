@@ -34,7 +34,7 @@ function extractUserInfo(session: Session, state?: { [key: string]: any }) {
 
   const waitlistEmail = getEmailFromToken(state.returnTo);
   if(waitlistEmail) {
-    return {...info, emailFromToken: waitlistEmail}
+    return {...info, waitlistEmail}
   }
 
   return { name, nickname, picture, email, org };
