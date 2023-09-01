@@ -16,7 +16,7 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 
 export function MainMenu() {
   const { isOpen, close } = useDrawerState();
-  const [accessToken, setAccessToken] = useState(getAccessToken());
+  const [accessToken, setAccessToken] = useState(useAccessToken());
   const { user } = useUser();
 
   console.log(user);
@@ -84,7 +84,7 @@ export function MainMenu() {
   );
 }
 
-function getAccessToken() {
+function useAccessToken() {
   const token = useSearchParams().get("token");
   const decoded = base64url.decode(token || "");
   const isValid = decoded?.includes("@");
