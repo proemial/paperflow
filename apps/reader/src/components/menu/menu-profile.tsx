@@ -1,21 +1,22 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { User } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useDrawerState } from "../login/state";
+import { useAuthActions } from "../authentication";
+import dynamic from "next/dynamic";
 
-export function ProfileMenuItem() {
-  const { push } = useRouter();
-  const { user } = useUser();
-  const { toggle } = useDrawerState();
+export const ProfileMenuItem = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const { goto, color } = useAuthActions();
 
-  const handleBookmarks = () => {
-    user ? push("/profile") : toggle();
-  };
+      const handleBookmarks = () => {
+        goto("/profile");
+      };
 
-  return (
-    <button type="button" onClick={handleBookmarks}>
-      <User className="stroke-muted-foreground" />
-    </button>
-  );
-}
+      return (
+        <button type="button" onClick={handleBookmarks}>
+          <User className={color} />
+        </button>
+      );
+    }),
+  { ssr: false }
+);

@@ -1,21 +1,22 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import { History } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useDrawerState } from "../login/state";
+import { useAuthActions } from "../authentication";
+import dynamic from "next/dynamic";
 
-export function HistoryMenuItem() {
-  const { push } = useRouter();
-  const { user } = useUser();
-  const { toggle } = useDrawerState();
+export const HistoryMenuItem = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const { goto, color } = useAuthActions();
 
-  const handleClick = () => {
-    user ? push("/history") : toggle();
-  };
+      const handleClick = () => {
+        goto("/history");
+      };
 
-  return (
-    <button type="button" onClick={handleClick}>
-      <History className="stroke-muted-foreground" />
-    </button>
-  );
-}
+      return (
+        <button type="button" onClick={handleClick}>
+          <History className={color} />
+        </button>
+      );
+    }),
+  { ssr: false }
+);

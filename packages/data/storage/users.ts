@@ -18,7 +18,7 @@ export const UsersDao  = {
           {
             $inc: getStatIncrement(user.event),
             $set: {info: user.info, updatedAt: now},
-            $setOnInsert: {createdAt: now}
+            $setOnInsert: {createdAt: now, waitlistEmail: user.waitlistEmail}
           },
           {upsert: true, returnDocument: 'after'});
 
@@ -28,6 +28,30 @@ export const UsersDao  = {
         throw error;
       } finally {
         Log.metrics(begin, 'UsersDao.upsert');
+      }
+    },
+
+    updateReadStats: async (userId: string) => {
+      const history = await db('history');
+      const users = await db('users');
+      const begin = DateMetrics.now();
+
+      const now = new Date();
+
+      try {
+        const reads = await history.countDocuments({user: userId})
+        await users.findOneAndUpdate(
+          {id: userId},
+          {
+            $set: {updatedAt: now, "stats.reads": reads},
+          }
+        );
+
+      } catch (error) {
+        console.error(error);
+        throw error;
+      } finally {
+        Log.metrics(begin, 'UsersDao.updateReadStats');
       }
     },
 
@@ -50,7 +74,7 @@ export const UsersDao  = {
       const begin = DateMetrics.now();
 
       try {
-        const result = await mongo.find<User>({id: {$in: ids}});
+        const result = mongo.find<User>({id: {$in: ids}});
         return await result.toArray();
       } catch (error) {
         console.error(error);

@@ -1,6 +1,7 @@
 import { Session, handleAuth, handleCallback } from '@auth0/nextjs-auth0';
 import { NextRequest } from 'next/server';
 import { QStash } from 'data/adapters/qstash/qstash-client'
+import base64url from "base64url";
 
 export const GET = handleAuth({
   onError(req: Request, error: Error) {
@@ -11,11 +12,12 @@ export const GET = handleAuth({
     afterCallback: (req: NextRequest, session: Session, state?: { [key: string]: any }) => {
       const { sub: id } = session.user;
       const info = extractUserInfo(session);
+      const waitlistEmail = getEmailFromToken(state.returnTo);
 
       QStash.postEvent('user', {
         event: 'login',
-        id, info
-    });
+        id, info, waitlistEmail
+      });
       return session;
     }
   }),
@@ -30,4 +32,14 @@ function extractUserInfo(session: Session) {
   const org = organisations.includes(domain) ? domain : undefined;
 
   return { name, nickname, picture, email, org };
+}
+
+function getEmailFromToken(returnTo?: string) {
+  if(returnTo?.includes('token=')) {
+    const url = new URL(returnTo)
+    const email = base64url.decode(url.searchParams.get('token'));
+
+    return email;
+  }
+  return undefined;
 }

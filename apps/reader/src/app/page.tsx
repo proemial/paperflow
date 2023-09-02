@@ -1,130 +1,89 @@
 "use client";
-import { useUser } from "@auth0/nextjs-auth0/client";
-import {
-  QueryClientProvider,
-  useInfiniteQuery,
-  useQuery,
-} from "@tanstack/react-query";
-import React, { Suspense, useEffect, useRef } from "react";
-import { useInView } from "react-intersection-observer";
-import { PaperCard } from "src/components/card/card.cc";
+import { QueryClientProvider } from "@tanstack/react-query";
 import logo from "src/images/logo.png";
-import { RefreshBanner } from "../components/refresh-banner";
-import { Spinner } from "../components/spinner";
+import { useAuthActions } from "../components/authentication";
+import { Button } from "../components/shadcn-ui/button";
 import { queryClient } from "../state/react-query";
-import { FeedResponse } from "./api/feed/[page]/route";
+import { PaperFeed } from "./feed";
+import dynamic from "next/dynamic";
 
 export const revalidate = 1;
 
-const showDevTools = false;
-
 export default function HomePage() {
-  const { user } = useUser();
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (window.location.search.includes("reload=true")) {
-      ref.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
-
-  // h-[calc(100vh-120px)]
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="flex min-h-screen flex-col justify-begin">
-        <div className="flex h-[calc(100dvh-48px)] max-h-screen flex-col justify-center items-center bg-zinc-900">
+      <main className={`min-h-[calc(100dvh-48px)] flex flex-col justify-begin`}>
+        <div
+          className={`h-[calc(100dvh-48px)] max-h-screen flex flex-col justify-center items-center bg-zinc-900`}
+        >
           <div className="h-[10%]"></div>
           <div className="h-[50%] w-full flex flex-col justify-center items-center">
             <img src={logo.src} style={{ maxHeight: "40%" }} />
             <div className="text-3xl md:text-7xl">Paperflow</div>
           </div>
           <div className="h-[40%] w-full flex justify-center items-center">
-            <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
-              Swipe up to get started
-            </div>
+            {/* @ts-ignore */}
+            <LoggedinGreeting />
+            {/* @ts-ignore */}
+            <LoggedoutNudge />
           </div>
         </div>
-        <div
-          ref={ref}
-          className="text-xl px-4 py-6 bg-background h-full top-0 sticky shadow"
-        >
-          Recent papers
-        </div>
-        <Suspense fallback={<CenteredSpinner />}>
-          <PageContent />
-        </Suspense>
+        {/* @ts-ignore */}
+        <PaperFeed />
       </main>
     </QueryClientProvider>
   );
 }
 
-async function fetchPage(page: number) {
-  const res = await fetch(`/api/feed/${page}`);
-  return await res.json();
-}
+const LoggedinGreeting = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const { user, status } = useAuthActions();
 
-function useLikes() {
-  return useQuery<string[], Error>(["likes"], async () => {
-    const res = await fetch(`/api/user/likes`);
-    return await res.json();
-  });
-}
+      if (!user && status !== "member") return undefined;
 
-function useFeed() {
-  return useInfiniteQuery<FeedResponse, Error>({
-    queryKey: ["feed"],
-    queryFn: ({ pageParam = 0 }) => fetchPage(pageParam),
-    getNextPageParam: (lastPage) => lastPage.pages.next,
-  });
-}
-
-function PageContent() {
-  const { ref, inView } = useInView();
-  const likes = useLikes();
-  const feed = useFeed();
-
-  useEffect(() => {
-    if (inView && feed.hasNextPage) {
-      feed.fetchNextPage();
-    }
-  }, [inView, feed.fetchNextPage, feed.hasNextPage]);
-
-  return (
-    <>
-      <RefreshBanner likes={likes.data} />
-      {(feed.isLoading || likes.isLoading) && <CenteredSpinner />}
-      {(feed.error || likes.error) && (
-        <div>
-          {feed.error?.message} {likes.error?.message}
+      return (
+        <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
+          Swipe up to get started
         </div>
-      )}
-      {feed.data?.pages.map((page, index) => (
-        <React.Fragment key={index}>
-          {page.items?.map((item, index) => (
-            <PaperCard key={index} id={item.id} likes={likes.data || []} />
-          ))}
-        </React.Fragment>
-      ))}
-      {feed.isFetchingNextPage && <Spinner />}
-      <button
-        ref={ref}
-        onClick={() => feed.fetchNextPage()}
-        disabled={!feed.hasNextPage || feed.isFetchingNextPage}
-      >
-        {feed.isFetchingNextPage
-          ? "Loading more..."
-          : feed.hasNextPage
-          ? "Load Newer"
-          : "Nothing more to load"}
-      </button>
-    </>
-  );
-}
+      );
+    }),
+  { ssr: false }
+);
 
-function CenteredSpinner() {
-  return (
-    <div className="flex min-h-screen flex-col justify-center">
-      <Spinner />
-    </div>
-  );
-}
+const LoggedoutNudge = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const { user, status } = useAuthActions();
+
+      if (user) return undefined;
+
+      switch (status) {
+        case "member":
+          return undefined;
+        case "waitlist":
+          return (
+            <div>
+              <div className="text-lg text-center">
+                Thank you for your interest!
+              </div>
+              <div className="text-center text-sm">
+                You are on our waitlist.
+              </div>
+            </div>
+          );
+        default:
+          return (
+            <Button
+              variant="secondary"
+              onClick={() => (window.location.href = `/waitlist`)}
+            >
+              Join our waitlist
+            </Button>
+          );
+      }
+    }),
+  {
+    ssr: false,
+  }
+);

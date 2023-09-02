@@ -6,3 +6,14 @@ POST http://localhost:3000/api/users/ HTTP/1.1
 content-type: application/json
 
 ["google-oauth2|113343050005700467125", "google-oauth2|116237839610131678110"]
+
+
+### Post to slack
+POST https://hooks.slack.com/services/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 HTTP/1.1
+content-type: application/json
+
+{
+    "username": "Waitlist Bot",
+    "icon_emoji": "paperflow",
+    "text": "Heads up! person@email.com just secured a spot on the Paperflow waitlist! ✨"
+}

@@ -1,22 +1,29 @@
 "use client";
 import { Home } from "lucide-react";
+import { useAuthActions } from "../authentication";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useDrawerState } from "../login/state";
 
-export function HomeMenuItem() {
-  const { push } = useRouter();
-  const { close } = useDrawerState();
+export const HomeMenuItem = dynamic(
+  () =>
+    Promise.resolve(() => {
+      const { push } = useRouter();
+      const { isHome, color } = useAuthActions();
 
-  const handleHome = () => {
-    close();
-    push("/?reload=true");
-  };
+      const handleHome = () => {
+        if (isHome) return;
 
-  return (
-    <>
-      <button type="button" onClick={handleHome}>
-        <Home className="stroke-muted-foreground" />
-      </button>
-    </>
-  );
-}
+        close();
+        push("/?reload=true");
+      };
+
+      return (
+        <>
+          <button type="button" onClick={handleHome}>
+            <Home className={color} />
+          </button>
+        </>
+      );
+    }),
+  { ssr: false }
+);

@@ -14,6 +14,7 @@ import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { revalidatePath } from "next/cache";
 import { QuestionsPanelOld } from "./components/panels/questions-old";
+import { UsersDao } from "data/storage/users";
 
 type Props = {
   params: { id: string };
@@ -78,5 +79,6 @@ async function logHistory(id, category) {
   const session = await getSession();
   if (session) {
     await ViewHistoryDao.upsert(session.user.sub, id, category);
+    await UsersDao.updateReadStats(session.user.sub);
   }
 }
