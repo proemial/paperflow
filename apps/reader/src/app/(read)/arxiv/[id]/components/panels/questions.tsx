@@ -10,6 +10,137 @@ type Props = {
   closed?: boolean;
 };
 
+type Message = {
+  text: string;
+  createdAt: Date;
+};
+
+type ConversationalMessage = Message & {
+  user?: string; // Default: 'Bot'
+  role?: "question" | "answer" | "suggestion"; // Default: 'answer'
+  visibility?: "public" | "private"; // Default: 'private'
+  scores?: {
+    [key: string]: number;
+  };
+};
+
+type PaperConversations = {
+  paper: string;
+  suggestions?: Message[];
+  insights?: {
+    [key: string]: Array<Message & { replies?: Message[] }>;
+  };
+  conversations?: Array<
+    ConversationalMessage & { replies?: ConversationalMessage[] }
+  >;
+};
+
+// Query relevant messages:
+// $project: {
+//   messages: {
+//     $filter: {
+//       input: "$messages",
+//       as: "messages",
+//       cond: {
+//         $or: [
+//           {$eq: ["$$messages.visibility", "public"]},
+//           {$eq: ["$$messages.user", "google-oauth2|116237839610131678110"]}
+//         ]
+//       }
+//     }
+//   }
+// }
+
+const example: PaperConversations = {
+  paper: "2308.10966",
+  suggestions: [
+    {
+      text: "How does this approach ensure safe and deadlock-free navigation for decentralized multi-robot systems in constrained environments?",
+      createdAt: new Date(),
+    },
+    {
+      text: "What is the key insight that allows decentralized robots to maintain liveness and avoid deadlocks?",
+      createdAt: new Date(),
+    },
+    {
+      text: "How does the proposed approach compare to other decentralized and centralized navigation approaches in terms of safety, efficiency, and smoothness?",
+      createdAt: new Date(),
+    },
+    {
+      text: "What is the mean-field approach to studying two-site Bose-Hubbard systems?",
+      createdAt: new Date(),
+    },
+    {
+      text: "How can quantum effects beyond mean field be uncovered in these systems?",
+      createdAt: new Date(),
+    },
+    {
+      text: "What are the advantages of using a multi-configuration ansatz with time-dependent basis functions in the variational principle?",
+      createdAt: new Date(),
+    },
+  ],
+  insights: {
+    "google-oauth2|116237839610131678110": [
+      {
+        // Custom question
+        text: "Why should I care?",
+        createdAt: new Date(),
+        replies: [
+          {
+            text: "Understanding the quantum effects in bosonic Josephson junctions through a multi-configuration atomic coherent states approach provides a more accurate representation of phase space dynamics and symmetry breaking, requiring significantly fewer variational trajectories compared to traditional semiclassical ones, offering more efficient and precise insights into quantum systems.",
+            createdAt: new Date(),
+          },
+        ],
+      },
+      // Follow-up suggestion clicked
+      {
+        text: "What are the advantages of using a multi-configuration ansatz with time-dependent basis functions in the variational principle?",
+        createdAt: new Date(),
+        replies: [
+          {
+            text: "The use of a multi-configuration ansatz with time-dependent basis functions in the variational principle allows for uncovering quantum effects with fewer variational trajectories, providing better qualitative agreement of phase space dynamics and facilitating the understanding of more complex effects such as macroscopic quantum self trapping and the onset of spontaneous symmetry breaking.",
+            createdAt: new Date(),
+          },
+        ],
+      },
+      // insights-link clicked
+      {
+        text: "What is macroscopic quantum self trapping?",
+        createdAt: new Date(),
+        replies: [
+          {
+            text: "Macroscopic quantum self trapping refers to a quantum phenomenon where a bosonic system can exhibit a self-stabilizing behavior against distribution or spread of population, leading to an imbalance in the population states due to inter-particle interaction and nonlinear effects.",
+            createdAt: new Date(),
+          },
+        ],
+      },
+    ],
+  },
+  conversations: [
+    {
+      user: "google-oauth2|116237839610131678110",
+      createdAt: new Date(),
+      text: "How does the P2C framework complete point cloud objects using only a single incomplete point cloud per object?",
+      replies: [
+        {
+          createdAt: new Date(),
+          text: "The P2C framework completes point cloud objects from a single partial observation by grouping ((incomplete point clouds)) into ((local patches)), and utilizing a self-supervised approach that predicts ((masked patches)) based on prior information learned from various incomplete objects, supported further by a ((Region-Aware Chamfer Distance)) for shape regulization and a Normal ((Consistency Constraint)) to ensure continuous and complete surface recovery.",
+        },
+        {
+          user: "google-oauth2|103724863179690205173",
+          createdAt: new Date(),
+          text: "The ((Region-Aware Chamfer)) helps regularizing shape mismatches without limiting completion capacity, and the ((Normal Consistency Constraint)) supports a local planarity assumption to ensure the continuity and completeness of the recovered surface.",
+        },
+        {
+          user: "google-oauth2|113343050005700467125",
+          createdAt: new Date(),
+          text: "((@rydahl)) does the model learn from it's own observations?",
+        },
+      ],
+    },
+  ],
+};
+
 const conversations = {
   users: {
     "google-oauth2|116237839610131678110": {
