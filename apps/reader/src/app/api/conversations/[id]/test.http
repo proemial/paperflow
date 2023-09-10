@@ -1,0 +1,11 @@
+### Get public messages
+GET http://localhost:3000/api/conversations/2302.05349 HTTP/1.1
+
+### Get public and user messages
+GET http://localhost:3000/api/conversations/2302.05349 HTTP/1.1
+X-User: google-oauth2|116237839610131678110
+
+### Upsert message
+POST http://localhost:3000/api/conversations/2302.05349 HTTP/1.1
+
+{"createdAt": "2023-09-04T14:39:00.947Z",  "text": "test message", "user": "google-oauth2|116237839610131678110"}
