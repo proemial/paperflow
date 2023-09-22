@@ -4,10 +4,11 @@ import { useChat } from "ai/react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
 import React, { useEffect, useState } from "react";
-import { BotForm } from "./form";
-import { BotMessages } from "./messages";
+import { BotForm } from "./bot-form";
+import { BotMessages } from "./bot-messages";
 import { generateSuggestions } from "src/query/suggestions";
 import { Spinner } from "src/components/spinner";
+import { Message } from "data/storage/conversations";
 
 type Props = {
   paper: ArXivAtomPaper;
@@ -16,19 +17,19 @@ type Props = {
 
 export function InsightsBot({ paper, model }: Props) {
   const { id, title, abstract } = paper.parsed;
-  const [suggestions, setSuggestions] = useState<string[]>();
+  const [conversation, setConversation] = useState<Message[]>();
 
   // import { useConversation } from "src/app/queries/conversations";
   // const { data, isLoading } = useConversation(id);
 
-  // TODO: Move generation of suggestions into the conversations query
+  // TODO: Move generation of conversation into the conversations query
   const { mutate } = useMutation(generateSuggestions);
   useEffect(() => {
     mutate(
       { id, title, abstract },
       {
         onSuccess: async (response) => {
-          setSuggestions(response);
+          setConversation(response);
         },
       }
     );
@@ -48,16 +49,16 @@ export function InsightsBot({ paper, model }: Props) {
 
   return (
     <div className="pt-4 flex flex-col justify-start">
-      {!suggestions && (
+      {!conversation && (
         <div className="mb-4">
           <Spinner />
         </div>
       )}
 
-      {suggestions && (
+      {conversation && (
         <BotMessages
           messages={messages}
-          suggestions={suggestions}
+          conversation={conversation}
           append={append}
         />
       )}

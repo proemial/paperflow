@@ -1,16 +1,17 @@
 import { Message as AiMessage, CreateMessage } from "ai";
 import { Analytics } from "src/components/analytics";
 import { Message, Question } from "./message";
+import { Message as ConversationalMessage } from "data/storage/conversations";
 
 type Props = {
   messages: AiMessage[];
-  suggestions: string[];
+  conversation: ConversationalMessage[];
   append: (
     message: AiMessage | CreateMessage
   ) => Promise<string | null | undefined>;
 };
 
-export function BotMessages({ messages, suggestions, append }: Props) {
+export function BotMessages({ messages, conversation, append }: Props) {
   const appendQuestion = (question: string) =>
     append({ role: "user", content: question });
 
@@ -27,13 +28,13 @@ export function BotMessages({ messages, suggestions, append }: Props) {
   return (
     <>
       {messages.length === 0 &&
-        suggestions?.map((question, i) => (
+        conversation?.map((question, i) => (
           <Question
             key={i}
-            onClick={() => handleSuggestionClick(question)}
+            onClick={() => handleSuggestionClick(question.text)}
             className="cursor-pointer"
           >
-            {question}
+            {question.text}
           </Question>
         ))}
       {messages?.map((message, i) => (

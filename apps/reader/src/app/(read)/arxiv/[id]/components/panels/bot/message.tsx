@@ -1,4 +1,3 @@
-"use client";
 import { useDrawerState } from "src/components/login/state";
 import { useUser } from "@auth0/nextjs-auth0/client";
 

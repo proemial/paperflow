@@ -1,3 +1,4 @@
+import { Message } from "data/storage/conversations";
 
 type SuggestionsPayload = { id: string, title: string; abstract: string };
 
@@ -8,5 +9,9 @@ export async function generateSuggestions(payload: SuggestionsPayload) {
     body: JSON.stringify(payload),
   });
 
-  return (await result.json()) as string[];
+  const json = (await result.json()) as string[];
+  return json.map(text => ({
+    text,
+    createdAt: new Date().toString(),
+  } as Message));
 }
