@@ -4,7 +4,10 @@ export const Env = {
 
   connectors: {
     mongo: {
-      uri: process.env.MONGO_CONNECT_STRING,
+      uri: {
+        old: process.env.MONGO_CONNECT_STRING,
+        new: process.env.MONGODB_URI
+      },
     },
     redis: {
       // Upstash
