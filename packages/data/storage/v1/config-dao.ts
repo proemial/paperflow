@@ -1,4 +1,4 @@
-import { db } from "../../adapters/mongo/mongo-client";
+import { dbOld } from "../../adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { GptPrompt } from "../../adapters/openai/openai";
 
@@ -12,7 +12,7 @@ export type PromptTemplate = {
 
 export const ConfigDao = {
   getPrompt: async () => {
-    const mongo = await db('config');
+    const mongo = await dbOld('config');
     const begin = DateMetrics.now();
 
     try {
@@ -28,7 +28,7 @@ export const ConfigDao = {
   },
 
   getFilter: async () => {
-    const mongo = await db('config');
+    const mongo = await dbOld('config');
     const begin = DateMetrics.now();
 
     try {

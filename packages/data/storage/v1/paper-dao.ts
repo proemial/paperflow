@@ -1,4 +1,4 @@
-import { db } from "../../adapters/mongo/mongo-client";
+import { dbOld } from "../../adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { AnyBulkWriteOperation } from "mongodb";
 import { ArXivAtomPaper } from "../../adapters/arxiv/arxiv.models";
@@ -19,7 +19,7 @@ export type WithId = {
 
 export const PapersDao = {
   upsert: async (paper: ArXivAtomPaper) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -42,7 +42,7 @@ export const PapersDao = {
   },
 
   upsertMany: async (papers: ArXivAtomPaper[]) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -74,7 +74,7 @@ export const PapersDao = {
   },
 
   updateSummary: async (id: string, revId: string, summary: string, promptHash: string) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -98,7 +98,7 @@ export const PapersDao = {
   },
 
   getByIds: async (ids: string[]) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -124,7 +124,7 @@ export const PapersDao = {
   },
 
   getById: async (id: string) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -150,7 +150,7 @@ export const PapersDao = {
   },
 
   getByIdAndStatus: async (id: string, status: string) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     try {
@@ -171,7 +171,7 @@ export const PapersDao = {
   },
 
   getIdsByStatusFiltered: async (status: string) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     const filterConfig = await ConfigDao.getFilter();
@@ -192,7 +192,7 @@ export const PapersDao = {
   },
 
   getIdsByIdsFiltered: async (ids: string[]) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     const filterConfig = await ConfigDao.getFilter();
@@ -213,7 +213,7 @@ export const PapersDao = {
   },
 
   getByCategory: async (id: string, category: string, limit: number) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
     const filter = {
@@ -235,7 +235,7 @@ export const PapersDao = {
   },
 
   getSummarizedByDate: async (after: Date, before?: Date) => {
-    const mongo = await db('papers');
+    const mongo = await dbOld('papers');
     const begin = DateMetrics.now();
 
 

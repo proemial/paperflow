@@ -1,5 +1,5 @@
 import { Log } from "utils/log";
-import { db } from "../adapters/mongo/mongo-client";
+import { dbOld } from "../adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { User, UserEvent, UserEventType } from "./users.models";
 
@@ -7,7 +7,7 @@ import { User, UserEvent, UserEventType } from "./users.models";
 
 export const UsersDao  = {
     upsert: async (user: UserEvent) => {
-      const mongo = await db('users');
+      const mongo = await dbOld('users');
       const begin = DateMetrics.now();
 
       const now = new Date();
@@ -32,8 +32,8 @@ export const UsersDao  = {
     },
 
     updateReadStats: async (userId: string) => {
-      const history = await db('history');
-      const users = await db('users');
+      const history = await dbOld('history');
+      const users = await dbOld('users');
       const begin = DateMetrics.now();
 
       const now = new Date();
@@ -56,7 +56,7 @@ export const UsersDao  = {
     },
 
     get: async (id: string) => {
-      const mongo = await db('users');
+      const mongo = await dbOld('users');
       const begin = DateMetrics.now();
 
       try {
@@ -70,7 +70,7 @@ export const UsersDao  = {
     },
 
     getByIds: async (ids: string[]) => {
-      const mongo = await db('users');
+      const mongo = await dbOld('users');
       const begin = DateMetrics.now();
 
       try {

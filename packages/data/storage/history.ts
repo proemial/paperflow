@@ -1,5 +1,5 @@
 import { Log } from "utils/log";
-import { db } from "../adapters/mongo/mongo-client";
+import { dbOld } from "../adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { ObjectId } from "mongodb";
 
@@ -17,7 +17,7 @@ export type UserPaper = {
 
 export const ViewHistoryDao = {
   upsert: async (user: string, paper: string, category: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -34,7 +34,7 @@ export const ViewHistoryDao = {
   },
 
   get: async (user: string, paper: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -48,7 +48,7 @@ export const ViewHistoryDao = {
   },
 
   bookmarked: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -66,7 +66,7 @@ export const ViewHistoryDao = {
   },
 
   readHistory: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -84,7 +84,7 @@ export const ViewHistoryDao = {
   },
 
   fullHistory: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -102,7 +102,7 @@ export const ViewHistoryDao = {
   },
 
   clearFullHistory: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -116,7 +116,7 @@ export const ViewHistoryDao = {
   },
 
   bookmark: async (user: string, paper: string, category: string, bookmarked: boolean) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -133,7 +133,7 @@ export const ViewHistoryDao = {
   },
 
   clearBookmarks: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -149,7 +149,7 @@ export const ViewHistoryDao = {
   },
 
   like: async (user: string, paper: string, category: string, text: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -172,7 +172,7 @@ export const ViewHistoryDao = {
   },
 
   unlike: async (user: string, text: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -198,7 +198,7 @@ export const ViewHistoryDao = {
   },
 
   clearLikes: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
@@ -214,7 +214,7 @@ export const ViewHistoryDao = {
   },
 
   liked: async (user: string) => {
-    const mongo = await db('history');
+    const mongo = await dbOld('history');
     const begin = DateMetrics.now();
 
     try {
