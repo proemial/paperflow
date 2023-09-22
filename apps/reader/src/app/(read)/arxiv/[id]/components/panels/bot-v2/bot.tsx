@@ -1,14 +1,11 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
 import { useChat } from "ai/react";
 import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import { Model } from "data/adapters/redis/redis-client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BotForm } from "./bot-form";
 import { BotMessages } from "./bot-messages";
-import { generateSuggestions } from "src/query/suggestions";
 import { Spinner } from "src/components/spinner";
-import { Message } from "data/storage/conversations";
 import { useConversation } from "src/app/queries/conversations";
 
 type Props = {
