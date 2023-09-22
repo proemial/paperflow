@@ -6,20 +6,14 @@ import { InsightsBot as Bot } from "./bot/bot";
 import { InsightsBot as BotV2 } from "./bot-v2/bot";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/src/state/react-query";
-import { UserProvider, useUser } from "@auth0/nextjs-auth0/client";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { useRole } from "@/src/utils/auth";
 
 type Props = {
   paper: ArXivAtomPaper;
   model: Model;
   closed?: boolean;
 };
-
-export function useRole(role: string) {
-  const {user} = useUser();
-  const roles = (user && user['https://paperflow.ai/roles'] as string[]) || [];
-
-  return roles.includes(role);
-}
 
 export function QuestionsPanel(props: Props) {
   const botV2Enabled = useRole('botV2');

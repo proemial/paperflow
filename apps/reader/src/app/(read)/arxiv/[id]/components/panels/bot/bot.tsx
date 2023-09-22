@@ -19,10 +19,6 @@ export function InsightsBot({ paper, model }: Props) {
   const { id, title, abstract } = paper.parsed;
   const [conversation, setConversation] = useState<Message[]>();
 
-  // import { useConversation } from "src/app/queries/conversations";
-  // const { data, isLoading } = useConversation(id);
-
-  // TODO: Move generation of conversation into the conversations query
   const { mutate } = useMutation(generateSuggestions);
   useEffect(() => {
     mutate(

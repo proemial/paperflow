@@ -9,6 +9,7 @@ import { BotMessages } from "./bot-messages";
 import { generateSuggestions } from "src/query/suggestions";
 import { Spinner } from "src/components/spinner";
 import { Message } from "data/storage/conversations";
+import { useConversation } from "src/app/queries/conversations";
 
 type Props = {
   paper: ArXivAtomPaper;
@@ -17,23 +18,8 @@ type Props = {
 
 export function InsightsBot({ paper, model }: Props) {
   const { id, title, abstract } = paper.parsed;
-  const [conversation, setConversation] = useState<Message[]>();
 
-  // import { useConversation } from "src/app/queries/conversations";
-  // const { data, isLoading } = useConversation(id);
-
-  // TODO: Move generation of conversation into the conversations query
-  const { mutate } = useMutation(generateSuggestions);
-  useEffect(() => {
-    mutate(
-      { id, title, abstract },
-      {
-        onSuccess: async (response) => {
-          setConversation(response);
-        },
-      }
-    );
-  }, [title, abstract, mutate]);
+  const { data, isLoading } = useConversation(id);
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     body: { title, abstract, model },
@@ -50,16 +36,16 @@ export function InsightsBot({ paper, model }: Props) {
   return (
     <div className="pt-4 flex flex-col justify-start">
       <div>Bot V2</div>
-      {!conversation && (
+      {isLoading && (
         <div className="mb-4">
           <Spinner />
         </div>
       )}
 
-      {conversation && (
+      {!isLoading && (
         <BotMessages
           messages={messages}
-          conversation={conversation}
+          conversation={data.messages}
           append={append}
         />
       )}
