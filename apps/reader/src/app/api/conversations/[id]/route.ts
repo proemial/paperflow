@@ -1,4 +1,4 @@
-import { ConversationsDao, Message, Conversation } from "data/storage/conversations";
+import { ConversationsDao, Message } from "data/storage/conversations";
 import { PapersDao } from "data/storage/papers";
 import { NextResponse } from "next/server";
 import { getSuggestions } from "../../bot/suggestions/route";
