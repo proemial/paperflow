@@ -8,7 +8,6 @@ import { BotForm } from "./form";
 import { BotMessages } from "./messages";
 import { generateSuggestions } from "src/query/suggestions";
 import { Spinner } from "src/components/spinner";
-import { useConversation } from "src/app/queries/conversations";
 
 type Props = {
   paper: ArXivAtomPaper;
@@ -19,12 +18,11 @@ export function InsightsBot({ paper, model }: Props) {
   const { id, title, abstract } = paper.parsed;
   const [suggestions, setSuggestions] = useState<string[]>();
 
-  const { data } = useConversation(id);
-  console.log("data", data);
-
-  const { mutate } = useMutation(generateSuggestions);
+  // import { useConversation } from "src/app/queries/conversations";
+  // const { data, isLoading } = useConversation(id);
 
   // TODO: Move generation of suggestions into the conversations query
+  const { mutate } = useMutation(generateSuggestions);
   useEffect(() => {
     mutate(
       { id, title, abstract },

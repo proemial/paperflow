@@ -36,7 +36,7 @@ class Singleton {
 }
 const clientPromise = Singleton.instance;
 
-export const dbNew = async (collection: string) => {
+export const db = async (collection: string) => {
   try {
     return (await clientPromise).db("paperflow").collection(collection);
   } catch (e) {

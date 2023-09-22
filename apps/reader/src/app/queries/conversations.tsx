@@ -8,8 +8,6 @@ export function useConversation(id: string) {
   const userId = user?.sub;
   const headers = (userId && { "X-User": userId }) || undefined;
 
-  console.log("useConversation", id, headers);
-
   return useQuery<Conversation, Error>(
     ["conversations", id, userId],
     async () => {

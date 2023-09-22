@@ -3,13 +3,22 @@ import { ConfigDao } from "data/storage/config";
 import { PapersDao } from "data/storage/papers";
 import { NextResponse } from "next/server";
 
+// TODO: DELETE
 export async function POST(request: Request) {
     const {id, title, abstract} = await request.json();
+
+    const suggestions = await getSuggestions(id, title, abstract);
+
+    return NextResponse.json(suggestions);
+}
+
+// TODO: MOVE
+export async function getSuggestions(id: string, title: string, abstract: string) {
     const item = "suggestions";
 
     let suggestions = await PapersDao.getGptSummary(id, item);
     if (suggestions) {
-        return NextResponse.json(asArray(suggestions));
+        return asArray(suggestions);
     }
 
     // Generate suggestions
@@ -20,7 +29,7 @@ export async function POST(request: Request) {
         await PapersDao.pushGptSummary(id, item, suggestions);
     }
 
-    return NextResponse.json(asArray(suggestions));
+    return asArray(suggestions);
 }
 
 // {text: "1. xxx\n2. xxx\n 3. xxx"} > ["xxx", "xxx", "xxx"]

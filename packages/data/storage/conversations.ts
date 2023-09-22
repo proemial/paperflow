@@ -1,5 +1,5 @@
 import { Log } from "utils/log";
-import { db } from "../adapters/mongo/mongo-client";
+import { db } from "../adapters/mongo/mongo-client.new";
 import { DateMetrics } from "utils/date";
 
 export type Conversation = {
@@ -21,15 +21,16 @@ export type Message = {
 }
 
 export const ConversationsDao = {
-    upsertMessage: async (paper: string, message: Message) => {
+    upsert: async (paper: string, messageData: Message | Message[]) => {
       const mongo = await db('conversations');
       const begin = DateMetrics.now();
 
       try {
+        const messages = Array.isArray(messageData) ? messageData : [messageData];
         return await mongo.findOneAndUpdate(
           {paper},
           // @ts-ignore
-          {$push: {messages: message}},
+          {$push: {messages: {$each: messages}}},
           {upsert: true, returnDocument: 'after'});
       } catch (error) {
         console.error(error);
