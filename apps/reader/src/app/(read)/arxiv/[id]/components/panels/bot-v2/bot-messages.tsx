@@ -2,6 +2,7 @@ import { Message as AiMessage, CreateMessage } from "ai";
 import { Analytics } from "src/components/analytics";
 import { Message, Question } from "./message";
 import { Message as ConversationalMessage } from "data/storage/conversations";
+import React, { useEffect } from "react";
 
 type Props = {
   messages: AiMessage[];
@@ -25,10 +26,15 @@ export function BotMessages({ messages, conversation, append }: Props) {
     appendQuestion(question);
   };
 
+  const suggestions = conversation?.filter(message => !message.user).slice(0, 3) || [];
+  useEffect(() => {
+    console.log('messages', messages);
+  }, [messages]);
+
   return (
     <>
       {messages.length === 0 &&
-        conversation?.map((question, i) => (
+        suggestions.map((question, i) => (
           <Question
             key={i}
             onClick={() => handleSuggestionClick(question.text)}

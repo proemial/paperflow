@@ -17,7 +17,6 @@ export function InsightsBot({ paper, model }: Props) {
   const { id, title, abstract } = paper.parsed;
 
   const { data, isLoading } = useConversation(id);
-  const suggestions = data?.messages.filter(message => !message.user).slice(0, 2);
 
   const { messages, input, handleInputChange, handleSubmit, append } = useChat({
     body: { title, abstract, model },
@@ -29,6 +28,7 @@ export function InsightsBot({ paper, model }: Props) {
     if (messages?.length > 0 && inputFieldRef.current) {
       inputFieldRef.current.scrollIntoView(false);
     }
+    // console.log('messages', messages);
   }, [messages]);
 
   return (
@@ -43,7 +43,7 @@ export function InsightsBot({ paper, model }: Props) {
       {!isLoading && (
         <BotMessages
           messages={messages}
-          conversation={suggestions}
+          conversation={data.messages}
           append={append}
         />
       )}
