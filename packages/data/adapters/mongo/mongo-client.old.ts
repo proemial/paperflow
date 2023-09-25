@@ -1,8 +1,7 @@
-import { DateMetrics } from 'utils/date';
 import { MongoClient } from 'mongodb';
 import { Env } from '../env';
 
-const uri = Env.connectors.mongo.uri;
+const uri = Env.connectors.mongo.uri.old;
 const options = {};
 
 if (!uri) {
@@ -29,16 +28,12 @@ if (Env.isDev) {
   clientPromise = client.connect();
 }
 
-export const db = async (collection: string) => {
-  const begin = DateMetrics.now();
-
+export const dbOld = async (collection: string) => {
   try {
     return (await clientPromise).db("paperflow").collection(collection);
   } catch (e) {
     console.error(e);
     throw e;
-  } finally {
-    // console.log(`[${DateMetrics.elapsed(begin)}] Mongo connected to ${collection}`);
   }
 };
 

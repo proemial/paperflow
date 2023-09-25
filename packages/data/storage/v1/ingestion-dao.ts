@@ -1,10 +1,10 @@
-import { db } from "../../adapters/mongo/mongo-client";
+import { dbOld } from "../../adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { IngestionState } from "./ingestion-models";
 
 export const IngestionDao = {
   get: async (date: string) => {
-    const mongo = await db('ingestion');
+    const mongo = await dbOld('ingestion');
     const begin = DateMetrics.now();
 
     try {
@@ -20,7 +20,7 @@ export const IngestionDao = {
   },
 
   getOrCreate: async (date: string) => {
-    const mongo = await db('ingestion');
+    const mongo = await dbOld('ingestion');
     const begin = DateMetrics.now();
 
     try {
@@ -47,7 +47,7 @@ export const IngestionDao = {
   },
 
   getLatest: async () => {
-    const mongo = await db('ingestion');
+    const mongo = await dbOld('ingestion');
     const begin = DateMetrics.now();
 
     try {
@@ -66,7 +66,7 @@ export const IngestionDao = {
   },
 
   update: async (date: string, ingestionEntry: IngestionState) => {
-    const mongo = await db('ingestion');
+    const mongo = await dbOld('ingestion');
     const begin = DateMetrics.now();
 
     try {
@@ -80,7 +80,7 @@ export const IngestionDao = {
   },
 
   getCounts: async () => {
-    const mongo = await db('ingestion');
+    const mongo = await dbOld('ingestion');
     const begin = DateMetrics.now();
 
     try {
