@@ -1,5 +1,5 @@
 import { Log } from "utils/log";
-import { dbOld } from "../adapters/mongo/mongo-client.old";
+import { dbOld } from "@/adapters/mongo/mongo-client.old";
 import { DateMetrics } from "utils/date";
 import { User, UserEvent, UserEventType } from "./users.models";
 
@@ -22,7 +22,7 @@ export const UsersDao  = {
           },
           {upsert: true, returnDocument: 'after'});
 
-        return result.value;
+        return result?.value;
       } catch (error) {
         console.error(error);
         throw error;
