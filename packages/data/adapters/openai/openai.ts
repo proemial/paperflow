@@ -17,8 +17,6 @@ export type WithTextAndUsage = {
   usage?: CreateCompletionResponseUsage,
 }
 
-console.log('Env.connectors.openai.apiKey', Env.connectors.openai.apiKey);
-
 const configuration = new Configuration({
   apiKey: Env.connectors.openai.apiKey,
 });
