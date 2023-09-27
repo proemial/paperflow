@@ -8,16 +8,17 @@ type Props = {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   onChange: (e: any) => void;
   inputFieldRef: MutableRefObject<HTMLInputElement>;
+  disabled?: boolean;
 };
 
-export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
+export function BotForm({ value, onSubmit, onChange, inputFieldRef, disabled }: Props) {
   const { user } = useUser();
   const { open } = useDrawerState();
 
   return (
     <form onSubmit={onSubmit} className="flex items-center">
       <input
-        readOnly={!user}
+        readOnly={!user || disabled}
         onFocus={() => !user && open()}
         type="text"
         placeholder="Ask your own question"
@@ -32,6 +33,7 @@ export function BotForm({ value, onSubmit, onChange, inputFieldRef }: Props) {
         ref={inputFieldRef}
       />
       <button
+        disabled={!user || disabled}
         onClick={() => !user && open()}
         type="submit"
         className="p-3 pt-4 border-input border-r-2 border-y-2 rounded-tr-lg rounded-br-lg"

@@ -18,7 +18,7 @@ export function InsightsBot({ paper, model }: Props) {
 
   const { data, isLoading } = useConversation(id);
 
-  const { messages, input, handleInputChange, handleSubmit, append } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, append, isLoading: isGenerating } = useChat({
     body: { title, abstract, model },
     api: "/api/bot/chat",
   });
@@ -53,6 +53,7 @@ export function InsightsBot({ paper, model }: Props) {
         onChange={handleInputChange}
         onSubmit={handleSubmit}
         inputFieldRef={inputFieldRef}
+        disabled={isLoading || isGenerating}
       />
     </div>
   );
