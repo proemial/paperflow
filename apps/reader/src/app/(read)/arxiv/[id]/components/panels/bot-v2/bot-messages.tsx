@@ -2,7 +2,7 @@ import { Message as AiMessage, CreateMessage } from "ai";
 import { Analytics } from "src/components/analytics";
 import { Message, Question } from "./message";
 import { Message as ConversationalMessage } from "data/storage/conversations";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 type Props = {
   messages: AiMessage[];
@@ -10,9 +10,11 @@ type Props = {
   append: (
     message: AiMessage | CreateMessage
   ) => Promise<string | null | undefined>;
+  isGenerating?: boolean
 };
 
-export function BotMessages({ messages, conversation, append }: Props) {
+export function BotMessages({ messages, conversation, append, isGenerating }: Props) {
+  const [currentResponse, setCurrentResponse] = useState<string>();
   const appendQuestion = (question: string) =>
     append({ role: "user", content: question });
 
@@ -28,8 +30,14 @@ export function BotMessages({ messages, conversation, append }: Props) {
 
   const suggestions = conversation?.filter(message => !message.user).slice(0, 3) || [];
   useEffect(() => {
-    console.log('messages', messages);
-  }, [messages]);
+    console.log('messages', messages, isGenerating);
+    if(isGenerating) {
+      setCurrentResponse(messages.at(-1).content);
+    } else if(currentResponse) {
+      console.log('Persisting to DB');
+      setCurrentResponse(undefined);
+    }
+  }, [messages, isGenerating]);
 
   return (
     <>

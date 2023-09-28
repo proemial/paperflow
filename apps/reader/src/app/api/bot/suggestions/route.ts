@@ -18,6 +18,7 @@ export async function getSuggestions(id: string, title: string, abstract: string
 
     let suggestions = await PapersDao.getGptSummary(id, item);
     if (suggestions) {
+        console.log('Existing suggestions found');
         return asArray(suggestions);
     }
 

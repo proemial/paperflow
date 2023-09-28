@@ -45,6 +45,7 @@ export function InsightsBot({ paper, model }: Props) {
           messages={messages}
           conversation={data.messages}
           append={append}
+          isGenerating={isGenerating}
         />
       )}
 
