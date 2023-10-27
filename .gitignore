@@ -18,6 +18,7 @@ build
 *.pem
 .idea
 .vscode
+next-env.d.ts
 
 # debug
 npm-debug.log*
@@ -36,3 +37,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# data
+data
