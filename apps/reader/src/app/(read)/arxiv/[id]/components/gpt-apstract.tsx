@@ -11,5 +11,6 @@ export async function GptAbstract({ id, size }: Props) {
   const { text } = await PapersDao.getGptSummary(id, size);
   const sanitized = sanitize(text);
 
+  // @ts-ignore
   return <Markdown>{sanitized.sanitized}</Markdown>;
 }
