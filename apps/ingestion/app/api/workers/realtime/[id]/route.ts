@@ -10,7 +10,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     const config = (await ConfigDao.getPipelineConfig()).stages;
 
-    const oaiPaper = await fetchOaiPaper(id, config.arxivOai);
+    const oaiPaper = await fetchOaiPaper(id);
     await PapersDao.pushArXivOaiPapers([oaiPaper]);
 
     const atomPapers = await fetchUpdatedArXivAtomPapers([id], config.arxivAtom);
