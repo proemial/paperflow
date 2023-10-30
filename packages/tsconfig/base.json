@@ -14,8 +14,7 @@
     "noUnusedParameters": false,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true,
-    "target": "ES2021"
+    "strict": true
   },
   "exclude": [
     "node_modules"

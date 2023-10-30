@@ -16,7 +16,8 @@
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
-    "strict": false
+    "strict": false,
+    "target": "ES2015"
   },
   "include": [
     "src",
