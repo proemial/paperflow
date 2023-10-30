@@ -25,7 +25,6 @@ export default async function ReaderPage({ params }: Props) {
 
   return (
     <Suspense fallback={<CenteredSpinner />}>
-      {/* @ts-expect-error Server Component */}
       <PageContent id={params.id} />
     </Suspense>
   );
@@ -40,7 +39,6 @@ async function PageContent({ id }: { id: string }) {
     <main className="flex min-h-screen flex-col justify-start">
       <PaperCard id={id} date={paper.parsed.updated}>
         <Suspense fallback={<EmptySpinner />}>
-          {/* @ts-expect-error Server Component */}
           <GptAbstract id={id} size="sm" />
         </Suspense>
       </PaperCard>

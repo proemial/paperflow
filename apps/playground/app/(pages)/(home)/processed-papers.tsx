@@ -1,6 +1,6 @@
 "use client";
 import { IngestionIndexEntries } from "@/app/api/v2/ingestion/[[...args]]/route";
-import { Button, Chip, Sheet, Stack, styled } from "@mui/joy";
+import { Chip, Sheet, Stack, styled } from "@mui/joy";
 import { ArXivCategory, arXivCategory, arxivCategories } from "data/adapters/arxiv/arxiv.models";
 import { PromptOutputCardList } from "./card-list";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { useState } from "react";
 const Item = styled(Sheet)(({ theme }) => ({
   backgroundColor:
     theme.palette.mode === 'dark' ? theme.palette.background.level1 : '#fff',
-  ...theme.typography.body2,
+  ...theme.typography["body-md"],
   padding: theme.spacing(1),
   textAlign: 'start',
   borderRadius: 4,

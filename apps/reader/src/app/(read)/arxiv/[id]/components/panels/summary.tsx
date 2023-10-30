@@ -7,7 +7,6 @@ export function SummaryPanel({ id, closed }: { id: string; closed?: boolean }) {
   return (
     <Panel title="Summary" closed={closed}>
       <Suspense fallback={<EmptySpinner />}>
-        {/* @ts-expect-error Server Component */}
         <GptAbstract id={id} size="md" />
       </Suspense>
     </Panel>

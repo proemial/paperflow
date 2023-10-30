@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import ReactGA from "react-ga4";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import * as Sentry from "@sentry/nextjs";
+import {Env} from "data/adapters/env";
 
 // https://www.npmjs.com/package/react-ga4
 // https://vercel.com/docs/concepts/analytics/custom-events
@@ -91,7 +92,7 @@ function useSentry() {
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    if (!initialized) {
+    if (!initialized && Env.isProd) {
       Sentry.init({
         dsn: "https://e2c9474531c243f9aae26fb24b1b8653@o4505557013168128.ingest.sentry.io/4505557015199744",
         integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()],

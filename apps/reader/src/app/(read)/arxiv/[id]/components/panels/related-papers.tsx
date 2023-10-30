@@ -13,7 +13,6 @@ export function RelatedPanel({ paper, closed }: Props) {
   return (
     <Panel title="Related papers" className="px-4 mt-6 mb-4" closed={closed}>
       <Suspense fallback={<EmptySpinner />}>
-        {/* @ts-expect-error Server Component */}
         <RelatedResearch
           id={paper.parsed.id}
           category={paper.parsed.category}

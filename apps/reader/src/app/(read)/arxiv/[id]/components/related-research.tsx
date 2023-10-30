@@ -30,7 +30,6 @@ export async function RelatedResearch({ id, category }: Props) {
       {finalSet?.slice(0, 10).map((entry, i) => (
         <div key={i}>
           <Suspense fallback={<EmptySpinner />}>
-            {/* @ts-expect-error Server Component */}
             <PaperCard id={entry.id} />
           </Suspense>
         </div>

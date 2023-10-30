@@ -6,7 +6,6 @@ export const Env = {
     mongo: {
       uri: {
         old: process.env.MONGO_CONNECT_STRING,
-        new: process.env.MONGODB_URI
       },
     },
     redis: {

@@ -31,7 +31,7 @@ export function PromptOutputCard({
       <Typography level="h2" sx={{ fontSize: 'sm' }}>
         <Link
           href={
-            id ? `https://reader.paperflow.ai/read/${id}` : arxivOutput.link
+            id ? `https://paperflow.ai/arxiv/${id}` : arxivOutput.link
           }
           target="_blank"
           color="neutral"
@@ -52,7 +52,7 @@ export function PromptOutputCard({
           dangerouslySetInnerHTML={{ __html: arxivOutput.authors.join(', ') }}
         />
       </Typography>
-      <Typography level="body2" sx={{ mt: 2, mb: 2, fontSize: 'md' }}>
+      <Typography level="body-md" sx={{ mt: 2, mb: 2, fontSize: 'md' }}>
         {!modelOutput && !modelOutputString && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress variant="solid" />

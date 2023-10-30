@@ -14,7 +14,6 @@ export default async function HistoryPage() {
         History
       </div>
       <Suspense fallback={<CenteredSpinner />}>
-        {/* @ts-expect-error Server Component */}
         <PageContent />
       </Suspense>
     </main>
@@ -31,7 +30,6 @@ async function PageContent() {
       {latestIds.length === 0 && <NothingHereYet />}
       {latestIds.map((id, index) => (
         <Suspense key={index} fallback={<EmptySpinner />}>
-          {/* @ts-expect-error Server Component */}
           <PaperCard key={index} id={id} />
         </Suspense>
       ))}

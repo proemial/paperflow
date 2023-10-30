@@ -2,7 +2,6 @@ import { createClient } from 'redis';
 import { Env } from "../env";
 import { DateMetrics } from 'utils/date';
 import { ChatCompletionRequestMessageRoleEnum } from 'openai';
-import { SAddCommand } from '@upstash/redis/types/pkg/commands/sadd';
 import { Log } from 'utils/log';
 
 const pipelineEnv = Env.connectors.redis.pipeline;
