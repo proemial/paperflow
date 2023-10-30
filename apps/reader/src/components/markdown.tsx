@@ -7,7 +7,6 @@ import "katex/dist/katex.min.css";
 export default function Markdown({ children }: { children: string }) {
   return (
     <>
-      {/* @ts-ignore */}
       <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
         {children}
       </ReactMarkdown>

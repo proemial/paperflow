@@ -16,7 +16,7 @@ type Props = {
 export function Badge({ id, category, text, likes }: Props) {
   const { user } = useUser();
   const [checked, setChecked] = useState(likes?.includes(text));
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const { open } = useDrawerState();
 
   const handleClick = () => {
@@ -29,7 +29,6 @@ export function Badge({ id, category, text, likes }: Props) {
       id,
     });
 
-    // @ts-ignore
     startTransition(() => like(id, category, text, nowChecked));
 
     setChecked(nowChecked);

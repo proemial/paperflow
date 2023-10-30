@@ -9,10 +9,9 @@ import {
 } from "./feed-actions";
 
 export function ClearLikes({ count }: { count: number }) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleClick = () => {
-    // @ts-ignore
     startTransition(() => clearLikes());
   };
 
@@ -24,10 +23,9 @@ export function ClearLikes({ count }: { count: number }) {
 }
 
 export function ClearBookmarks({ count }: { count: number }) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleClick = () => {
-    // @ts-ignore
     startTransition(() => clearBookmarks());
   };
 
@@ -39,10 +37,9 @@ export function ClearBookmarks({ count }: { count: number }) {
 }
 
 export function ClearHistory({ count }: { count: number }) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const handleClick = () => {
-    // @ts-ignore
     startTransition(() => clearHistory());
   };
 
@@ -53,11 +50,10 @@ export function ClearHistory({ count }: { count: number }) {
   );
 }
 
-export function ClearCache({ count }: { count: number }) {
-  const [isPending, startTransition] = useTransition();
+export function ClearCache() {
+  const [, startTransition] = useTransition();
 
   const handleClick = () => {
-    // @ts-ignore
     startTransition(() => clearCache());
   };
 

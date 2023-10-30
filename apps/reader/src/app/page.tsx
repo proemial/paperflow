@@ -18,17 +18,14 @@ export default function HomePage() {
         >
           <div className="h-[10%]"></div>
           <div className="h-[50%] w-full flex flex-col justify-center items-center">
-            <img src={logo.src} style={{ maxHeight: "40%" }} />
+            <img src={logo.src} style={{ maxHeight: "40%" }} alt="" />
             <div className="text-3xl md:text-7xl">Paperflow</div>
           </div>
           <div className="h-[40%] w-full flex justify-center items-center">
-            {/* @ts-ignore */}
             <LoggedinGreeting />
-            {/* @ts-ignore */}
             <LoggedoutNudge />
           </div>
         </div>
-        {/* @ts-ignore */}
         <PaperFeed />
       </main>
     </QueryClientProvider>

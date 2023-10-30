@@ -56,7 +56,7 @@ export default async function FeedTest({ params }: Props) {
             {feed.tags.liked.length > 0 && (
               <ClearLikes count={feed.tags.liked.length} />
             )}
-            <ClearCache count={history.length} />
+            <ClearCache />
             {history.length > 0 && <ClearHistory count={history.length} />}
           </>
         )}

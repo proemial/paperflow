@@ -12,7 +12,6 @@ type Props = {
 };
 export function Logo({ variant = "paperflow", className }: Props) {
   return (
-    // @ts-ignore
     <Image
       height={16}
       width={16}

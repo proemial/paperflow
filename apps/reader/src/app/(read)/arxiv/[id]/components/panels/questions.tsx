@@ -18,7 +18,6 @@ export function QuestionsPanel(props: Props) {
     <Panel title="Ask a question" closed={props.closed}>
       <div className="pt-4 flex flex-col justify-start">
         <QueryClientProvider client={queryClient}>
-          {/* @ts-ignore */}
           <UserProvider>
             <InsightsBot {...props} />
           </UserProvider>

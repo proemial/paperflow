@@ -52,7 +52,6 @@ const style =
 export function Answer({ children }: { children: React.ReactNode }) {
   return (
     <div className={`${style} bg-[#60A040] rounded-tr-2xl self-start`}>
-      {/* @ts-ignore */}
       {children}
     </div>
   );

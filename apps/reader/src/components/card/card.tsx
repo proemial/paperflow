@@ -46,7 +46,6 @@ export async function PaperCard({ id }: { id: string }) {
           </div>
         </div>
         <div>
-          {/* @ts-ignore */}
           <CardLink id={id} text={sanitized.sanitized} />
         </div>
         <div className="w-full pt-6 pb-1 text-xs tracking-wider flex justify-begin gap-2 overflow-scroll no-scrollbar">

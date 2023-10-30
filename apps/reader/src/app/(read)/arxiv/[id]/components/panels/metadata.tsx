@@ -1,9 +1,6 @@
 import dayjs from "dayjs";
 import Markdown from "src/components/markdown";
-import {
-  ArXivAtomPaper,
-  arXivCategory,
-} from "data/adapters/arxiv/arxiv.models";
+import { ArXivAtomPaper } from "data/adapters/arxiv/arxiv.models";
 import avatar from "src/images/avatar.svg";
 import Image from "next/image";
 import { Panel } from "src/components/panel";
@@ -14,8 +11,6 @@ type Props = {
 };
 
 export function MetadataPanel({ paper, closed }: Props) {
-  const category = arXivCategory(paper.parsed.category);
-
   return (
     <Panel title="Article Metadata" closed={closed}>
       <div>
@@ -41,7 +36,6 @@ function Author({ name }: { name: string }) {
   const names = name.split(" ");
   return (
     <div className="whitespace-nowrap flex gap-1">
-      {/* @ts-ignore */}
       <Image src={avatar} alt="" />
       {names.at(-1)}
     </div>

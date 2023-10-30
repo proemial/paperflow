@@ -15,7 +15,7 @@ type Props = {
 export function Bookmark({ id, category, bookmarked }: Props) {
   const [checked, setChecked] = useState(bookmarked);
   const { user } = useUser();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const { open } = useDrawerState();
 
   const handleClick = () => {
@@ -28,7 +28,6 @@ export function Bookmark({ id, category, bookmarked }: Props) {
       id,
     });
 
-    // @ts-ignore
     startTransition(() => bookmark(id, category, !bookmarked));
   };
 

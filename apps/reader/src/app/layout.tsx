@@ -20,7 +20,6 @@ export default async function RootLayout({ children }: Props) {
   const light = lightModeEnabled ? "dark:dark" : "dark";
 
   return (
-    // @ts-ignore
     <UserProvider>
       <html lang="en">
         <body
