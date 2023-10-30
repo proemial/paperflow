@@ -20,6 +20,8 @@ import {ArXivError} from "./arxiv-error";
 const idsByTypeAndDate = (type: string, from: string, to: string) => `https://export.arxiv.org/oai2?verb=${type}&from=${from}&until=${to}&metadataPrefix=arXivRaw`;
 const idsByTypeAndToken = (type: string, token: string) => `https://export.arxiv.org/oai2?verb=${type}&resumptionToken=${token}`;
 
+const byId = (id: string) => `https://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:${id}&metadataPrefix=arXivRaw`;
+
 export async function fetchUpdatedIds(date: string) {
   const result = await fetchData(idsByTypeAndDate('ListIdentifiers', date, date));
   const text = await result.text();
@@ -28,6 +30,17 @@ export async function fetchUpdatedIds(date: string) {
     throw new Error(text);
 
   return parseListIdentifiers(text);
+}
+
+export async function fetchOaiPaper(id: string) {
+  const response = await fetchData(byId(id));
+  const text = await response.text();
+  console.log(text)
+
+  if(response.status !== 200)
+    throw ArXivError.withStatus(text, response.status);
+
+  return parseGetRecord(text).metadata;
 }
 
 export async function fetchUpdatedPapers(date: string, config: PipelineStageConfig) {
@@ -87,6 +100,55 @@ function parseListIdentifiers(text: string) {
 
     let parsedError = parser
       .parse(text)['OAI-PMH']['error'];
+    console.error(parsedError);
+
+    throw new Error(parsedError);
+  }
+}
+
+function parseGetRecord(text: string) {
+  const parser = new XMLParser({
+    removeNSPrefix: true,
+    ignoreAttributes : false,
+    numberParseOptions: {
+      leadingZeros: false,
+      hex: false,
+      skipLike: /[\w]+\.[\w]+/, // Don't convert doi's to numbers
+    },
+  });
+
+  try {
+    let record = parser
+        .parse(text)['OAI-PMH']['GetRecord'].record as RawArXivRecord;
+
+    console.log(`${record.header.identifier} ${record?.metadata?.arXivRaw?.title}`)
+
+    return {
+      header: {
+        identifier: record?.header?.identifier,
+        datestamp: record?.header?.datestamp,
+        setSpec: Array.isArray(record?.header?.setSpec || []) ? record?.header?.setSpec as string[] : [record?.header?.setSpec as string]
+      },
+      metadata: {
+        id: `${record?.metadata?.arXivRaw?.id}`,
+        submitter: record?.metadata?.arXivRaw?.submitter,
+        version: toArxivVersion(record?.metadata?.arXivRaw?.version),
+        title: record?.metadata?.arXivRaw?.title,
+        authors: (record?.metadata?.arXivRaw?.authors || '').split(','),
+        categories: (record?.metadata?.arXivRaw?.categories || '').split(' '),
+        comments: record?.metadata?.arXivRaw?.comments,
+        abstract: record?.metadata?.arXivRaw?.abstract,
+        doi: record?.metadata?.arXivRaw?.doi,
+        license: record?.metadata?.arXivRaw?.license,
+        journalRef: record?.metadata?.arXivRaw?.["journal-ref"],
+        mscClass: record?.metadata?.arXivRaw?.["msc-class"],
+      }
+    };
+  } catch (error) {
+    console.error(error);
+
+    let parsedError = parser
+        .parse(text)['OAI-PMH']['error'];
     console.error(parsedError);
 
     throw new Error(parsedError);
