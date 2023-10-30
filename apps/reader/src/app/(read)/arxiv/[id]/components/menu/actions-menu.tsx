@@ -12,6 +12,7 @@ export function ActionsMenu({ id, className }: Props) {
     <div
       className={`${className} w-full flex justify-between items-center shadow`}
     >
+      {/* @ts-ignore */}
       <ArxivButton id={id} />
       <div className="flex gap-4">
         <BookmarkButton id={id} />
