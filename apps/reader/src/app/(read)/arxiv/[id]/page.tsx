@@ -14,6 +14,9 @@ import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { revalidatePath } from "next/cache";
 import { UsersDao } from "data/storage/users";
+import {fetchOaiPaper} from "data/adapters/arxiv/arxiv-oai";
+import {fetchUpdatedArXivAtomPapers} from "data/adapters/arxiv/arxiv-atom";
+import {summarize} from "data/adapters/openai/summarize";
 
 type Props = {
   params: { id: string };
@@ -31,7 +34,7 @@ export default async function ReaderPage({ params }: Props) {
 }
 
 async function PageContent({ id }: { id: string }) {
-  const paper = await PapersDao.getArXivAtomPaper(id);
+  const paper = await fetchOrIngestPaper(id);
   const { model } = await ConfigDao.getPaperbotConfig();
   await logHistory(id, paper.parsed.category);
 
@@ -60,6 +63,30 @@ async function PageContent({ id }: { id: string }) {
       <RelatedPanel paper={paper} />
     </main>
   );
+}
+
+async function fetchOrIngestPaper(id: string) {
+    const paper = await PapersDao.getArXivAtomPaper(id);
+    if(paper) {
+        return paper;
+    }
+    console.log('Realtime ingestion started')
+
+    const config = (await ConfigDao.getPipelineConfig()).stages;
+
+    const oaiPaper = await fetchOaiPaper(id);
+    console.log('oaiPaper fetched')
+    await PapersDao.pushArXivOaiPapers([oaiPaper]);
+
+    const atomPapers = await fetchUpdatedArXivAtomPapers([id], config.arxivAtom);
+    console.log('atomPapers fetched')
+    if(atomPapers?.length > 0) {
+        await PapersDao.pushArXivAtomPapers(atomPapers);
+        await summarize(id, oaiPaper, config.gptSummary, true);
+        console.log('summarization completed')
+
+        return atomPapers[0];
+    }
 }
 
 function CenteredSpinner() {
