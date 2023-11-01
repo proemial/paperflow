@@ -94,17 +94,21 @@ function getFeedPapers(metadata: PaperMetadata[], userTags: UserTags, size: numb
     if(!session) {
       return empty;
     }
-    const history = await ViewHistoryDao.fullHistory(session?.user.sub);
-    if(history.length < 1) {
+    const unSanitizedHistory = await ViewHistoryDao.fullHistory(session?.user.sub);
+    if(unSanitizedHistory.length < 1) {
         return empty;
     }
 
-    const summaries = await PapersDao.getGptSummaries(
-      history.map((h) => h.paper)
-    );
+    const summaries = (await PapersDao.getGptSummaries(
+        unSanitizedHistory.map((h) => h.paper)
+    ));
+
+    // edge case: remove broken summaries in redis
+    const validIds = summaries.filter(s => s?.text && s?.id).map(s => s.id);
+    const history = unSanitizedHistory.filter(h => validIds.includes(h.paper));
 
     const withTags = history.map((h) => {
-      const summary = summaries.find((s) => s.id === h.paper);
+      const summary = summaries.find((s) => s?.id === h.paper);
       const tags = sanitize(summary.text).hashtags;
       return {
         ...h,
