@@ -1,15 +1,5 @@
-import {NextResponse} from "next/server";
-
-export type WithDate = {
-    date: string
-};
+import {arxivByDate, WithDate} from "../worker";
 
 export async function GET(request: Request, { params }: { params: WithDate }) {
-    return await run(params);
-}
-
-export async function run({date}: WithDate) {
-    console.log(`/api/arxivByDate[${date}]`)
-
-    return NextResponse.json({date});
+    return await arxivByDate(params);
 }
