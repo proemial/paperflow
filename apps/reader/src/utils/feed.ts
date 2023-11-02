@@ -23,9 +23,11 @@ export type UserTags = {
 export async function buildFeed(date: string) {
     const begin = DateMetrics.now();
     const metadata = await getMetadata(date);
+  console.log('metadata', metadata?.length)
     const {tags, bookmarks, size} = await getUserHistory();
 
     const papers = getFeedPapers(metadata, tags, size);
+  console.log('papers', papers?.length)
 
     const elapsed = DateMetrics.elapsed(begin);
 

@@ -30,12 +30,15 @@ export async function GET(request: Request, { params }: { params: { page: string
     // todo: cache latestIngestedDate on the client
     const ingestionIndex = await PipelineDao.getIngestionIndex();
     const date = ingestionIndex.at(-1);
+    console.log('date', date)
 
     // TODO: consider caching the username
     const session = await getSession();
     const key = session ? `${session.user.sub}:${date}` : date;
+    console.log('key', key)
 
     let allItems = await FeedCache.get(key);
+    console.log('allItems', allItems?.length)
     if(!allItems) {
         const feedData = await buildFeed(date);
         allItems = feedData.papers;
@@ -47,7 +50,9 @@ export async function GET(request: Request, { params }: { params: { page: string
 
     if(session) {
         const read = (await ViewHistoryDao.readHistory(session.user.sub)).map(p => p.paper);
+        console.log('read', read?.length)
         allItems = allItems.filter((item) => !read.includes(item.id));
+        console.log('allItems filtered', allItems?.length)
 
         const categories = getCategoriesFromCookie();
         if(categories && Object.keys(categories).length > 0 && categories.length > 0) {
