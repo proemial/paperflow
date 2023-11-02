@@ -1,5 +1,5 @@
-import {arxivByDate, WithDate} from "../worker";
+import {arxivByDate} from "../worker";
 
-export async function GET(request: Request, { params }: { params: WithDate }) {
-    return await arxivByDate(params);
+export async function GET(request: Request, { params }: { params: { date: string } }) {
+    return await arxivByDate(params.date);
 }

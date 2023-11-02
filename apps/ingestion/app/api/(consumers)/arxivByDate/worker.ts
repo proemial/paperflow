@@ -1,11 +1,7 @@
 import {NextResponse} from "next/server";
 
-export type WithDate = {
-    date: string
-};
+export async function arxivByDate(dateStr: string) {
+    console.log(`/api/arxivByDate[${dateStr}]`)
 
-export async function arxivByDate({date}: WithDate) {
-    console.log(`/api/arxivByDate[${date}]`)
-
-    return NextResponse.json({date});
+    return NextResponse.json({dateStr});
 }
