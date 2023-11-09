@@ -57,8 +57,11 @@ export async function fetchUpdatedPapers(date: string, config: PipelineStageConf
     );
     const text = await response.text();
 
-    if(response.status !== 200)
-      throw ArXivError.withStatus(text, response.status);
+    if(response.status !== 200){
+      console.error(text, response.status)
+      break;
+    }
+      // throw ArXivError.withStatus(text, response.status);
 
     const data = parseListRecords(text);
     result = [...result, ...data.records.map(record => record.metadata)];
