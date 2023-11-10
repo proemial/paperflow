@@ -47,8 +47,10 @@ export async function fetchUpdatedPapers(date: string, token?: string) {
   const data = parseListRecords(text);
 
   if(data.resumptionToken?.token) {
-    console.log(`Queue up https://ingestion.paperflow.ai/api/workers/arxivOai/${date}/${data.resumptionToken.token}`)
+    console.log('Sleep for', 2500)
     await delay(2500)
+
+    console.log(`Queue up https://ingestion.paperflow.ai/api/workers/arxivOai/${date}/${data.resumptionToken.token}`)
     await QStash.scheduleOai(date, data.resumptionToken.token)
   }
 
