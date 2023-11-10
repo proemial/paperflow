@@ -1,8 +1,8 @@
 import { XMLParser } from "fast-xml-parser";
 import { fetchData, } from "../fetch";
 import dayjs from "dayjs";
-import { PipelineStageConfig } from "../redis/redis-client";
 import {ArXivError} from "./arxiv-error";
+import {QStash} from "@/adapters/qstash/qstash-client";
 
 // Docs
 // https://www.openarchives.org/OAI/openarchivesprotocol.html
@@ -17,20 +17,10 @@ import {ArXivError} from "./arxiv-error";
 // GetRecord example
 // https://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:1306.1917&metadataPrefix=oai_dc
 
-const idsByTypeAndDate = (type: string, from: string, to: string) => `https://export.arxiv.org/oai2?verb=${type}&from=${from}&until=${to}&metadataPrefix=arXivRaw`;
-const idsByTypeAndToken = (type: string, token: string) => `https://export.arxiv.org/oai2?verb=${type}&resumptionToken=${token}`;
+const idsByTypeAndDate = (type: string, from?: string) => `https://export.arxiv.org/oai2?verb=${type}&from=${from}&until=${dayjs(from).add(1, 'day').format("YYYY-MM-DD")}&metadataPrefix=arXivRaw`;
+const idsByTypeAndToken = (type: string, token?: string) => `https://export.arxiv.org/oai2?verb=${type}&resumptionToken=${token}`;
 
 const byId = (id: string) => `https://export.arxiv.org/oai2?verb=GetRecord&identifier=oai:arXiv.org:${id}&metadataPrefix=arXivRaw`;
-
-export async function fetchUpdatedIds(date: string) {
-  const result = await fetchData(idsByTypeAndDate('ListIdentifiers', date, date));
-  const text = await result.text();
-
-  if(result.status !== 200)
-    throw new Error(text);
-
-  return parseListIdentifiers(text);
-}
 
 export async function fetchOaiPaper(id: string) {
   const response = await fetchData(byId(id));
@@ -43,70 +33,29 @@ export async function fetchOaiPaper(id: string) {
   return parseGetRecord(text).metadata;
 }
 
-export async function fetchUpdatedPapers(date: string, config: PipelineStageConfig) {
-  const to = dayjs(date).add(1, 'day').format("YYYY-MM-DD");
+export async function fetchUpdatedPapers(date: string, token?: string) {
+  const response = await fetchData(
+    token
+      ? idsByTypeAndToken('ListRecords', token)
+      : idsByTypeAndDate('ListRecords', date)
+  );
+  const text = await response.text();
 
-  let result = [] as ArXivOaiPaper[];
+  if(response.status !== 200)
+    throw ArXivError.withStatus(text, response.status);
 
-  let token: string | undefined = '';
-  while(token !== undefined) {
-    const response = await fetchData(
-      token
-        ? idsByTypeAndToken('ListRecords', token)
-        : idsByTypeAndDate('ListRecords', date, to)
-    );
-    const text = await response.text();
+  const data = parseListRecords(text);
 
-    if(response.status !== 200){
-      console.error(text, response.status)
-      break;
-    }
-      // throw ArXivError.withStatus(text, response.status);
-
-    const data = parseListRecords(text);
-    result = [...result, ...data.records.map(record => record.metadata)];
-    token = data.resumptionToken?.token;
-
-    if(token) {
-      const sleep = config.sleep as number || 2500;
-      console.log(`sleeping for ${sleep}ms ...`);
-      await delay(sleep);
-    }
+  if(data.resumptionToken?.token) {
+    console.log(`Queue up https://ingestion.paperflow.ai/api/workers/arxivOai/${date}/${data.resumptionToken.token}`)
+    await QStash.scheduleOai(date, data.resumptionToken.token)
   }
 
+  const result = data.records.map(record => record.metadata);
   const filtered = result.filter(paper => dayjs(paper.version.date).format("YYYY-MM-DD") === date);
   console.log('result', {unfiltered: result.length, filtered: filtered.length});
 
   return filtered;
-}
-
-function parseListIdentifiers(text: string) {
-  const parser = new XMLParser({
-    ignoreAttributes: true,
-    removeNSPrefix: true
-  });
-
-  try {
-    let parsed = parser
-      .parse(text)['OAI-PMH']['ListIdentifiers']['header'];
-
-    if (!Array.isArray(parsed)) {
-      parsed = [parsed];
-    }
-
-    return (parsed as Array<ArxivOaiHeader>)
-      .map(item => item.identifier.substring(item.identifier.lastIndexOf(':') + 1)) // extract id's
-      .sort()
-      .reverse();
-  } catch (error) {
-    console.error(error);
-
-    let parsedError = parser
-      .parse(text)['OAI-PMH']['error'];
-    console.error(parsedError);
-
-    throw new Error(parsedError);
-  }
 }
 
 function parseGetRecord(text: string) {
@@ -322,8 +271,4 @@ type RawArXivVersion = {
   date: string,
   size: string,
   '@_version': string,
-}
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }

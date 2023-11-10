@@ -66,6 +66,13 @@ export const QStash = {
     }
   },
 
+  scheduleOai: async (date: string, token: string) => {
+    await publishJSON({
+      url: `${ingestionUrl}/arxivOai/${date}/${token}`,
+      body: '',
+    });
+  },
+
   postEvent: async (event: string, body: UserEvent | TemporaryDummyEvent) => {
     await publishJSON({
       url: `${paperflowUrl}/events/${event}`,

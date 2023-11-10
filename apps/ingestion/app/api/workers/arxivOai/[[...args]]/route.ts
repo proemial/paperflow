@@ -1,4 +1,3 @@
-import { ConfigDao } from "data/storage/config";
 import { dateFromParams } from "@/app/api/utils";
 import { ArXivOaiPaper, fetchUpdatedPapers } from "data/adapters/arxiv/arxiv-oai";
 import { IngestionLogger } from "data/storage/ingestion-log";
@@ -22,10 +21,10 @@ async function run(params: { args: string[] }) {
   let result = '';
 
   const date = dateFromParams(params);
+  const token = params?.args?.length > 1 ? params.args[1] : undefined;
 
   try {
-    const config = (await ConfigDao.getPipelineConfig()).stages.arxivOai;
-    const papers = await fetchUpdatedPapers(date, config);
+    const papers = await fetchUpdatedPapers(date, token);
 
     result = `allPapers: ${papers?.length}`;
     if(papers.length > 0) {
@@ -41,7 +40,6 @@ async function run(params: { args: string[] }) {
     result = '[ERROR]' + normalizeError(e).message;
     return new NextResponse(normalizeError(e).message, { status: (e as any)?.hasOwnProperty('status') ? (e as any)?.status: 500 });
   } finally {
-    const msg = `[arxivOai][${DateMetrics.elapsed(begin)}] ${result}`;
     await IngestionLogger.log(date, `[arxivOai][${DateMetrics.elapsed(begin)}] ${result}`);
   }
 }
