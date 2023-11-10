@@ -2,7 +2,7 @@ import { XMLParser } from "fast-xml-parser";
 import { fetchData, } from "../fetch";
 import dayjs from "dayjs";
 import {ArXivError} from "./arxiv-error";
-import {QStash} from "@/adapters/qstash/qstash-client";
+import {QStash} from "../qstash/qstash-client";
 
 // Docs
 // https://www.openarchives.org/OAI/openarchivesprotocol.html
