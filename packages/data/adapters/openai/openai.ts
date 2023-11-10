@@ -66,8 +66,6 @@ function createPrompt(title: string, abstract: string, messages: Array<GptPrompt
       content: lastMessage.content + ` ${title} ${abstract}`,
     };
   }
-  console.log('messages', messages, prompt);
-
 
   return prompt;
 }
