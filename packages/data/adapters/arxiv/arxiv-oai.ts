@@ -48,6 +48,7 @@ export async function fetchUpdatedPapers(date: string, token?: string) {
 
   if(data.resumptionToken?.token) {
     console.log(`Queue up https://ingestion.paperflow.ai/api/workers/arxivOai/${date}/${data.resumptionToken.token}`)
+    await delay(2500)
     await QStash.scheduleOai(date, data.resumptionToken.token)
   }
 
@@ -56,6 +57,10 @@ export async function fetchUpdatedPapers(date: string, token?: string) {
   console.log('result', {unfiltered: result.length, filtered: filtered.length});
 
   return filtered;
+}
+
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function parseGetRecord(text: string) {
