@@ -21,7 +21,6 @@ export async function summarize(id: string, paper: ArXivOaiPaper, config: Pipeli
 
         // Run summarization
         const summary = await gptPrompt(paper.title, paper.abstract, promptTemplates[sizes[index]]);
-        console.log('summary', summary)
         if (summary.text) {
             // Update DB
             await PapersDao.pushGptSummary(id, sizes[index], summary);
