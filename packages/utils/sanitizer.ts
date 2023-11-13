@@ -1,6 +1,7 @@
 const regex = /#[A-Za-z0-9_]+\b/g;
 
-export function sanitize(str?: string) {
+export function sanitize(text?: string) {
+  const str = text || '';
   const hashtags = str?.match(regex) || [];
   // const sanitized = str?.replace(regex, '').trim();
 

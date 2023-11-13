@@ -13,9 +13,9 @@ import { PubDate } from "./pub-date";
 const images = [assetImg1, assetImg2, assetImg3];
 
 export async function PaperCard({ id }: { id: string }) {
-  const { text } = await PapersDao.getGptSummary(id, "sm");
+  const summary = await PapersDao.getGptSummary(id, "sm");
   const { parsed } = await PapersDao.getArXivAtomPaper(id);
-  const sanitized = sanitize(text);
+  const sanitized = sanitize(summary?.text);
   const session = await getSession();
   const history = await ViewHistoryDao.get(session?.user.sub, id);
 
