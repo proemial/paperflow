@@ -14,6 +14,11 @@ const images = [assetImg1, assetImg2, assetImg3];
 
 export async function PaperCard({ id }: { id: string }) {
   const summary = await PapersDao.getGptSummary(id, "sm");
+
+  if(!summary?.text) {
+    return <></>
+  }
+
   const { parsed } = await PapersDao.getArXivAtomPaper(id);
   const sanitized = sanitize(summary?.text);
   const session = await getSession();
