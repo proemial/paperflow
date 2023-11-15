@@ -5,7 +5,7 @@ export const runtime = 'edge';
 
 export async function POST(req: Request) {
     const body = await req.json();
-    console.log('api/search', body);
+    console.log('api/feed', body);
 
     return NextResponse.json(recentPapers);
 }
