@@ -14,10 +14,39 @@ import { ViewHistoryDao } from "data/storage/history";
 import { getSession } from "@auth0/nextjs-auth0";
 import { revalidatePath } from "next/cache";
 import { UsersDao } from "data/storage/users";
+import {sanitize} from "utils/sanitizer";
 
 type Props = {
-  params: { id: string };
+    params: { id: string };
+    searchParams: { text?: string };
 };
+
+export async function generateMetadata({ params, searchParams }: Props) {
+    const title = `Proem - ${params.id}`;
+
+    let description = searchParams.text
+    if(!description) {
+        const { text } = await PapersDao.getGptSummary(params.id, 'sm');
+        const {sanitized} = sanitize(text);
+        description = sanitized;
+    }
+
+    return {
+        title,
+        description,
+        openGraph: {
+            title,
+            description,
+            type: 'article',
+            images: [{
+                url: `/api/og?text=${description}`,
+                width: 400,
+                height: 200,
+                alt: description,
+            }]
+        },
+    };
+}
 
 export default async function ReaderPage({ params }: Props) {
   revalidatePath("/history");
