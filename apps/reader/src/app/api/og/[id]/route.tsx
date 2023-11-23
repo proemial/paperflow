@@ -1,9 +1,11 @@
 import {ImageResponse} from "next/og";
-import bg from '../../../images/asset-bg-2.png';
+import assetImg1 from "src/images/asset-bg-1.png";
+import assetImg2 from "src/images/asset-bg-2.png";
+import assetImg3 from "src/images/asset-bg-3.png";
 
 export const runtime = 'edge';
 
-export async function GET(request: Request) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
         const url = new URL(request.url);
         const { searchParams } = new URL(url)
@@ -12,13 +14,13 @@ export async function GET(request: Request) {
             'placeholder'
 
         const fontData = await fetch(
-            new URL('../../../assets/AnekMalayalam-SemiBold.ttf', import.meta.url),
+            new URL('../../../../assets/AnekMalayalam-SemiBold.ttf', import.meta.url),
         ).then((res) => res.arrayBuffer());
 
         return new ImageResponse(
             (
                 <div tw="flex flex-col w-full h-full items-center justify-center text-white" style={{
-                    backgroundImage: `url("${url.protocol}//${url.host}${bg.src}")`,
+                    backgroundImage: `url("${url.protocol}//${url.host}${image(params.id)}")`,
                     backgroundSize: 'cover',
                     backgroundRepeat: 'none',
                     fontFamily: 'AnekMalayalam',
@@ -46,4 +48,13 @@ export async function GET(request: Request) {
     } catch (e: any) {
         return new Response('Failed to generate image', {status: 500})
     }
+}
+
+const images = [assetImg1, assetImg2, assetImg3];
+
+function image(id: string) {
+    const lastNum = Number(id.charAt(id.length - 1));
+    if (lastNum < 3) return images[0].src;
+    if (lastNum < 6) return images[1].src;
+    return images[2].src;
 }
