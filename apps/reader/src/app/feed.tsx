@@ -3,7 +3,6 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import React, { Suspense, useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { PaperCard } from "src/components/card/card.cc";
-import { useAuthActions } from "../components/authentication";
 import { RefreshBanner } from "../components/refresh-banner";
 import { Spinner } from "../components/spinner";
 import { FeedResponse } from "./api/feed/[page]/route";
@@ -13,8 +12,6 @@ export const PaperFeed = dynamic(
   () =>
     Promise.resolve(() => {
       const ref = useRef<HTMLDivElement>();
-      const { user, status } = useAuthActions();
-      if (!user && status !== "member") return undefined;
 
       useEffect(() => {
         if (window.location.search.includes("reload=true")) {

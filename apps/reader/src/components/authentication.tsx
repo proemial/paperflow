@@ -12,12 +12,10 @@ export function useAuthActions() {
 
   const status = getStatus(user);
   const isHome = pathname === "/";
-  const isWaitlist = pathname === "/waitlist";
-  const disableMenu = (isHome || isWaitlist) && !user && status !== "member";
 
-  const color = disableMenu ? "stroke-[#444444]" : "stroke-muted-foreground";
+  const color = "stroke-muted-foreground";
 
-  const toggleDrawer = !user && !disableMenu ? toggle : () => {};
+  const toggleDrawer = !user ? toggle : () => {};
   const goto = user ? push : toggleDrawer;
 
   return { user, goto, toggleDrawer, status, color, isHome };

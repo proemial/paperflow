@@ -1,11 +1,8 @@
 "use client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import logo from "src/images/logo.png";
-import { useAuthActions } from "../components/authentication";
-import { Button } from "../components/shadcn-ui/button";
 import { queryClient } from "../state/react-query";
 import { PaperFeed } from "./feed";
-import dynamic from "next/dynamic";
 
 export const revalidate = 1;
 
@@ -21,66 +18,14 @@ export default function HomePage() {
             <img src={logo.src} style={{ maxHeight: "40%" }} alt="" />
             <div className="text-3xl md:text-7xl">Paperflow</div>
           </div>
-          <div className="h-[40%] w-full flex justify-center items-center">
-            <LoggedinGreeting />
-            <LoggedoutNudge />
-          </div>
+            <div className="h-[40%] w-full flex justify-center items-center">
+                <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
+                    Swipe up to get started
+                </div>
+            </div>
         </div>
-        <PaperFeed />
+        <PaperFeed/>
       </main>
     </QueryClientProvider>
   );
 }
-
-const LoggedinGreeting = dynamic(
-  () =>
-    Promise.resolve(() => {
-      const { user, status } = useAuthActions();
-
-      if (!user && status !== "member") return undefined;
-
-      return (
-        <div className="text-secondary text-xl font-normal px-8 mt-4 text-center">
-          Swipe up to get started
-        </div>
-      );
-    }),
-  { ssr: false }
-);
-
-const LoggedoutNudge = dynamic(
-  () =>
-    Promise.resolve(() => {
-      const { user, status } = useAuthActions();
-
-      if (user) return undefined;
-
-      switch (status) {
-        case "member":
-          return undefined;
-        case "waitlist":
-          return (
-            <div>
-              <div className="text-lg text-center">
-                Thank you for your interest!
-              </div>
-              <div className="text-center text-sm">
-                You are on our waitlist.
-              </div>
-            </div>
-          );
-        default:
-          return (
-            <Button
-              variant="secondary"
-              onClick={() => (window.location.href = `/waitlist`)}
-            >
-              Join our waitlist
-            </Button>
-          );
-      }
-    }),
-  {
-    ssr: false,
-  }
-);
